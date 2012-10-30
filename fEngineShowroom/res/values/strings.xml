@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="app_name">fEngineShowroom</string>
+    <string name="title_scene_detail">Scene Detail</string>
+    <string name="title_scene_list">Scenes</string>
+
+</resources>
