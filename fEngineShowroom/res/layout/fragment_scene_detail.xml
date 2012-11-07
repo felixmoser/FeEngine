@@ -1,8 +1,17 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="?android:attr/textAppearanceLarge"
-    android:id="@+id/scene_detail"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".SceneDetailFragment" />
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".SceneDetailFragment">
+	<de.fieben.fengine.showroom.scenes.AbstractScene
+		android:id="@+id/scene"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
+	<TextView
+		android:id="@+id/scene_name"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		style="?android:attr/textAppearanceLarge"/>
+</RelativeLayout>
+

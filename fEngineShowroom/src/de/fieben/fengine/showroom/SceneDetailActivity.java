@@ -8,32 +8,32 @@ import android.view.MenuItem;
 
 public class SceneDetailActivity extends FragmentActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scene_detail);
+	@Override
+	protected void onCreate(final Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_scene_detail);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (savedInstanceState == null) {
-            Bundle arguments = new Bundle();
-            arguments.putString(SceneDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(SceneDetailFragment.ARG_ITEM_ID));
-            SceneDetailFragment fragment = new SceneDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.scene_detail_container, fragment)
-                    .commit();
-        }
-    }
+		if (savedInstanceState == null) {
+			final Bundle arguments = new Bundle();
+			arguments.putInt(SceneDetailFragment.ARG_ITEM_ID, getIntent()
+					.getIntExtra(SceneDetailFragment.ARG_ITEM_ID, -1));
+			final SceneDetailFragment fragment = new SceneDetailFragment();
+			fragment.setArguments(arguments);
+			getSupportFragmentManager().beginTransaction()
+					.add(R.id.scene_detail_container, fragment).commit();
+		}
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            NavUtils.navigateUpTo(this, new Intent(this, SceneListActivity.class));
-            return true;
-        }
+	@Override
+	public boolean onOptionsItemSelected(final MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			NavUtils.navigateUpTo(this, new Intent(this,
+					SceneListActivity.class));
+			return true;
+		}
 
-        return super.onOptionsItemSelected(item);
-    }
+		return super.onOptionsItemSelected(item);
+	}
 }
