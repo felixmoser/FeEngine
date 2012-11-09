@@ -22,7 +22,7 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 		getHolder().addCallback(this);
 		mSurfaceThread = new FeSurfaceThread(this);
 		setFocusable(true);
-		mPaint = new Paint();
+		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mRootElement = new FeRootElementImpl(Color.WHITE);
 	}
 
@@ -71,4 +71,6 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 			mRootElement.addChild(element);
 		}
 	}
+
+	// TODO how to handle touchs?
 }

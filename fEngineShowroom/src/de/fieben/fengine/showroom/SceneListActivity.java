@@ -30,7 +30,6 @@ public class SceneListActivity extends FragmentActivity implements
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.scene_detail_container, fragment).commit();
-
 		} else {
 			final Intent detailIntent = new Intent(this,
 					SceneDetailActivity.class);

@@ -9,12 +9,16 @@ import android.graphics.Paint;
 
 public abstract class FeSurfaceElement {
 
+	public static int UPDATE_INTERVAL_30FPS = 34;
+	public static int UPDATE_INTERVAL_60FPS = 16;
+
 	private final Matrix mMatrix;
 	private final float[] mMatrixValues = new float[9];
 	// TODO what is the most performant data holder?
 	private List<FeSurfaceElement> mChildren;
-	private long mUpdateInterval;
-	private long mLastDoUpdate;
+
+	private int mDoUpdateInterval;
+	private long mDoUpdateCounter;
 
 	public FeSurfaceElement() {
 		mMatrix = new Matrix();
@@ -58,19 +62,28 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
-	public void setRotate(final float degrees) {
-		mMatrix.setRotate(degrees);
-		// synchronized (mMatrixValues) {
-		// mMatrix.getValues(mMatrixValues);
-		// mMatrixValues[Matrix.] += scaleX;
-		// mMatrixValues[Matrix.MSCALE_Y] += scaleY;
-		// mMatrix.setValues(mMatrixValues);
-		// }
-	}
+	// TODO right way with seperate rotation matrix? how to get rotation?
+
+	// public void setRotate(final float degrees) {
+	// mRotationMatrix.reset();
+	// mRotationMatrix.postRotate(degrees);
+	// mMatrix.postConcat(mRotationMatrix);
+	// }
+
+	private final Matrix mRotationMatrix = new Matrix();
 
 	public void addRotate(final float degrees) {
-		mMatrix.setRotate(degrees);
-		// mMatrix.
+		mRotationMatrix.setRotate(degrees);
+		mMatrix.postConcat(mRotationMatrix);
+	}
+
+	public void addRotateAroundCenter(final float degrees) {
+		synchronized (mMatrixValues) {
+			mMatrix.getValues(mMatrixValues);
+			mRotationMatrix.setRotate(degrees, mMatrixValues[Matrix.MTRANS_X],
+					mMatrixValues[Matrix.MTRANS_Y]);
+			mMatrix.postConcat(mRotationMatrix);
+		}
 	}
 
 	public void addChild(final FeSurfaceElement child) {
@@ -87,20 +100,23 @@ public abstract class FeSurfaceElement {
 		canvas.restore();
 	}
 
-	public final void setUpdateInterval(final long updateInterval) {
-		mUpdateInterval = updateInterval;
+	public final void setUpdateInterval(final int updateInterval) {
+		mDoUpdateInterval = updateInterval;
+		mDoUpdateCounter = updateInterval;
 	}
 
 	public final void update(final long elapsedMillis) {
 		onUpdate(elapsedMillis);
-		if (mUpdateInterval > 0
-				&& mLastDoUpdate + mUpdateInterval <= System
-						.currentTimeMillis()) {
-			doUpdate();
-			mLastDoUpdate = System.currentTimeMillis();
-		}
 		for (final FeSurfaceElement e : mChildren) {
 			e.update(elapsedMillis);
+		}
+
+		if (mDoUpdateInterval > 0) {
+			mDoUpdateCounter -= elapsedMillis;
+			if (mDoUpdateCounter <= 0) {
+				mDoUpdateCounter += mDoUpdateInterval;
+				doUpdate();
+			}
 		}
 	}
 

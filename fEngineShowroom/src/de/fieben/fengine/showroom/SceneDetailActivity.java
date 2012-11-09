@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import de.fieben.fengine.showroom.scenes.SceneProvider;
 
 public class SceneDetailActivity extends FragmentActivity {
 
@@ -14,6 +15,11 @@ public class SceneDetailActivity extends FragmentActivity {
 		setContentView(R.layout.activity_scene_detail);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setTitle(
+				SceneProvider.SCENE_ITEMS.get(
+						getIntent().getIntExtra(
+								SceneDetailFragment.ARG_ITEM_ID, -1) - 1)
+						.toString());
 
 		if (savedInstanceState == null) {
 			final Bundle arguments = new Bundle();

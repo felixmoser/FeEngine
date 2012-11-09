@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import de.fieben.fengine.showroom.scenes.SceneProvider;
 
 public class SceneDetailFragment extends Fragment {
@@ -48,9 +47,6 @@ public class SceneDetailFragment extends Fragment {
 			// if (v instanceof TopDownScene) {
 			// ((TopDownScene) v).testOutput();
 			// }
-
-			((TextView) rootView.findViewById(R.id.scene_name))
-					.setText(mSceneItem.toString());
 		}
 		return rootView;
 	}

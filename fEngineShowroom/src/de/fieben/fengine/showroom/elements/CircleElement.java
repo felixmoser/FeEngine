@@ -9,6 +9,9 @@ public class CircleElement extends FeSurfaceElement {
 
 	private final int mRadius;
 	private int mColor;
+	private boolean mWeirdRotation;
+	private float mRotateAroundParentSpeed;
+	private float mRotateArountCenterSpeed;
 
 	public CircleElement(final int radius) {
 		mRadius = radius;
@@ -19,39 +22,32 @@ public class CircleElement extends FeSurfaceElement {
 		mColor = color;
 	}
 
+	public void setWeirdRotation(final boolean rotation) {
+		mColor = Color.RED;
+		mRotateAroundParentSpeed = 360f / 4000;
+		mRotateArountCenterSpeed = -180f / 1000;
+		mWeirdRotation = rotation;
+		setUpdateInterval(1000);
+	}
+
 	@Override
 	public void onDraw(final Canvas canvas, final Paint paint) {
 		paint.setColor(mColor);
 		canvas.drawCircle(0, 0, mRadius, paint);
 	}
 
-	private boolean mRandomMovement;
-	private long mLastMoveTime;
-	// speed in pixel/second
-	private int mSpeed;
-	private int mMoveX = 5;
-	private int mMoveY = -5;
-
 	@Override
 	public void onUpdate(final long elapsedMillis) {
-		if (mRandomMovement) {
-			// if (mLastMoveTime + mSpeed <= System.currentTimeMillis()) {
-			// mLastMoveTime = System.currentTimeMillis();
-			if (mMoveX > -20) {
-				addTranslate(mMoveX--, mMoveY++);
-			} else {
-				addTranslate(mMoveX++, mMoveY--);
-			}
-			// }
+		if (mWeirdRotation) {
+			addRotate(mRotateAroundParentSpeed * elapsedMillis);
+			addRotateAroundCenter(mRotateArountCenterSpeed * elapsedMillis);
 		}
 	}
 
 	@Override
 	public void doUpdate() {
-		// mColor = mColor == Color.BLUE ? Color.RED : Color.BLUE;
-	}
-
-	public void setRandomMovement(final boolean movement) {
-		mRandomMovement = movement;
+		if (mWeirdRotation) {
+			mColor = mColor == Color.RED ? Color.GREEN : Color.RED;
+		}
 	}
 }

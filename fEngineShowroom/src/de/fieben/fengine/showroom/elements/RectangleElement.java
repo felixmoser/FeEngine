@@ -9,11 +9,11 @@ import de.fieben.fengine.surface.FeSurfaceElement;
 public class RectangleElement extends FeSurfaceElement {
 
 	private final Rect mDimensions;
-
 	private int mColor;
 
 	public RectangleElement(final int width, final int height,
 			final boolean centerAnchor) {
+		// TODO replace centerAnchor with flag. eg. x-achses center
 		if (centerAnchor) {
 			mDimensions = new Rect(-width / 2, -height / 2, width / 2,
 					height / 2);
@@ -35,11 +35,9 @@ public class RectangleElement extends FeSurfaceElement {
 
 	@Override
 	public void onUpdate(final long elapsedMillis) {
-
 	}
 
 	@Override
 	public void doUpdate() {
-
 	}
 }
