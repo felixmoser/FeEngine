@@ -15,7 +15,7 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 
 	private FeSurfaceThread mSurfaceThread;
 	private Paint mPaint;
-	private FeSurfaceElement mRootElement;
+	private FeRootElementImpl mRootElement;
 
 	public FeSurface(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
@@ -23,7 +23,7 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 		mSurfaceThread = new FeSurfaceThread(this);
 		setFocusable(true);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mRootElement = new FeRootElementImpl(Color.WHITE);
+		mRootElement = new FeRootElementImpl(Color.WHITE, 100);
 	}
 
 	@Override
@@ -37,6 +37,7 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceChanged(final SurfaceHolder holder, final int format,
 			final int width, final int height) {
+		mRootElement.calculateGrid(width, height);
 	}
 
 	@Override
@@ -70,6 +71,10 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 		synchronized (mRootElement) {
 			mRootElement.addChild(element);
 		}
+	}
+
+	public void setScale(final float scaleX, final float scaleY) {
+		mRootElement.setScale(scaleX, scaleY);
 	}
 
 	// TODO how to handle touchs?

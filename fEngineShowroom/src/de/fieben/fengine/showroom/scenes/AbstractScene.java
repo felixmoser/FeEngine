@@ -17,7 +17,7 @@ public class AbstractScene extends FeSurface {
 	public AbstractScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 		mRootCircle = new CircleElement(75);
-		mRootCircle.setTranslate(300, 300);
+		mRootCircle.setTranslate(200, 200);
 		mRootCircle.setColor(Color.BLUE);
 
 		mOrbitElipse = new CircleElement(20);
@@ -25,11 +25,19 @@ public class AbstractScene extends FeSurface {
 		mOrbitElipse.setScale(0.5f, 3);
 		mOrbitElipse.setWeirdRotation(true);
 
-		mPointerRectangle = new RectangleElement(5, 65, false);
+		mPointerRectangle = new RectangleElement(5, -65, false);
 		mPointerRectangle.setColor(Color.YELLOW);
 
-		mRootCircle.addChild(mOrbitElipse);
-		// mRootCircle.addChild(mPointerRectangle);
+		// mRootCircle.addChild(mOrbitElipse);
+
+		// TODO scaling correct?
+		// setScale(2, 2);
+		mRootCircle.addChild(new CircleElement(1));
+		mRootCircle.addChild(mPointerRectangle);
+
+		// final CircleElement point = new CircleElement(5);
+		// point.setColor(Color.BLACK);
+		// addElement(point);
 		addElement(mRootCircle);
 	}
 }

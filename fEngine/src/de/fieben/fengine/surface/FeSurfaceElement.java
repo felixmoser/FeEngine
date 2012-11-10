@@ -9,11 +9,14 @@ import android.graphics.Paint;
 
 public abstract class FeSurfaceElement {
 
-	public static int UPDATE_INTERVAL_30FPS = 34;
-	public static int UPDATE_INTERVAL_60FPS = 16;
-
 	private final Matrix mMatrix;
 	private final float[] mMatrixValues = new float[9];
+
+	// TODO right way with seperate rotation matrix?
+	private final Matrix mRotationMatrix = new Matrix();
+	private float mRotationDegrees = 0f;
+	private float mRotationAroundCenterDegrees = 0f;
+
 	// TODO what is the most performant data holder?
 	private List<FeSurfaceElement> mChildren;
 
@@ -62,25 +65,35 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
-	// TODO right way with seperate rotation matrix? how to get rotation?
-
-	// public void setRotate(final float degrees) {
-	// mRotationMatrix.reset();
-	// mRotationMatrix.postRotate(degrees);
-	// mMatrix.postConcat(mRotationMatrix);
-	// }
-
-	private final Matrix mRotationMatrix = new Matrix();
+	public void setRotate(final float degrees) {
+		mRotationDegrees = degrees;
+		mRotationMatrix.setRotate(mRotationDegrees);
+		mMatrix.postConcat(mRotationMatrix);
+	}
 
 	public void addRotate(final float degrees) {
-		mRotationMatrix.setRotate(degrees);
+		mRotationDegrees += degrees;
+		mRotationMatrix.setRotate(mRotationDegrees);
 		mMatrix.postConcat(mRotationMatrix);
+	}
+
+	public void setRotateAroundCenter(final float degrees) {
+		synchronized (mMatrixValues) {
+			mRotationAroundCenterDegrees = degrees;
+			mMatrix.getValues(mMatrixValues);
+			mRotationMatrix.setRotate(mRotationAroundCenterDegrees,
+					mMatrixValues[Matrix.MTRANS_X],
+					mMatrixValues[Matrix.MTRANS_Y]);
+			mMatrix.postConcat(mRotationMatrix);
+		}
 	}
 
 	public void addRotateAroundCenter(final float degrees) {
 		synchronized (mMatrixValues) {
+			mRotationAroundCenterDegrees += degrees;
 			mMatrix.getValues(mMatrixValues);
-			mRotationMatrix.setRotate(degrees, mMatrixValues[Matrix.MTRANS_X],
+			mRotationMatrix.setRotate(mRotationAroundCenterDegrees,
+					mMatrixValues[Matrix.MTRANS_X],
 					mMatrixValues[Matrix.MTRANS_Y]);
 			mMatrix.postConcat(mRotationMatrix);
 		}

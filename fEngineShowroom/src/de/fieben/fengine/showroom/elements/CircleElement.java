@@ -22,6 +22,12 @@ public class CircleElement extends FeSurfaceElement {
 		mColor = color;
 	}
 
+	@Override
+	public void onDraw(final Canvas canvas, final Paint paint) {
+		paint.setColor(mColor);
+		canvas.drawCircle(0, 0, mRadius, paint);
+	}
+
 	public void setWeirdRotation(final boolean rotation) {
 		mColor = Color.RED;
 		mRotateAroundParentSpeed = 360f / 4000;
@@ -31,16 +37,10 @@ public class CircleElement extends FeSurfaceElement {
 	}
 
 	@Override
-	public void onDraw(final Canvas canvas, final Paint paint) {
-		paint.setColor(mColor);
-		canvas.drawCircle(0, 0, mRadius, paint);
-	}
-
-	@Override
 	public void onUpdate(final long elapsedMillis) {
 		if (mWeirdRotation) {
-			addRotate(mRotateAroundParentSpeed * elapsedMillis);
-			addRotateAroundCenter(mRotateArountCenterSpeed * elapsedMillis);
+			setRotate(mRotateAroundParentSpeed * elapsedMillis);
+			setRotateAroundCenter(mRotateArountCenterSpeed * elapsedMillis);
 		}
 	}
 
