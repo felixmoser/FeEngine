@@ -23,7 +23,7 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 		mSurfaceThread = new FeSurfaceThread(this);
 		setFocusable(true);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mRootElement = new FeRootElementImpl(Color.WHITE, 100);
+		mRootElement = new FeRootElementImpl(Color.CYAN, 100);
 	}
 
 	@Override
@@ -77,5 +77,7 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 		mRootElement.setScale(scaleX, scaleY);
 	}
 
-	// TODO how to handle touchs?
+	public void addTranslate(final float translateX, final float translateY) {
+		mRootElement.addTranslate(translateX, translateY);
+	}
 }

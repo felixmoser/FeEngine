@@ -3,6 +3,7 @@ package de.fieben.fengine.showroom.scenes;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import de.fieben.fengine.showroom.elements.CircleElement;
 import de.fieben.fengine.showroom.elements.RectangleElement;
 import de.fieben.fengine.surface.FeSurface;
@@ -31,7 +32,7 @@ public class AbstractScene extends FeSurface {
 		// mRootCircle.addChild(mOrbitElipse);
 
 		// TODO scaling correct?
-		// setScale(2, 2);
+		setScale(2, 2);
 		mRootCircle.addChild(new CircleElement(1));
 		mRootCircle.addChild(mPointerRectangle);
 
@@ -40,4 +41,29 @@ public class AbstractScene extends FeSurface {
 		// addElement(point);
 		addElement(mRootCircle);
 	}
+
+	// TODO WIP zoom gesture?
+	// TODO rename
+	private float mLastX;
+	private float mLastY;
+
+	@Override
+	public boolean onTouchEvent(final MotionEvent event) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			mLastX = event.getX();
+			mLastY = event.getY();
+			break;
+		case MotionEvent.ACTION_MOVE:
+			addTranslate(event.getX() - mLastX, event.getY() - mLastY);
+			mLastX = event.getX();
+			mLastY = event.getY();
+			break;
+		case MotionEvent.ACTION_UP:
+			addTranslate(event.getX() - mLastX, event.getY() - mLastY);
+			break;
+		}
+		return true;
+	}
+
 }
