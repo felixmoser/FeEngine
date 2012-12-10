@@ -30,8 +30,8 @@ public class CircleElement extends FeSurfaceElement {
 
 	public void setWeirdRotation(final boolean rotation) {
 		mColor = Color.RED;
-		mRotateAroundParentSpeed = 360f / 8000;
-		mRotateArountCenterSpeed = -180f / 2000;
+		mRotateAroundParentSpeed = 360f / 4000;
+		mRotateArountCenterSpeed = -180f / 1000;
 		mWeirdRotation = rotation;
 		setUpdateInterval(1000);
 	}

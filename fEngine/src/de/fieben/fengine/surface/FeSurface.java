@@ -14,8 +14,8 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 	private final String LOG_TAG = FeSurface.class.getSimpleName();
 
 	private FeSurfaceThread mSurfaceThread;
-	private Paint mPaint;
-	private FeRootElementImpl mRootElement;
+	private final Paint mPaint;
+	private final FeRootElementImpl mRootElement;
 
 	public FeSurface(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
@@ -23,8 +23,10 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 		mSurfaceThread = new FeSurfaceThread(this);
 		setFocusable(true);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		// TODO set backgroundcolor as attribute
-		mRootElement = new FeRootElementImpl(Color.CYAN, 100);
+		final int backgroundColor = attrs.getAttributeIntValue(
+				"http://schemas.android.com/apk/res-auto", "backgroundColor",
+				Color.BLACK);
+		mRootElement = new FeRootElementImpl(backgroundColor, 100);
 	}
 
 	@Override
@@ -38,7 +40,7 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceChanged(final SurfaceHolder holder, final int format,
 			final int width, final int height) {
-		// TODO enable grid from outsite
+		// TODO enable grid from attribute
 		mRootElement.calculateGrid(width, height);
 	}
 

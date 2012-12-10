@@ -19,8 +19,8 @@ public class SceneDetailActivity extends FragmentActivity {
 		mSceneId = getIntent().getIntExtra(SceneDetailFragment.ARG_ITEM_ID, -1);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar()
-				.setTitle(SceneProvider.findSceneById(mSceneId).toString());
+		getActionBar().setTitle(
+				SceneProvider.findSceneById(mSceneId).toString());
 
 		if (savedInstanceState == null) {
 			final Bundle arguments = new Bundle();

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="de.fieben.fengine.surface.FeSurface">
+		<attr
+			name="backgroundColor"
+			format="color"/>
+		<attr
+			name="setGrid"
+			format="boolean"/>
+		<attr
+			name="setGridColor"
+			format="color"/>
+	</declare-styleable>
+</resources>

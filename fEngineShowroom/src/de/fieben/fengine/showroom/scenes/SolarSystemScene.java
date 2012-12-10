@@ -8,8 +8,17 @@ import de.fieben.fengine.showroom.elements.RectangleElement;
 
 public class SolarSystemScene extends AbstractScene {
 
+	// TODO add asteroids and moons
 	private final CircleElement mSun;
+	// TODO set realistic behaviors
+	// private final CircleElement mMercury;
+	// private final CircleElement mVenus;
 	private final CircleElement mEarth;
+	// private final CircleElement mMars;
+	// private final CircleElement mJupiter;
+	// private final CircleElement mSaturn;
+	// private final CircleElement mUranus;
+	// private final CircleElement mNeptune;
 	private final RectangleElement mPointerRectangle;
 
 	public SolarSystemScene(final Context context, final AttributeSet attrs) {

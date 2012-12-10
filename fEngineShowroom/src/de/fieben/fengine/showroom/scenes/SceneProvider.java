@@ -12,6 +12,8 @@ public class SceneProvider {
 	private static List<SceneItem> SCENE_ITEMS = new ArrayList<SceneItem>();
 
 	static {
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_update,
+				UpdateTestScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_solar,
 				SolarSystemScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_clock,
