@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import de.fieben.fengine.showroom.scenes.SceneProvider;
 
 public class SceneDetailFragment extends Fragment {
@@ -13,8 +14,6 @@ public class SceneDetailFragment extends Fragment {
 
 	private SceneProvider.SceneItem mSceneItem;
 
-	// private AbstractScene mScene;
-
 	public SceneDetailFragment() {
 	}
 
@@ -22,8 +21,8 @@ public class SceneDetailFragment extends Fragment {
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments().containsKey(ARG_ITEM_ID)) {
-			mSceneItem = SceneProvider.SCENE_ITEMS.get(getArguments().getInt(
-					ARG_ITEM_ID) - 1);
+			mSceneItem = SceneProvider.findSceneById(getArguments().getInt(
+					ARG_ITEM_ID));
 		}
 	}
 
@@ -33,20 +32,9 @@ public class SceneDetailFragment extends Fragment {
 		final View rootView = inflater.inflate(R.layout.fragment_scene_detail,
 				container, false);
 		if (mSceneItem != null) {
-			// mScene =
-			// mSceneItem.mClass.cast(rootView.findViewById(R.id.scene));
-
-			// rootView.
-			//
-			// final View v = rootView.findViewById(R.id.scene);
-			// android.util.Log.i("testing", "::onCreateView:: "
-			// + v.getClass().getSimpleName());
-			// mSceneItem.mClass.cast(v);
-			// android.util.Log.i("testing", "::onCreateView:: "
-			// + v.getClass().getSimpleName());
-			// if (v instanceof TopDownScene) {
-			// ((TopDownScene) v).testOutput();
-			// }
+			final ViewStub stub = (ViewStub) rootView.findViewById(R.id.stub);
+			stub.setLayoutResource(mSceneItem.mId);
+			mSceneItem.mClass.cast(stub.inflate().findViewById(R.id.scene));
 		}
 		return rootView;
 	}

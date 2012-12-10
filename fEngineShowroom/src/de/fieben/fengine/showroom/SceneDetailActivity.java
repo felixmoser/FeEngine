@@ -9,22 +9,22 @@ import de.fieben.fengine.showroom.scenes.SceneProvider;
 
 public class SceneDetailActivity extends FragmentActivity {
 
+	private int mSceneId;
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scene_detail);
 
+		mSceneId = getIntent().getIntExtra(SceneDetailFragment.ARG_ITEM_ID, -1);
+
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle(
-				SceneProvider.SCENE_ITEMS.get(
-						getIntent().getIntExtra(
-								SceneDetailFragment.ARG_ITEM_ID, -1) - 1)
-						.toString());
+		getActionBar()
+				.setTitle(SceneProvider.findSceneById(mSceneId).toString());
 
 		if (savedInstanceState == null) {
 			final Bundle arguments = new Bundle();
-			arguments.putInt(SceneDetailFragment.ARG_ITEM_ID, getIntent()
-					.getIntExtra(SceneDetailFragment.ARG_ITEM_ID, -1));
+			arguments.putInt(SceneDetailFragment.ARG_ITEM_ID, mSceneId);
 			final SceneDetailFragment fragment = new SceneDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()

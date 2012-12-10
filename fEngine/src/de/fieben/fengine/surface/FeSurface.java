@@ -23,6 +23,7 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 		mSurfaceThread = new FeSurfaceThread(this);
 		setFocusable(true);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		// TODO set backgroundcolor as attribute
 		mRootElement = new FeRootElementImpl(Color.CYAN, 100);
 	}
 
@@ -37,6 +38,7 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceChanged(final SurfaceHolder holder, final int format,
 			final int width, final int height) {
+		// TODO enable grid from outsite
 		mRootElement.calculateGrid(width, height);
 	}
 

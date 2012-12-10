@@ -4,8 +4,9 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context=".SceneDetailFragment">
-	<de.fieben.fengine.showroom.scenes.AbstractScene
-		android:id="@+id/scene"
+	<ViewStub
+		android:id="@+id/stub"
+		android:inflatedId="@+id/scene"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
 </RelativeLayout>

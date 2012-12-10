@@ -27,6 +27,7 @@ public class FeRootElementImpl extends FeSurfaceElement {
 		}
 	}
 
+	// TODO the grid needs to be "floating"
 	public void calculateGrid(final int width, final int height) {
 		if (mGridSpacing > 0) {
 			mGrid = new float[(width / mGridSpacing + height / mGridSpacing) * 4];
