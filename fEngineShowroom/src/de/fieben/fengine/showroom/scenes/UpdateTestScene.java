@@ -4,8 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import de.fieben.fengine.showroom.elements.CircleElement;
+import de.fieben.fengine.surface.FeSurface;
 
-public class UpdateTestScene extends AbstractScene {
+public class UpdateTestScene extends FeSurface {
 
 	private final CircleElement mInnerCircle;
 	private final CircleElement mOrbitElipse;

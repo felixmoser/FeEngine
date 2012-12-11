@@ -6,11 +6,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import de.fieben.fengine.R;
 import de.fieben.fengine.surface.impl.FeRootElementImpl;
 
-public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
+public abstract class FeSurface extends SurfaceView implements
+		SurfaceHolder.Callback {
 	private final String LOG_TAG = FeSurface.class.getSimpleName();
 
 	private FeSurfaceThread mSurfaceThread;
@@ -23,10 +26,32 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 		mSurfaceThread = new FeSurfaceThread(this);
 		setFocusable(true);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		final int backgroundColor = attrs.getAttributeIntValue(
-				"http://schemas.android.com/apk/res-auto", "backgroundColor",
-				Color.BLACK);
-		mRootElement = new FeRootElementImpl(backgroundColor, 100);
+		mRootElement = new FeRootElementImpl(getIntValue(attrs,
+				R.string.xmlattr_backgroundRowCount, 0), getIntValue(attrs,
+				R.string.xmlattr_backgroundColumnCount, 0));
+		mRootElement.setVoidColor(getIntValue(attrs,
+				R.string.xmlattr_voidColor, Color.BLACK));
+		mRootElement.enableGrid(getIntValue(attrs,
+				R.string.xmlattr_gridSpacing, 0));
+		mRootElement.setGridColor(getIntValue(attrs,
+				R.string.xmlattr_gridColor, Color.WHITE));
+		setScrollable(getBooleanValue(attrs, R.string.xmlattr_scrollable, false));
+	}
+
+	// TODO getter/setter for all (xml)attributes
+
+	private boolean getBooleanValue(final AttributeSet attrs, final int attrId,
+			final boolean defaultValue) {
+		return attrs.getAttributeBooleanValue(
+				getResources().getString(R.string.xmlns_fengine),
+				getResources().getString(attrId), defaultValue);
+	}
+
+	private int getIntValue(final AttributeSet attrs, final int attrId,
+			final int defaultValue) {
+		return attrs.getAttributeIntValue(
+				getResources().getString(R.string.xmlns_fengine),
+				getResources().getString(attrId), defaultValue);
 	}
 
 	@Override
@@ -83,5 +108,40 @@ public class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void addTranslate(final float translateX, final float translateY) {
 		mRootElement.addTranslate(translateX, translateY);
+	}
+
+	public void setScrollable(final boolean dragEnabled) {
+		mDragEnabled = true;
+	}
+
+	private boolean mDragEnabled;
+	// TODO rename
+	private float mLastX;
+	private float mLastY;
+
+	// WIP impl tiled mode
+
+	@Override
+	public boolean onTouchEvent(final MotionEvent event) {
+		// TODO zoom gesture
+		if (mDragEnabled) {
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				mLastX = event.getX();
+				mLastY = event.getY();
+				break;
+			case MotionEvent.ACTION_MOVE:
+				addTranslate(event.getX() - mLastX, event.getY() - mLastY);
+				mLastX = event.getX();
+				mLastY = event.getY();
+				break;
+			case MotionEvent.ACTION_UP:
+				// TODO stop scrolling if tile border is reached
+				addTranslate(event.getX() - mLastX, event.getY() - mLastY);
+				break;
+			}
+			return true;
+		}
+		return false;
 	}
 }

@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">fEngine</string>
-	<string name="title_scene_detail">Scene Detail</string>
-	<string name="title_scene_list">Scenes</string>
+    <string name="app_name">fEngine</string>
+    <string name="title_scene_detail">Scene Detail</string>
+    <string name="title_scene_list">Scenes</string>
 </resources>

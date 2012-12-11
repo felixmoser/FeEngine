@@ -1,11 +1,11 @@
-package de.fieben.fengine.showroom;
+package de.fieben.fengine.showroom.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
-import de.fieben.fengine.showroom.scenes.SceneProvider;
+import de.fieben.fengine.showroom.utils.SceneProvider;
 
 public class SceneListFragment extends ListFragment {
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.fieben.fengine.showroom.scenes.TiledForestScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fe="http://schemas.android.com/apk/res-de.fieben.fengine"
+    android:id="@+id/scene"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    fe:backgroundColumnCount="10"
+    fe:backgroundRowCount="10"
+    fe:scrollable="true"
+    fe:voidColor="#ff0000" />

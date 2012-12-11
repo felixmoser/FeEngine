@@ -5,8 +5,9 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import de.fieben.fengine.showroom.elements.CircleElement;
 import de.fieben.fengine.showroom.elements.RectangleElement;
+import de.fieben.fengine.surface.FeSurface;
 
-public class SolarSystemScene extends AbstractScene {
+public class SolarSystemScene extends FeSurface {
 
 	// TODO add asteroids and moons
 	private final CircleElement mSun;
@@ -56,7 +57,5 @@ public class SolarSystemScene extends AbstractScene {
 		// point.setColor(Color.BLACK);
 		// addElement(point);
 		addElement(mSun);
-
-		setDrag(true);
 	}
 }

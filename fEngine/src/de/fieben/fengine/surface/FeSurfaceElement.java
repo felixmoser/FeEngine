@@ -7,7 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
+// TODO impl FeSurfaceObject as parent and FeSurfaceTile as child of FSO.
 public abstract class FeSurfaceElement {
+
+	// TODO bitmap as resource / instead of color
 
 	private final Matrix mMatrix;
 	private final float[] mMatrixValues = new float[9];
@@ -47,6 +50,7 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
+	// TODO make depending on display density?
 	public void setScale(final float scaleX, final float scaleY) {
 		synchronized (mMatrixValues) {
 			mMatrix.getValues(mMatrixValues);

@@ -1,8 +1,11 @@
-package de.fieben.fengine.showroom;
+package de.fieben.fengine.showroom.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import de.fieben.fengine.showroom.R;
+import de.fieben.fengine.showroom.fragments.SceneDetailFragment;
+import de.fieben.fengine.showroom.fragments.SceneListFragment;
 
 public class SceneListActivity extends FragmentActivity implements
 		SceneListFragment.Callbacks {
