@@ -2,10 +2,7 @@
 <resources>
     <declare-styleable name="de.fieben.fengine.surface.FeSurface">
         <attr name="voidColor" format="color" />
-        <attr name="gridSpacing" format="integer" />
-        <attr name="gridColor" format="color" />
         <attr name="scrollable" format="boolean" />
-        <!-- TODO combine? -->
         <attr name="backgroundRowCount" format="integer" />
         <attr name="backgroundColumnCount" format="integer" />
     </declare-styleable>

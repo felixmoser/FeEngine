@@ -12,6 +12,8 @@ import android.graphics.Paint;
  */
 public class FeSurfaceTile {
 
+	// TODO add bitmap
+
 	private int mId;
 	private int mBackgroundColor;
 	public int mWidth;
@@ -30,9 +32,8 @@ public class FeSurfaceTile {
 		paint.setColor(mBackgroundColor);
 		canvas.drawRect(x, y, x + mWidth, y + mHeight, paint);
 
-		// WIP
-		paint.setColor(mBackgroundColor == Color.BLACK ? Color.WHITE
-				: Color.BLACK);
+		// TODO enable in debug mode
+		paint.setColor(Color.BLACK + (Color.WHITE ^ mBackgroundColor));
 		canvas.drawText(String.valueOf(mId + 1), x + 5, y + 10, paint);
 	}
 }

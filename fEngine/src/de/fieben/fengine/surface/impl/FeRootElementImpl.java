@@ -11,15 +11,12 @@ import de.fieben.fengine.surface.FeSurfaceTile;
 public class FeRootElementImpl extends FeSurfaceElement {
 	private int mVoidColor;
 
-	// WIP what to do with the grid? stash?
-	// private int mGridColor = Color.BLACK;
-	// private float[] mGrid;
-	// private int mGridSpacing;
-
 	private final int mRowCount;
 	private final int mColumnCount;
 	private final HashMap<Integer, HashMap<Integer, FeSurfaceTile>> mBackground;
 
+	// WIP useful? check memory and performance behavior at declaration and
+	// initialization.
 	private HashMap<Integer, FeSurfaceTile> mNextRow;
 	private FeSurfaceTile mNextTile = null;
 	private int mBackgroundDrawOffsetX = 0;
@@ -55,18 +52,6 @@ public class FeRootElementImpl extends FeSurfaceElement {
 		mVoidColor = VoidColor;
 	}
 
-	public void enableGrid(final int gridSpacing) {
-		// mGridSpacing = gridSpacing;
-	}
-
-	public void setGridColor(final int gridColor) {
-		// mGridColor = gridColor;
-	}
-
-	public void disableGrid() {
-		// mGridSpacing = 0;
-	}
-
 	@Override
 	public void onDraw(final Canvas canvas, final Paint paint) {
 		canvas.drawColor(mVoidColor);
@@ -80,49 +65,16 @@ public class FeRootElementImpl extends FeSurfaceElement {
 					mNextTile = mNextRow.get(j);
 					mNextTile.draw(canvas, mBackgroundDrawOffsetX,
 							mBackgroundDrawOffsetY, paint);
-					// WIP remove spacing
+					// TODO spacing as param or alpha offset using png?
 					mBackgroundDrawOffsetX += mNextTile.mWidth + 5;
 				}
 				mBackgroundDrawOffsetY += mNextTile.mHeight + 5;
 			}
 		}
-
-		// if (mGrid != null) {
-		// paint.setColor(mGridColor);
-		// drawGrid(canvas, paint);
-		// }
-	}
-
-	// TODO the grid needs to be "floating"
-	// private void drawGrid(final Canvas canvas, final Paint paint) {
-	// canvas.drawLines(mGrid, paint);
-	// }
-
-	public void calculateGrid(final int width, final int height) {
-		// if (mGridSpacing > 0) {
-		// mGrid = new float[(width / mGridSpacing + height / mGridSpacing) *
-		// 4];
-		// int nextGridIndex = 0;
-		// for (int nextXValue = mGridSpacing; nextXValue < width; nextXValue +=
-		// mGridSpacing) {
-		// mGrid[nextGridIndex++] = nextXValue;
-		// mGrid[nextGridIndex++] = 0;
-		// mGrid[nextGridIndex++] = nextXValue;
-		// mGrid[nextGridIndex++] = height;
-		// }
-		// for (int nextYValue = mGridSpacing; nextYValue < height; nextYValue
-		// += mGridSpacing) {
-		// mGrid[nextGridIndex++] = 0;
-		// mGrid[nextGridIndex++] = nextYValue;
-		// mGrid[nextGridIndex++] = width;
-		// mGrid[nextGridIndex++] = nextYValue;
-		// }
-		// }
 	}
 
 	@Override
 	public void onUpdate(final long elapsedMillis) {
-		// TODO update grid (offset) here?
 	}
 
 	@Override

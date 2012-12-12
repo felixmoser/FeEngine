@@ -2,8 +2,6 @@
 <resources>
     <string name="xmlns_fengine">http://schemas.android.com/apk/res-de.fieben.fengine</string>
     <string name="xmlattr_voidColor">voidColor</string>
-    <string name="xmlattr_gridSpacing">gridSpacing</string>
-    <string name="xmlattr_gridColor">gridColor</string>
     <string name="xmlattr_scrollable">scrollable</string>
     <string name="xmlattr_backgroundRowCount">backgroundRowCount</string>
     <string name="xmlattr_backgroundColumnCount">backgroundColumnCount</string>

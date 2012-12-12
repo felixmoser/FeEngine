@@ -26,15 +26,13 @@ public abstract class FeSurface extends SurfaceView implements
 		mSurfaceThread = new FeSurfaceThread(this);
 		setFocusable(true);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		// WIP combine row and column attribute? constructor or method to set
+		// tile mode?
 		mRootElement = new FeRootElementImpl(getIntValue(attrs,
 				R.string.xmlattr_backgroundRowCount, 0), getIntValue(attrs,
 				R.string.xmlattr_backgroundColumnCount, 0));
 		mRootElement.setVoidColor(getIntValue(attrs,
 				R.string.xmlattr_voidColor, Color.BLACK));
-		mRootElement.enableGrid(getIntValue(attrs,
-				R.string.xmlattr_gridSpacing, 0));
-		mRootElement.setGridColor(getIntValue(attrs,
-				R.string.xmlattr_gridColor, Color.WHITE));
 		setScrollable(getBooleanValue(attrs, R.string.xmlattr_scrollable, false));
 	}
 
@@ -65,8 +63,6 @@ public abstract class FeSurface extends SurfaceView implements
 	@Override
 	public void surfaceChanged(final SurfaceHolder holder, final int format,
 			final int width, final int height) {
-		// TODO enable grid from attribute
-		mRootElement.calculateGrid(width, height);
 	}
 
 	@Override
@@ -118,8 +114,6 @@ public abstract class FeSurface extends SurfaceView implements
 	// TODO rename
 	private float mLastX;
 	private float mLastY;
-
-	// WIP impl tiled mode
 
 	@Override
 	public boolean onTouchEvent(final MotionEvent event) {

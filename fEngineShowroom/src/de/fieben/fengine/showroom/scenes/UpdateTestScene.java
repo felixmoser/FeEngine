@@ -3,13 +3,16 @@ package de.fieben.fengine.showroom.scenes;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.SurfaceHolder;
 import de.fieben.fengine.showroom.elements.CircleElement;
+import de.fieben.fengine.showroom.elements.GridElement;
 import de.fieben.fengine.surface.FeSurface;
 
 public class UpdateTestScene extends FeSurface {
 
 	private final CircleElement mInnerCircle;
 	private final CircleElement mOrbitElipse;
+	private GridElement mBackgroundGrid;
 
 	public UpdateTestScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
@@ -25,5 +28,15 @@ public class UpdateTestScene extends FeSurface {
 		mInnerCircle.addChild(mOrbitElipse);
 
 		addElement(mInnerCircle);
+	}
+
+	@Override
+	public void surfaceChanged(final SurfaceHolder holder, final int format,
+			final int width, final int height) {
+		mBackgroundGrid = new GridElement(100, width, height);
+		mBackgroundGrid.setColor(Color.YELLOW);
+		// TODO impl addBackgroundElement() to FeSurface
+		addElement(mBackgroundGrid);
+		super.surfaceChanged(holder, format, width, height);
 	}
 }
