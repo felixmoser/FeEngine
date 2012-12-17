@@ -12,6 +12,7 @@ public abstract class FeSurfaceElement {
 
 	// TODO bitmap as resource / instead of color
 
+	// TODO final + sync block or volatile?
 	private final Matrix mMatrix;
 	private final float[] mMatrixValues = new float[9];
 
@@ -19,8 +20,10 @@ public abstract class FeSurfaceElement {
 	private final Matrix mRotationMatrix = new Matrix();
 	private float mRotationDegrees = 0f;
 	private float mRotationAroundCenterDegrees = 0f;
+	// TODO and what about translate?
+	protected float mTranslateOffsetX;
+	protected float mTranslateOffsetY;
 
-	// TODO what is the most performant data holder?
 	private List<FeSurfaceElement> mChildren;
 
 	private int mDoUpdateInterval;
@@ -32,27 +35,26 @@ public abstract class FeSurfaceElement {
 	}
 
 	public void setTranslate(final float translateX, final float translateY) {
-		// TODO sync block needed?
-		synchronized (mMatrixValues) {
+		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrixValues[Matrix.MTRANS_X] = translateX;
-			mMatrixValues[Matrix.MTRANS_Y] = translateY;
+			mMatrixValues[Matrix.MTRANS_X] = mTranslateOffsetX = translateX;
+			mMatrixValues[Matrix.MTRANS_Y] = mTranslateOffsetY = translateY;
 			mMatrix.setValues(mMatrixValues);
 		}
 	}
 
 	public void addTranslate(final float translateX, final float translateY) {
-		synchronized (mMatrixValues) {
+		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrixValues[Matrix.MTRANS_X] += translateX;
-			mMatrixValues[Matrix.MTRANS_Y] += translateY;
+			mMatrixValues[Matrix.MTRANS_X] = mTranslateOffsetX += translateX;
+			mMatrixValues[Matrix.MTRANS_Y] = mTranslateOffsetY += translateY;
 			mMatrix.setValues(mMatrixValues);
 		}
 	}
 
 	// TODO make depending on display density?
 	public void setScale(final float scaleX, final float scaleY) {
-		synchronized (mMatrixValues) {
+		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
 			mMatrixValues[Matrix.MSCALE_X] = scaleX;
 			mMatrixValues[Matrix.MSCALE_Y] = scaleY;
@@ -61,7 +63,7 @@ public abstract class FeSurfaceElement {
 	}
 
 	public void addScale(final float scaleX, final float scaleY) {
-		synchronized (mMatrixValues) {
+		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
 			mMatrixValues[Matrix.MSCALE_X] += scaleX;
 			mMatrixValues[Matrix.MSCALE_Y] += scaleY;
@@ -70,19 +72,23 @@ public abstract class FeSurfaceElement {
 	}
 
 	public void setRotate(final float degrees) {
-		mRotationDegrees = degrees;
-		mRotationMatrix.setRotate(mRotationDegrees);
-		mMatrix.postConcat(mRotationMatrix);
+		synchronized (mMatrix) {
+			mRotationDegrees = degrees;
+			mRotationMatrix.setRotate(mRotationDegrees);
+			mMatrix.postConcat(mRotationMatrix);
+		}
 	}
 
 	public void addRotate(final float degrees) {
-		mRotationDegrees += degrees;
-		mRotationMatrix.setRotate(mRotationDegrees);
-		mMatrix.postConcat(mRotationMatrix);
+		synchronized (mMatrix) {
+			mRotationDegrees += degrees;
+			mRotationMatrix.setRotate(mRotationDegrees);
+			mMatrix.postConcat(mRotationMatrix);
+		}
 	}
 
 	public void setRotateAroundCenter(final float degrees) {
-		synchronized (mMatrixValues) {
+		synchronized (mMatrix) {
 			mRotationAroundCenterDegrees = degrees;
 			mMatrix.getValues(mMatrixValues);
 			mRotationMatrix.setRotate(mRotationAroundCenterDegrees,
@@ -93,7 +99,7 @@ public abstract class FeSurfaceElement {
 	}
 
 	public void addRotateAroundCenter(final float degrees) {
-		synchronized (mMatrixValues) {
+		synchronized (mMatrix) {
 			mRotationAroundCenterDegrees += degrees;
 			mMatrix.getValues(mMatrixValues);
 			mRotationMatrix.setRotate(mRotationAroundCenterDegrees,
@@ -108,13 +114,15 @@ public abstract class FeSurfaceElement {
 	}
 
 	public final void draw(final Canvas canvas, final Paint paint) {
-		canvas.save();
-		canvas.concat(mMatrix);
-		onDraw(canvas, paint);
-		for (final FeSurfaceElement e : mChildren) {
-			e.draw(canvas, paint);
+		synchronized (mMatrix) {
+			canvas.save();
+			canvas.concat(mMatrix);
+			onDraw(canvas, paint);
+			for (final FeSurfaceElement e : mChildren) {
+				e.draw(canvas, paint);
+			}
+			canvas.restore();
 		}
-		canvas.restore();
 	}
 
 	public final void setUpdateInterval(final int updateInterval) {
@@ -123,16 +131,19 @@ public abstract class FeSurfaceElement {
 	}
 
 	public final void update(final long elapsedMillis) {
-		onUpdate(elapsedMillis);
-		for (final FeSurfaceElement e : mChildren) {
-			e.update(elapsedMillis);
-		}
+		synchronized (mMatrix) {
+			onUpdate(elapsedMillis);
+			for (final FeSurfaceElement e : mChildren) {
+				e.update(elapsedMillis);
+			}
 
-		if (mDoUpdateInterval > 0) {
-			mDoUpdateCounter -= elapsedMillis;
-			if (mDoUpdateCounter <= 0) {
-				mDoUpdateCounter += mDoUpdateInterval;
-				doUpdate();
+			// TODO move to FST and impl update() - method without param
+			if (mDoUpdateInterval > 0) {
+				mDoUpdateCounter -= elapsedMillis;
+				if (mDoUpdateCounter <= 0) {
+					mDoUpdateCounter += mDoUpdateInterval;
+					doUpdate();
+				}
 			}
 		}
 	}

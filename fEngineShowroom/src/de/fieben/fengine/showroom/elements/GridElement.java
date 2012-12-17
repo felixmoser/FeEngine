@@ -11,10 +11,8 @@ public class GridElement extends FeSurfaceElement {
 	private int mSpacing = 0;
 	private float[] mGrid;
 
-	public GridElement(final int spacing, final int width, final int height) {
+	public GridElement(final int spacing) {
 		mSpacing = spacing;
-		// TODO method needed?
-		calculateGrid(width, height);
 	}
 
 	public void setColor(final int gridColor) {
@@ -32,7 +30,7 @@ public class GridElement extends FeSurfaceElement {
 		canvas.drawLines(mGrid, paint);
 	}
 
-	private void calculateGrid(final int width, final int height) {
+	public void calculateGrid(final int width, final int height) {
 		if (mSpacing > 0) {
 			mGrid = new float[(width / mSpacing + height / mSpacing) * 4];
 			int nextGridIndex = 0;

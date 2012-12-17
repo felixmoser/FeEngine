@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -19,6 +20,9 @@ public abstract class FeSurface extends SurfaceView implements
 	private FeSurfaceThread mSurfaceThread;
 	private final Paint mPaint;
 	private final FeRootElementImpl mRootElement;
+	private boolean mScrollEnabled;
+	private float mLastTouchX;
+	private float mLastTouchY;
 
 	public FeSurface(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
@@ -33,7 +37,8 @@ public abstract class FeSurface extends SurfaceView implements
 				R.string.xmlattr_backgroundColumnCount, 0));
 		mRootElement.setVoidColor(getIntValue(attrs,
 				R.string.xmlattr_voidColor, Color.BLACK));
-		setScrollable(getBooleanValue(attrs, R.string.xmlattr_scrollable, false));
+		mScrollEnabled = getBooleanValue(attrs, R.string.xmlattr_scrollable,
+				false);
 	}
 
 	// TODO getter/setter for all (xml)attributes
@@ -63,6 +68,7 @@ public abstract class FeSurface extends SurfaceView implements
 	@Override
 	public void surfaceChanged(final SurfaceHolder holder, final int format,
 			final int width, final int height) {
+		mRootElement.updateSurfaceSize(width, height);
 	}
 
 	@Override
@@ -84,14 +90,54 @@ public abstract class FeSurface extends SurfaceView implements
 		synchronized (mRootElement) {
 			mRootElement.draw(canvas, mPaint);
 		}
+
+		mPaint.setColor(Color.BLUE);
+		mPaint.setTextSize(34);
+		drawMultilineText(mFPS + "\n" + mRootElement.getDebugOutput(), 35, 50,
+				canvas);
+	}
+
+	private Rect mBounds = new Rect();
+
+	void drawMultilineText(final String str, final int x, final int y,
+			final Canvas canvas) {
+		int lineHeight = 0;
+		int yoffset = 0;
+		final String[] lines = str.split("\n");
+
+		mPaint.getTextBounds("Ig", 0, 2, mBounds);
+		lineHeight = (int) (mBounds.height() * 1.2);
+		for (int i = 0; i < lines.length; ++i) {
+			canvas.drawText(lines[i], x, y + yoffset, mPaint);
+			yoffset = yoffset + lineHeight;
+		}
 	}
 
 	protected void onUpdate(final long elapsedMillis) {
 		synchronized (mRootElement) {
 			mRootElement.update(elapsedMillis);
 		}
+		calculateFPS(elapsedMillis);
 	}
 
+	// WIP enable in debug mode
+	String mFPS = "";
+	private long[] mLastElapsed = new long[20];
+	private int mElapsedIndex = 0;
+
+	private void calculateFPS(final long elapsedMillis) {
+		if (mElapsedIndex >= 20) {
+			mElapsedIndex = 0;
+		}
+		mLastElapsed[mElapsedIndex++] = elapsedMillis;
+		long averageFPS = 0;
+		for (int i = 0; i < 20; i++) {
+			averageFPS += mLastElapsed[i];
+		}
+		mFPS = "FPS: " + String.valueOf(20000 / averageFPS);
+	}
+
+	// WIP !!! impl. "layers"
 	public void addElement(final FeSurfaceElement element) {
 		synchronized (mRootElement) {
 			mRootElement.addChild(element);
@@ -106,32 +152,29 @@ public abstract class FeSurface extends SurfaceView implements
 		mRootElement.addTranslate(translateX, translateY);
 	}
 
-	public void setScrollable(final boolean dragEnabled) {
-		mDragEnabled = true;
+	public void setScrollable(final boolean scrollEnabled) {
+		mScrollEnabled = scrollEnabled;
 	}
-
-	private boolean mDragEnabled;
-	// TODO rename
-	private float mLastX;
-	private float mLastY;
 
 	@Override
 	public boolean onTouchEvent(final MotionEvent event) {
 		// TODO zoom gesture
-		if (mDragEnabled) {
+		if (mScrollEnabled) {
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
-				mLastX = event.getX();
-				mLastY = event.getY();
+				mLastTouchX = event.getX();
+				mLastTouchY = event.getY();
 				break;
 			case MotionEvent.ACTION_MOVE:
-				addTranslate(event.getX() - mLastX, event.getY() - mLastY);
-				mLastX = event.getX();
-				mLastY = event.getY();
+				mRootElement.addTranslate(event.getX() - mLastTouchX,
+						event.getY() - mLastTouchY);
+				mLastTouchX = event.getX();
+				mLastTouchY = event.getY();
 				break;
 			case MotionEvent.ACTION_UP:
 				// TODO stop scrolling if tile border is reached
-				addTranslate(event.getX() - mLastX, event.getY() - mLastY);
+				mRootElement.addTranslate(event.getX() - mLastTouchX,
+						event.getY() - mLastTouchY);
 				break;
 			}
 			return true;

@@ -16,6 +16,12 @@ public class UpdateTestScene extends FeSurface {
 
 	public UpdateTestScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
+
+		mBackgroundGrid = new GridElement(100);
+		mBackgroundGrid.setColor(Color.YELLOW);
+		// TODO impl addBackgroundElement() to FeSurface
+		addElement(mBackgroundGrid);
+
 		mInnerCircle = new CircleElement(200);
 		mInnerCircle.setTranslate(700, 600);
 		mInnerCircle.setColor(Color.BLUE);
@@ -33,10 +39,7 @@ public class UpdateTestScene extends FeSurface {
 	@Override
 	public void surfaceChanged(final SurfaceHolder holder, final int format,
 			final int width, final int height) {
-		mBackgroundGrid = new GridElement(100, width, height);
-		mBackgroundGrid.setColor(Color.YELLOW);
-		// TODO impl addBackgroundElement() to FeSurface
-		addElement(mBackgroundGrid);
+		mBackgroundGrid.calculateGrid(width, height);
 		super.surfaceChanged(holder, format, width, height);
 	}
 }

@@ -32,8 +32,9 @@ public class FeSurfaceTile {
 		paint.setColor(mBackgroundColor);
 		canvas.drawRect(x, y, x + mWidth, y + mHeight, paint);
 
-		// TODO enable in debug mode
+		// WIP enable in debug mode
 		paint.setColor(Color.BLACK + (Color.WHITE ^ mBackgroundColor));
-		canvas.drawText(String.valueOf(mId + 1), x + 5, y + 10, paint);
+		paint.setTextSize(20);
+		canvas.drawText(String.valueOf(mId + 1), x + 10, y + 25, paint);
 	}
 }

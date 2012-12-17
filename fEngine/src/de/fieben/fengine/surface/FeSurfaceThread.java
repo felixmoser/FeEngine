@@ -4,11 +4,7 @@ import android.graphics.Canvas;
 
 public class FeSurfaceThread extends Thread {
 	private FeSurface mSurface;
-
 	public boolean mRun = true;
-	private long mLastUpdate;
-	private long mCurrentSystemTime;
-	private Canvas mCanvas;
 
 	public FeSurfaceThread(final FeSurface surface) {
 		mSurface = surface;
@@ -17,21 +13,23 @@ public class FeSurfaceThread extends Thread {
 	// TODO add frequenz
 	@Override
 	public void run() {
-		mLastUpdate = System.currentTimeMillis();
+		Canvas canvas = null;
+		long lastUpdate = System.currentTimeMillis();
 		while (mRun) {
 			try {
-				mCanvas = mSurface.getHolder().lockCanvas();
+				canvas = mSurface.getHolder().lockCanvas();
 				synchronized (mSurface.getHolder()) {
-					if (mCanvas != null) {
-						mCurrentSystemTime = System.currentTimeMillis();
-						mSurface.onDraw(mCanvas);
-						mSurface.onUpdate(mCurrentSystemTime - mLastUpdate);
-						mLastUpdate = mCurrentSystemTime;
+					if (canvas != null) {
+						final long currentSystemTime = System
+								.currentTimeMillis();
+						mSurface.onDraw(canvas);
+						mSurface.onUpdate(currentSystemTime - lastUpdate);
+						lastUpdate = currentSystemTime;
 					}
 				}
 			} finally {
-				if (mCanvas != null) {
-					mSurface.getHolder().unlockCanvasAndPost(mCanvas);
+				if (canvas != null) {
+					mSurface.getHolder().unlockCanvasAndPost(canvas);
 				}
 			}
 		}
