@@ -5,4 +5,5 @@
     <string name="xmlattr_scrollable">scrollable</string>
     <string name="xmlattr_backgroundRowCount">backgroundRowCount</string>
     <string name="xmlattr_backgroundColumnCount">backgroundColumnCount</string>
+    <string name="xmlattr_tileResource">tileResource</string>
 </resources>

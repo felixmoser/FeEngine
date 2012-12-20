@@ -5,5 +5,6 @@
         <attr name="scrollable" format="boolean" />
         <attr name="backgroundRowCount" format="integer" />
         <attr name="backgroundColumnCount" format="integer" />
+        <attr name="tileResource" format="integer" />
     </declare-styleable>
 </resources>

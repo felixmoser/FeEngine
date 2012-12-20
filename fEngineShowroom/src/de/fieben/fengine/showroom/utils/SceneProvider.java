@@ -11,6 +11,7 @@ import de.fieben.fengine.showroom.scenes.ClockScene;
 import de.fieben.fengine.showroom.scenes.IsometricForestScene;
 import de.fieben.fengine.showroom.scenes.JumpNRunScene;
 import de.fieben.fengine.showroom.scenes.SolarSystemScene;
+import de.fieben.fengine.showroom.scenes.SoundExampleScene;
 import de.fieben.fengine.showroom.scenes.StormySeaScene;
 import de.fieben.fengine.showroom.scenes.TiledForestScene;
 import de.fieben.fengine.showroom.scenes.UpdateTestScene;
@@ -28,14 +29,16 @@ public class SceneProvider {
 				UpdateTestScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_solar,
 				SolarSystemScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_clock,
-				ClockScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sea,
-				StormySeaScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_tiled_forest,
 				TiledForestScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_isometric_forest,
 				IsometricForestScene.class));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sound,
+				SoundExampleScene.class));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_clock,
+				ClockScene.class));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sea,
+				StormySeaScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_jump,
 				JumpNRunScene.class));
 	}
