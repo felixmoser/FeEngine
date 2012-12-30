@@ -29,7 +29,7 @@ public class UpdateTestScene extends FeSurface {
 		mOrbitElipse = new CircleElement(50);
 		mOrbitElipse.setTranslate(0, -400);
 		mOrbitElipse.setScale(0.5f, 3);
-		mOrbitElipse.setWeirdRotation(true);
+		mOrbitElipse.setUpdateTestRotation(true);
 
 		mInnerCircle.addChild(mOrbitElipse);
 

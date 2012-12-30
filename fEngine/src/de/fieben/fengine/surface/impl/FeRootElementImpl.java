@@ -1,8 +1,8 @@
 package de.fieben.fengine.surface.impl;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.SparseArray;
 import de.fieben.fengine.surface.FeSurfaceElement;
 
 public class FeRootElementImpl extends FeSurfaceElement {
@@ -34,9 +34,9 @@ public class FeRootElementImpl extends FeSurfaceElement {
 	public void doUpdate() {
 	}
 
-	public void addMap(final FeSurfaceMap.MODE mode, final int rowCount,
-			final int columnCount, final Bitmap tileBitmap) {
-		mMap = new FeSurfaceMap(this, mode, rowCount, columnCount, tileBitmap);
+	public void addMap(final FeSurfaceMap.MODE mode,
+			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
+		mMap = new FeSurfaceMap(this, mode, tiles);
 		addChild(BACKGROUND_LAYER, mMap);
 	}
 

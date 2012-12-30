@@ -3,8 +3,8 @@
     <declare-styleable name="de.fieben.fengine.surface.FeSurface">
         <attr name="voidColor" format="color" />
         <attr name="scrollable" format="boolean" />
-        <attr name="backgroundRowCount" format="integer" />
-        <attr name="backgroundColumnCount" format="integer" />
-        <attr name="tileResource" format="integer" />
+        <!-- <attr name="backgroundRowCount" format="integer" /> -->
+        <!-- <attr name="backgroundColumnCount" format="integer" /> -->
+        <!-- <attr name="tileResource" format="integer" /> -->
     </declare-styleable>
 </resources>

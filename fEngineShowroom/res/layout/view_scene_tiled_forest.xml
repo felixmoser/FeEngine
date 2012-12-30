@@ -7,4 +7,4 @@
     fe:backgroundColumnCount="100"
     fe:backgroundRowCount="100"
     fe:scrollable="true"
-    fe:voidColor="#ff0000" />
+    fe:voidColor="#0000ff" />

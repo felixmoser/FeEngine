@@ -1,8 +1,6 @@
 package de.fieben.fengine.surface.impl;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.SparseArray;
 import de.fieben.fengine.surface.FeSurfaceElement;
@@ -17,54 +15,30 @@ public class FeSurfaceMap extends FeSurfaceElement {
 
 	private final FeRootElementImpl mRootElement;
 
-	// TODO set tiles with params or method, and add a mTileMode
-	private final SparseArray<SparseArray<FeSurfaceTile>> mBackgroundTiles;
-	// TODO same with tile size for X and Y;
-	private int mTileSize = 250;
+	private final SparseArray<SparseArray<? extends FeSurfaceTile>> mBackgroundTiles;
+	private int mTileWidth = 0;
+	private int mTileHeight = 0;
 
 	private int mRowCount = 0;
 	private int mColumnCount = 0;
 
 	public FeSurfaceMap(final FeRootElementImpl rootElement, final MODE mode,
-			final int rowCount, final int columnCount, final Bitmap tileBitmap) {
+			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
 		mRootElement = rootElement;
 
-		mBackgroundTiles = new SparseArray<SparseArray<FeSurfaceTile>>(rowCount);
-		// WIP this creation needs to get triggerd from FeSurface
-		// implementations
-		int id = 0;
-		boolean colorBlack = true;
-		for (int i = 0; i < rowCount; i++) {
+		mBackgroundTiles = tiles;
 
-			final SparseArray<FeSurfaceTile> row = new SparseArray<FeSurfaceTile>(
-					columnCount);
-			for (int j = 0; j < columnCount; j++) {
-				// WIP tile background color
-				if (tileBitmap != null) {
-					row.append(j,
-							new FeSurfaceTile(id++, colorBlack ? Color.LTGRAY
-									: Color.WHITE, tileBitmap));
-				} else {
-					row.append(j, new FeSurfaceTile(id++,
-							colorBlack ? Color.LTGRAY : Color.WHITE, mTileSize,
-							mTileSize));
-				}
-				colorBlack = !colorBlack;
-			}
-			mBackgroundTiles.append(i, row);
-			if (rowCount % 2 == 0) {
-				colorBlack = !colorBlack;
-			}
-		}
-
+		// TODO complete isometric mode
 		if (mode == MODE.ISOMETRIC) {
 			setRotateAroundCenter(45f);
 			postScale(1f, 0.5f);
 		}
 
 		mMode = mode;
-		mRowCount = rowCount;
-		mColumnCount = columnCount;
+		mRowCount = tiles.size();
+		mColumnCount = tiles.get(0).size();
+		mTileWidth = tiles.get(0).get(0).mWidth;
+		mTileHeight = tiles.get(0).get(0).mHeight;
 	}
 
 	@Override
@@ -77,19 +51,19 @@ public class FeSurfaceMap extends FeSurfaceElement {
 		int firstVisibleColumn = 0;
 		int lastVisibleColumn = 0;
 
-		// WIP calculate
+		// TODO calculate visible tiles in isometric mode
 		// switch (mMode) {
 		// case NORMAL:
-		firstVisibleRow = limitToRowCount(((int) -mRootElement.getTranslateY() / mTileSize));
+		firstVisibleRow = limitToRowCount(((int) -mRootElement.getTranslateY() / mTileHeight));
 		lastVisibleRow = limitToRowCount((mRootElement.mSurfaceHeight
-				- (int) mRootElement.getTranslateY() + mTileSize)
-				/ mTileSize);
+				- (int) mRootElement.getTranslateY() + mTileHeight)
+				/ mTileHeight);
 
 		firstVisibleColumn = limitToColumnCount(((int) -mRootElement
-				.getTranslateX() / mTileSize));
+				.getTranslateX() / mTileWidth));
 		lastVisibleColumn = limitToColumnCount((mRootElement.mSurfaceWidth
-				- (int) mRootElement.getTranslateX() + mTileSize)
-				/ mTileSize);
+				- (int) mRootElement.getTranslateX() + mTileWidth)
+				/ mTileWidth);
 		// break;
 		// case ISOMETRIC:
 		// firstVisibleRow = 0;
@@ -100,18 +74,18 @@ public class FeSurfaceMap extends FeSurfaceElement {
 		// break;
 		// }
 
-		int drawOffsetY = firstVisibleRow * mTileSize;
+		int drawOffsetY = firstVisibleRow * mTileHeight;
 		for (int i = firstVisibleRow; i < lastVisibleRow; i++) {
 
-			int drawOffsetX = firstVisibleColumn * mTileSize;
+			int drawOffsetX = firstVisibleColumn * mTileWidth;
 			for (int j = firstVisibleColumn; j < lastVisibleColumn; j++) {
 				mBackgroundTiles.get(i).get(j)
 						.draw(canvas, drawOffsetX, drawOffsetY, paint);
 
 				mTileCountDrawn++;
-				drawOffsetX += mTileSize;
+				drawOffsetX += mTileWidth;
 			}
-			drawOffsetY += mTileSize;
+			drawOffsetY += mTileHeight;
 		}
 	}
 

@@ -1,17 +1,21 @@
 package de.fieben.fengine.showroom.scenes;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
+import de.fieben.fengine.showroom.R;
 import de.fieben.fengine.showroom.elements.CircleElement;
 import de.fieben.fengine.showroom.elements.RectangleElement;
 import de.fieben.fengine.surface.FeSurface;
+import de.fieben.fengine.surface.FeSurfaceElement;
 
 public class SolarSystemScene extends FeSurface {
 
-	// TODO add asteroids and moons
+	// TODO build solar system
 	private final CircleElement mSun;
-	// TODO set realistic behaviors
 	// private final CircleElement mMercury;
 	// private final CircleElement mVenus;
 	private final CircleElement mEarth;
@@ -22,17 +26,36 @@ public class SolarSystemScene extends FeSurface {
 	// private final CircleElement mNeptune;
 	private final RectangleElement mPointerRectangle;
 
+	private FeSurfaceElement mAnimationSun;
+
 	public SolarSystemScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
+
+		mAnimationSun = new FeSurfaceElement(BitmapFactory.decodeResource(
+				getResources(), R.drawable.sun_rotation01)) {
+			@Override
+			public void onUpdate(final long elapsedMillis) {
+			}
+
+			@Override
+			public void onDraw(final Canvas canvas, final Paint paint) {
+			}
+
+			@Override
+			public void doUpdate() {
+			}
+		};
+		mAnimationSun.setTranslate(500, 500);
+		mAnimationSun.setAnimation(4, 100);
+		addElement(mAnimationSun);
+
 		mSun = new CircleElement(75);
 		mSun.setTranslate(200, 200);
 		mSun.setColor(Color.RED);
 
 		mEarth = new CircleElement(20);
 		mEarth.setTranslate(0, -150);
-		// mOrbitElipse.setScale(0.5f, 3);
 		mEarth.setColor(Color.BLUE);
-		// mOrbitElipse.setWeirdRotation(true);
 		mEarth.setNormalRotation(true);
 
 		mPointerRectangle = new RectangleElement(5, -65, false);
@@ -41,7 +64,6 @@ public class SolarSystemScene extends FeSurface {
 		final CircleElement moon = new CircleElement(5);
 		moon.setColor(Color.MAGENTA);
 		moon.setTranslate(0, 35);
-		// mond.setWeirdRotation(true);
 		moon.setNormalRotation(true);
 
 		mEarth.addChild(moon);
@@ -50,12 +72,6 @@ public class SolarSystemScene extends FeSurface {
 
 		// TODO scaling correct?
 		setScale(1.5f, 1.5f);
-		// mSun.addChild(new CircleElement(1));
-		// mRootCircle.addChild(mPointerRectangle);
-
-		// final CircleElement point = new CircleElement(5);
-		// point.setColor(Color.BLACK);
-		// addElement(point);
 		addElement(mSun);
 	}
 }

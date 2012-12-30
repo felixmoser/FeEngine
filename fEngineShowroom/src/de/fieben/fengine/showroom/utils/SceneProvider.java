@@ -77,4 +77,40 @@ public class SceneProvider {
 			return mClass.getSimpleName();
 		}
 	}
+
+	// class Test<t> {
+	// t value;
+	//
+	// public void put(final t fe) {
+	// value = fe;
+	// }
+	//
+	// public t get() {
+	// return value;
+	// }
+	// }
+	//
+	// class A {
+	// };
+	//
+	// class B extends A {
+	// };
+	//
+	// void main1() {
+	// final Test<? extends B> testB = new Test<B>();
+	// final Test<? extends A> test = testB;
+	// final A a = new A();
+	// final B b = new B();
+	// test.put(a);
+	// b = testB.get();
+	// }
+	//
+	// void main2() {
+	// final Test<? super A> testA = new Test<A>();
+	// final Test<? super B> test = testA;
+	// final A a = new A();
+	// final B b = new B();
+	// testA.put(a);
+	// b = test.get();
+	// }
 }

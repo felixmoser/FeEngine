@@ -1,6 +1,7 @@
 package de.fieben.fengine.showroom.activities;
 
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import de.fieben.fengine.showroom.R;
@@ -16,6 +17,9 @@ public class SceneListActivity extends FragmentActivity implements
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scene_list);
+
+		// WIP
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		if (findViewById(R.id.scene_detail_container) != null) {
 			mTwoPane = true;

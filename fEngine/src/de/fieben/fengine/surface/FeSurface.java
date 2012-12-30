@@ -1,7 +1,6 @@
 package de.fieben.fengine.surface;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,12 +8,14 @@ import android.graphics.Rect;
 import android.os.Debug;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import de.fieben.fengine.R;
 import de.fieben.fengine.surface.impl.FeRootElementImpl;
 import de.fieben.fengine.surface.impl.FeSurfaceMap;
+import de.fieben.fengine.surface.impl.FeSurfaceTile;
 
 public abstract class FeSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
@@ -31,26 +32,18 @@ public abstract class FeSurface extends SurfaceView implements
 		super(context, attrs);
 		getHolder().addCallback(this);
 		mSurfaceThread = new FeSurfaceThread(this);
-		setFocusable(true);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		// TODO combine row and column attribute? constructor or method to set
-		// tile mode?
-		// TODO machen die xml anttribute noch sinn wenn eine bitmap nicht
-		// übergeben werden kann?
+		// TODO change name to voidColor
 		final int backgroundColor = getIntValue(attrs,
 				R.string.xmlattr_voidColor, Color.BLACK);
-		final int rowCount = getIntValue(attrs,
-				R.string.xmlattr_backgroundRowCount, 0);
-		final int columnCount = getIntValue(attrs,
-				R.string.xmlattr_backgroundColumnCount, 0);
 		mRootElement = new FeRootElementImpl(backgroundColor);
 		mScrollEnabled = getBooleanValue(attrs, R.string.xmlattr_scrollable,
 				false);
 	}
 
-	public void buildTiledBackground(final FeSurfaceMap.MODE mode,
-			final int rowCount, final int columnCount, final Bitmap tileBitmap) {
-		mRootElement.addMap(mode, rowCount, columnCount, tileBitmap);
+	public void addMap(final FeSurfaceMap.MODE mode,
+			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
+		mRootElement.addMap(mode, tiles);
 	}
 
 	// TODO getter/setter for all (xml)attributes
@@ -106,8 +99,8 @@ public abstract class FeSurface extends SurfaceView implements
 		mPaint.setTextSize(34);
 		drawMultilineText(
 				mFPS + " | RAM usage: " + Debug.getNativeHeapAllocatedSize()
-						/ 1048L + " kByte\n" + mRootElement.getDebugOutput(),
-				35, 50, canvas);
+						/ 1048L + " kByte | pointerCount: " + mPointerCount
+						+ "\n" + mRootElement.getDebugOutput(), 35, 50, canvas);
 	}
 
 	private Rect mBounds = new Rect();
@@ -171,10 +164,12 @@ public abstract class FeSurface extends SurfaceView implements
 		mScrollEnabled = scrollEnabled;
 	}
 
-	private volatile boolean mTouched = false;
+	private boolean mTouched = false;
+	private int mPointerCount = 0;
 
 	@Override
 	public boolean onTouchEvent(final MotionEvent event) {
+		mPointerCount = event.getPointerCount();
 		// TODO zoom gesture
 		if (mScrollEnabled) {
 			switch (event.getAction()) {
@@ -191,9 +186,12 @@ public abstract class FeSurface extends SurfaceView implements
 				break;
 			case MotionEvent.ACTION_UP:
 				mTouched = false;
-				// TODO stop scrolling if tile border is reached
+				// TODO stop scrolling if tile border is reached?
 				mRootElement.addTranslate(event.getX() - mLastTouchX,
 						event.getY() - mLastTouchY);
+				if (mPointerCount == 1) {
+					mPointerCount--;
+				}
 				break;
 			}
 			return true;
@@ -201,8 +199,7 @@ public abstract class FeSurface extends SurfaceView implements
 		return false;
 	}
 
-	// TODO usefull?
-
+	// TODO
 	// if (tileBitmap != null) {
 	// mBitmapStorage = new BitmapStorage(new Bitmap[] { tileBitmap },
 	// new SparseIntArray());

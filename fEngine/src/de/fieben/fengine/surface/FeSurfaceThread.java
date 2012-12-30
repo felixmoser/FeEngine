@@ -10,7 +10,7 @@ public class FeSurfaceThread extends Thread {
 		mSurface = surface;
 	}
 
-	// TODO add frequenz
+	// TODO add frequenz for drawing?
 	@Override
 	public void run() {
 		Canvas canvas = null;

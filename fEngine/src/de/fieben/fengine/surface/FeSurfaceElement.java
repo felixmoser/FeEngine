@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.SparseArray;
 
 // TODO impl FeSurfaceObject as parent and FeSurfaceTile as child of FSO.
@@ -153,8 +154,14 @@ public abstract class FeSurfaceElement {
 			canvas.save();
 			canvas.concat(mMatrix);
 
+			// TODO only draw visible elements
 			if (mBitmap != null) {
-				canvas.drawBitmap(mBitmap, 0, 0, paint);
+				if (mAnimationSteps > 0) {
+					canvas.drawBitmap(mBitmap, mAnimationSrcRect,
+							mAnimationDstRect, paint);
+				} else {
+					canvas.drawBitmap(mBitmap, 0, 0, paint);
+				}
 			}
 			onDraw(canvas, paint);
 
@@ -172,8 +179,31 @@ public abstract class FeSurfaceElement {
 	}
 
 	public final void setUpdateInterval(final int updateInterval) {
-		mDoUpdateInterval = updateInterval;
-		mDoUpdateCounter = updateInterval;
+		mDoUpdateCounter = mDoUpdateInterval = updateInterval;
+	}
+
+	private int mAnimationInterval;
+	private int mAnimationCounter;
+	private int mAnimationSteps;
+	private int mAnimationCurrentIndex;
+	private int mAnimationStepRootCeiled;
+	private int mAnimationWidth;
+	private int mAnimationHeight;
+	private Rect mAnimationSrcRect;
+	private Rect mAnimationDstRect;
+
+	public void setAnimation(final int stepCount, final int animationInterval) {
+		mAnimationCounter = mAnimationInterval = animationInterval;
+
+		mAnimationSteps = stepCount;
+		mAnimationCurrentIndex = 0;
+
+		mAnimationStepRootCeiled = (int) Math.ceil(Math.sqrt(stepCount));
+		mAnimationWidth = mBitmap.getWidth() / mAnimationStepRootCeiled;
+		mAnimationHeight = mBitmap.getHeight() / mAnimationStepRootCeiled;
+
+		mAnimationSrcRect = mAnimationDstRect = new Rect(0, 0, mAnimationWidth,
+				mAnimationHeight);
 	}
 
 	public final void update(final long elapsedMillis) {
@@ -185,6 +215,23 @@ public abstract class FeSurfaceElement {
 				if (mDoUpdateCounter <= 0) {
 					mDoUpdateCounter += mDoUpdateInterval;
 					doUpdate();
+				}
+			}
+
+			if (mAnimationInterval > 0) {
+				mAnimationCounter -= elapsedMillis;
+				if (mAnimationCounter <= 0) {
+					mAnimationCounter += mAnimationInterval;
+					if (++mAnimationCurrentIndex >= mAnimationSteps) {
+						mAnimationCurrentIndex = 0;
+					}
+					final int left = (mAnimationCurrentIndex % mAnimationStepRootCeiled)
+							* mAnimationWidth;
+					final int top = (mAnimationCurrentIndex / mAnimationStepRootCeiled)
+							* mAnimationHeight;
+					final int right = left + mAnimationWidth;
+					final int bottom = top + mAnimationHeight;
+					mAnimationSrcRect = new Rect(left, top, right, bottom);
 				}
 			}
 
@@ -212,4 +259,6 @@ public abstract class FeSurfaceElement {
 	public float getTranslateY() {
 		return mTranslateOffsetY;
 	}
+
+	// TODO !!! impl onTouchEvent
 }
