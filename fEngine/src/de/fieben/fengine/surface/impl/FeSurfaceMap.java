@@ -3,17 +3,16 @@ package de.fieben.fengine.surface.impl;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.SparseArray;
+import de.fieben.fengine.surface.FeSurface;
 import de.fieben.fengine.surface.FeSurfaceElement;
 
 public class FeSurfaceMap extends FeSurfaceElement {
 
-	public static enum MODE {
+	public static enum MapMode {
 		NORMAL, ISOMETRIC
 	};
 
-	private final MODE mMode;
-
-	private final FeRootElementImpl mRootElement;
+	private final MapMode mMode;
 
 	private final SparseArray<SparseArray<? extends FeSurfaceTile>> mBackgroundTiles;
 	private int mTileWidth = 0;
@@ -22,14 +21,14 @@ public class FeSurfaceMap extends FeSurfaceElement {
 	private int mRowCount = 0;
 	private int mColumnCount = 0;
 
-	public FeSurfaceMap(final FeRootElementImpl rootElement, final MODE mode,
+	public FeSurfaceMap(final MapMode mode,
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
-		mRootElement = rootElement;
-
+		super(tiles.get(0).size() * tiles.get(0).get(0).mWidth, tiles.size()
+				* tiles.get(0).get(0).mHeight);
 		mBackgroundTiles = tiles;
 
-		// TODO complete isometric mode
-		if (mode == MODE.ISOMETRIC) {
+		// TODO complete isometric mode -> recalculation of child before drawing
+		if (mode == MapMode.ISOMETRIC) {
 			setRotateAroundCenter(45f);
 			postScale(1f, 0.5f);
 		}
@@ -54,16 +53,17 @@ public class FeSurfaceMap extends FeSurfaceElement {
 		// TODO calculate visible tiles in isometric mode
 		// switch (mMode) {
 		// case NORMAL:
-		firstVisibleRow = limitToRowCount(((int) -mRootElement.getTranslateY() / mTileHeight));
-		lastVisibleRow = limitToRowCount((mRootElement.mSurfaceHeight
-				- (int) mRootElement.getTranslateY() + mTileHeight)
-				/ mTileHeight);
+		firstVisibleRow = limitTo((int) -FeSurface.OFFSET_Y / mTileHeight,
+				mRowCount);
+		lastVisibleRow = limitTo(
+				(FeSurface.HEIGHT - (int) FeSurface.OFFSET_Y + mTileHeight)
+						/ mTileHeight, mRowCount);
 
-		firstVisibleColumn = limitToColumnCount(((int) -mRootElement
-				.getTranslateX() / mTileWidth));
-		lastVisibleColumn = limitToColumnCount((mRootElement.mSurfaceWidth
-				- (int) mRootElement.getTranslateX() + mTileWidth)
-				/ mTileWidth);
+		firstVisibleColumn = limitTo((int) -FeSurface.OFFSET_X / mTileWidth,
+				mColumnCount);
+		lastVisibleColumn = limitTo(
+				(FeSurface.WIDTH - (int) FeSurface.OFFSET_X + mTileWidth)
+						/ mTileWidth, mColumnCount);
 		// break;
 		// case ISOMETRIC:
 		// firstVisibleRow = 0;
@@ -89,17 +89,13 @@ public class FeSurfaceMap extends FeSurfaceElement {
 		}
 	}
 
-	private int limitToRowCount(final int value) {
-		return Math.max(0, Math.min(value, mRowCount));
+	private int limitTo(final int value, final int maxValue) {
+		return Math.max(0, Math.min(value, maxValue));
 	}
 
-	private int limitToColumnCount(final int value) {
-		return Math.max(0, Math.min(value, mColumnCount));
-	}
-
+	// DEBUG
 	private int mTileCountDrawn = 0;
 
-	// WIP enable in debug mode
 	public String getDebugOutput() {
 		return "drawn tiles: " + mTileCountDrawn;
 	}

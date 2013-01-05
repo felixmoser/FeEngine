@@ -18,14 +18,13 @@ public class SceneListActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scene_list);
 
-		// WIP
-		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
 		if (findViewById(R.id.scene_detail_container) != null) {
 			mTwoPane = true;
 			((SceneListFragment) getSupportFragmentManager().findFragmentById(
 					R.id.scene_list)).setActivateOnItemClick(true);
 		}
+
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
 
 	@Override

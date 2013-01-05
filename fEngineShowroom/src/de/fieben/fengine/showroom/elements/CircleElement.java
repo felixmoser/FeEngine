@@ -5,14 +5,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import de.fieben.fengine.surface.FeSurfaceElement;
 
+// TODO clean this class up
 public class CircleElement extends FeSurfaceElement {
 
-	private final int mRadius;
+	protected final int mRadius;
 	private int mColor;
 	private boolean mUpdateTestRotation, mNormalRotation = false;
 	private float mRotateAroundParentSpeed, mRotateArountCenterSpeed;
 
 	public CircleElement(final int radius) {
+		super(radius * 2, radius * 2);
 		mRadius = radius;
 		mColor = Color.WHITE;
 	}
@@ -40,6 +42,11 @@ public class CircleElement extends FeSurfaceElement {
 		mNormalRotation = rotation;
 	}
 
+	public void setFastRotation(final boolean rotation) {
+		mRotateAroundParentSpeed = 360f / 4000;
+		mNormalRotation = rotation;
+	}
+
 	@Override
 	public void onUpdate(final long elapsedMillis) {
 		if (mUpdateTestRotation) {
@@ -47,7 +54,6 @@ public class CircleElement extends FeSurfaceElement {
 			setRotateAroundCenter(mRotateArountCenterSpeed * elapsedMillis);
 		} else if (mNormalRotation) {
 			setRotate(mRotateAroundParentSpeed * elapsedMillis);
-			// setRotateAroundCenter(mRotateAroundParentSpeed * elapsedMillis);
 		}
 	}
 

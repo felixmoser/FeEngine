@@ -12,6 +12,7 @@ public class GridElement extends FeSurfaceElement {
 	private float[] mGrid;
 
 	public GridElement(final int spacing) {
+		super(-1, -1);
 		mSpacing = spacing;
 	}
 
@@ -24,7 +25,7 @@ public class GridElement extends FeSurfaceElement {
 		drawGrid(canvas, paint);
 	}
 
-	// TODO the grid needs to be "floating"
+	// TAI the grid needs to be "floating"
 	private void drawGrid(final Canvas canvas, final Paint paint) {
 		paint.setColor(mColor);
 		canvas.drawLines(mGrid, paint);
@@ -51,7 +52,6 @@ public class GridElement extends FeSurfaceElement {
 
 	@Override
 	public void onUpdate(final long elapsedMillis) {
-		// TODO update grid (offset) here?
 	}
 
 	@Override

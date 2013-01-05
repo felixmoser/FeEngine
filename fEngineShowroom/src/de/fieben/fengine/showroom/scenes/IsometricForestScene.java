@@ -18,7 +18,7 @@ public class IsometricForestScene extends FeSurface {
 	public IsometricForestScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		addMap(FeSurfaceMap.MODE.ISOMETRIC, buildTiledBackground());
+		addMap(FeSurfaceMap.MapMode.ISOMETRIC, buildTiledBackground());
 	}
 
 	private SparseArray<SparseArray<? extends FeSurfaceTile>> buildTiledBackground() {

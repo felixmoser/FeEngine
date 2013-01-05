@@ -20,7 +20,7 @@ import de.fieben.fengine.surface.FeSurface;
 public class SceneProvider {
 	private static List<SceneItem> SCENE_ITEMS = new ArrayList<SceneItem>();
 
-	// TODO make "build-packages" for scenes. maybe xml files. this packages
+	// TAI make "build-packages" for scenes. maybe xml files. this packages
 	// include all informations to build a scene. also these scene descriptions
 	// can be used to handle loading of resources etc.
 

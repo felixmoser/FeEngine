@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import de.fieben.fengine.surface.FeSurfaceElement;
 
+// TODO class needed?
 public class RectangleElement extends FeSurfaceElement {
 
 	private final Rect mDimensions;
@@ -13,6 +14,7 @@ public class RectangleElement extends FeSurfaceElement {
 
 	public RectangleElement(final int width, final int height,
 			final boolean centerAnchor) {
+		super(width, height);
 		// TODO replace centerAnchor with flag. eg. x-achses center
 		if (centerAnchor) {
 			mDimensions = new Rect(-width / 2, -height / 2, width / 2,

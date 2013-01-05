@@ -17,6 +17,7 @@ public abstract class FeSurfaceTile {
 	protected int mWidth;
 	protected int mHeight;
 
+	// TODO extend surface element?
 	public FeSurfaceTile(final int id, final int backgroundColor,
 			final int width, final int height) {
 		mId = id;

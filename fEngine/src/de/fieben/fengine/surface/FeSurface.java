@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Debug;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -13,7 +12,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import de.fieben.fengine.R;
-import de.fieben.fengine.surface.impl.FeRootElementImpl;
+import de.fieben.fengine.surface.FeSurfaceElement.FeSurfaceTouchable;
+import de.fieben.fengine.surface.impl.FeRootElement;
 import de.fieben.fengine.surface.impl.FeSurfaceMap;
 import de.fieben.fengine.surface.impl.FeSurfaceTile;
 
@@ -21,44 +21,28 @@ public abstract class FeSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
 	private final String LOG_TAG = FeSurface.class.getSimpleName();
 
+	// TODO ist static hier ok?
+	public static int WIDTH;
+	public static int HEIGHT;
+	public static float OFFSET_X;
+	public static float OFFSET_Y;
+
 	private FeSurfaceThread mSurfaceThread;
 	private final Paint mPaint;
-	private final FeRootElementImpl mRootElement;
-	private boolean mScrollEnabled;
-	private float mLastTouchX;
-	private float mLastTouchY;
+	private final FeRootElement mRootElement;
 
 	public FeSurface(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 		getHolder().addCallback(this);
 		mSurfaceThread = new FeSurfaceThread(this);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		// TODO change name to voidColor
-		final int backgroundColor = getIntValue(attrs,
-				R.string.xmlattr_voidColor, Color.BLACK);
-		mRootElement = new FeRootElementImpl(backgroundColor);
-		mScrollEnabled = getBooleanValue(attrs, R.string.xmlattr_scrollable,
-				false);
-	}
-
-	public void addMap(final FeSurfaceMap.MODE mode,
-			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
-		mRootElement.addMap(mode, tiles);
-	}
-
-	// TODO getter/setter for all (xml)attributes
-	private boolean getBooleanValue(final AttributeSet attrs, final int attrId,
-			final boolean defaultValue) {
-		return attrs.getAttributeBooleanValue(
-				getResources().getString(R.string.xmlns_fengine),
-				getResources().getString(attrId), defaultValue);
-	}
-
-	private int getIntValue(final AttributeSet attrs, final int attrId,
-			final int defaultValue) {
-		return attrs.getAttributeIntValue(
-				getResources().getString(R.string.xmlns_fengine),
-				getResources().getString(attrId), defaultValue);
+		final int voidColor = getIntValue(attrs, R.string.xmlattr_voidColor,
+				Color.BLACK);
+		final boolean scrollEnabled = getBooleanValue(attrs,
+				R.string.xmlattr_scrollable, false);
+		mRootElement = new FeRootElement(voidColor, scrollEnabled);
+		OFFSET_X = 0f;
+		OFFSET_Y = 0f;
 	}
 
 	@Override
@@ -72,7 +56,8 @@ public abstract class FeSurface extends SurfaceView implements
 	@Override
 	public void surfaceChanged(final SurfaceHolder holder, final int format,
 			final int width, final int height) {
-		mRootElement.updateSurfaceSize(width, height);
+		WIDTH = width;
+		HEIGHT = height;
 	}
 
 	@Override
@@ -89,37 +74,22 @@ public abstract class FeSurface extends SurfaceView implements
 		}
 	}
 
+	// TODO synchronized blocks überall prüfen - vl erklärung einholen
 	@Override
 	protected void onDraw(final Canvas canvas) {
 		synchronized (mRootElement) {
 			mRootElement.draw(canvas, mPaint);
 		}
 
-		mPaint.setColor(Color.BLUE);
+		mPaint.setColor(Color.MAGENTA);
 		mPaint.setTextSize(34);
-		drawMultilineText(
-				mFPS + " | RAM usage: " + Debug.getNativeHeapAllocatedSize()
-						/ 1048L + " kByte | pointerCount: " + mPointerCount
-						+ "\n" + mRootElement.getDebugOutput(), 35, 50, canvas);
-	}
-
-	private Rect mBounds = new Rect();
-
-	void drawMultilineText(final String str, final int x, final int y,
-			final Canvas canvas) {
-		int lineHeight = 0;
-		int yoffset = 0;
-		final String[] lines = str.split("\n");
-
-		mPaint.getTextBounds("Ig", 0, 2, mBounds);
-		lineHeight = (int) (mBounds.height() * 1.2);
-		for (int i = 0; i < lines.length; ++i) {
-			canvas.drawText(lines[i], x, y + yoffset, mPaint);
-			yoffset = yoffset + lineHeight;
-			if (mTouched) {
-				mPaint.setColor(Color.YELLOW);
-			}
+		String debugString = null;
+		if (mMap != null) {
+			debugString = mFPS + "\n" + mMap.getDebugOutput();
+		} else {
+			debugString = mFPS + " | " + mRootElement.getDebugOutput();
 		}
+		drawMultilineText(debugString, 35, 50, canvas);
 	}
 
 	protected void onUpdate(final long elapsedMillis) {
@@ -129,10 +99,58 @@ public abstract class FeSurface extends SurfaceView implements
 		calculateFPS(elapsedMillis);
 	}
 
-	// WIP enable in debug mode
-	String mFPS = "";
+	@Override
+	public boolean onTouchEvent(final MotionEvent event) {
+		return mRootElement.onTouch(event);
+	}
+
+	public void registerTouchable(final FeSurfaceTouchable touchableElement) {
+		mRootElement.registerTouchable(touchableElement);
+	}
+
+	public void addElement(final FeSurfaceElement element) {
+		mRootElement.addChild(element);
+	}
+
+	public void addMap(final FeSurfaceMap.MapMode mode,
+			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
+		mMap = new FeSurfaceMap(mode, tiles);
+		mRootElement.addChild(FeSurfaceElement.BACKGROUND_LAYER, mMap);
+	}
+
+	public void addTranslate(final float translateX, final float translateY) {
+		mRootElement.addTranslate(translateX, translateY);
+	}
+
+	public void setScale(final float scaleX, final float scaleY) {
+		mRootElement.setScale(scaleX, scaleY);
+	}
+
+	public void setRotate(final float degrees) {
+		mRootElement.setRotate(degrees);
+	}
+
+	// TODO getter/setter for all (xml)attributes?
+	private boolean getBooleanValue(final AttributeSet attrs, final int attrId,
+			final boolean defaultValue) {
+		return attrs.getAttributeBooleanValue(
+				getResources().getString(R.string.xmlns_fengine),
+				getResources().getString(attrId), defaultValue);
+	}
+
+	private int getIntValue(final AttributeSet attrs, final int attrId,
+			final int defaultValue) {
+		return attrs.getAttributeIntValue(
+				getResources().getString(R.string.xmlns_fengine),
+				getResources().getString(attrId), defaultValue);
+	}
+
+	// DEBUG
+	private String mFPS = "";
 	private long[] mLastElapsed = new long[20];
 	private int mElapsedIndex = 0;
+
+	private FeSurfaceMap mMap = null;
 
 	private void calculateFPS(final long elapsedMillis) {
 		if (mElapsedIndex >= 20) {
@@ -146,81 +164,18 @@ public abstract class FeSurface extends SurfaceView implements
 		mFPS = "FPS: " + String.valueOf(20000 / averageFPS);
 	}
 
-	public void addElement(final FeSurfaceElement element) {
-		synchronized (mRootElement) {
-			mRootElement.addChild(element);
+	private void drawMultilineText(final String str, final int x, final int y,
+			final Canvas canvas) {
+		final Rect bounds = new Rect();
+		int lineHeight = 0;
+		int yoffset = 0;
+		final String[] lines = str.split("\n");
+
+		mPaint.getTextBounds("Ig", 0, 2, bounds);
+		lineHeight = (int) (bounds.height() * 1.2);
+		for (int i = 0; i < lines.length; ++i) {
+			canvas.drawText(lines[i], x, y + yoffset, mPaint);
+			yoffset = yoffset + lineHeight;
 		}
 	}
-
-	public void setScale(final float scaleX, final float scaleY) {
-		mRootElement.setScale(scaleX, scaleY);
-	}
-
-	public void addTranslate(final float translateX, final float translateY) {
-		mRootElement.addTranslate(translateX, translateY);
-	}
-
-	public void setScrollable(final boolean scrollEnabled) {
-		mScrollEnabled = scrollEnabled;
-	}
-
-	private boolean mTouched = false;
-	private int mPointerCount = 0;
-
-	@Override
-	public boolean onTouchEvent(final MotionEvent event) {
-		mPointerCount = event.getPointerCount();
-		// TODO zoom gesture
-		if (mScrollEnabled) {
-			switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				mTouched = true;
-				mLastTouchX = event.getX();
-				mLastTouchY = event.getY();
-				break;
-			case MotionEvent.ACTION_MOVE:
-				mRootElement.addTranslate(event.getX() - mLastTouchX,
-						event.getY() - mLastTouchY);
-				mLastTouchX = event.getX();
-				mLastTouchY = event.getY();
-				break;
-			case MotionEvent.ACTION_UP:
-				mTouched = false;
-				// TODO stop scrolling if tile border is reached?
-				mRootElement.addTranslate(event.getX() - mLastTouchX,
-						event.getY() - mLastTouchY);
-				if (mPointerCount == 1) {
-					mPointerCount--;
-				}
-				break;
-			}
-			return true;
-		}
-		return false;
-	}
-
-	// TODO
-	// if (tileBitmap != null) {
-	// mBitmapStorage = new BitmapStorage(new Bitmap[] { tileBitmap },
-	// new SparseIntArray());
-	// } else {
-	// mBitmapStorage = null;
-	// }
-	//
-	// public BitmapStorage mBitmapStorage;
-	//
-	// public class BitmapStorage {
-	// private Bitmap[] mTileBitmaps;
-	// private SparseIntArray mIdMap;
-	//
-	// private BitmapStorage(final Bitmap[] tileBitmaps,
-	// final SparseIntArray tileIdToBitmapMapping) {
-	// mTileBitmaps = tileBitmaps;
-	// mIdMap = tileIdToBitmapMapping;
-	// }
-	//
-	// public Bitmap getBitmap(final int tileId) {
-	// return mTileBitmaps[mIdMap.get(tileId)];
-	// }
-	// }
 }
