@@ -2,7 +2,7 @@ package de.fieben.fengine.surface;
 
 import android.graphics.Canvas;
 
-public class FeSurfaceThread extends Thread {
+public final class FeSurfaceThread extends Thread {
 	private FeSurface mSurface;
 	public boolean mRun = true;
 
@@ -22,8 +22,8 @@ public class FeSurfaceThread extends Thread {
 					if (canvas != null) {
 						final long currentSystemTime = System
 								.currentTimeMillis();
-						mSurface.onDraw(canvas);
 						mSurface.onUpdate(currentSystemTime - lastUpdate);
+						mSurface.onDraw(canvas);
 						lastUpdate = currentSystemTime;
 					}
 				}

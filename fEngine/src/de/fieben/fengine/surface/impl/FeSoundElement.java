@@ -4,10 +4,9 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
-public class FeSoundElement {
+public final class FeSoundElement {
 
 	private SoundPool mSoundPool;
-	private AudioManager mAudioManager;
 	private int mSoundId;
 	private int mStreamId;
 	private float mMasterVolume;
@@ -17,8 +16,6 @@ public class FeSoundElement {
 	public FeSoundElement(final Context context, final int resourceId,
 			final LoadCompleteCallback callback) {
 		mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-		mAudioManager = (AudioManager) context
-				.getSystemService(Context.AUDIO_SERVICE);
 		mSoundId = mSoundPool.load(context, resourceId, 1);
 		if (callback != null) {
 			mSoundPool
@@ -37,11 +34,8 @@ public class FeSoundElement {
 
 	public void playSound(final float leftVolume, final float rightVolume,
 			final boolean loop) {
-		final float currentStreamVolume = mAudioManager
-				.getStreamVolume(AudioManager.STREAM_MUSIC);
-
-		mStreamId = mSoundPool.play(mSoundId, currentStreamVolume * leftVolume,
-				currentStreamVolume * rightVolume, 0, loop ? -1 : 0, 1f);
+		mStreamId = mSoundPool.play(mSoundId, leftVolume, rightVolume, 0,
+				loop ? -1 : 0, 1f);
 	}
 
 	public void stopSound() {

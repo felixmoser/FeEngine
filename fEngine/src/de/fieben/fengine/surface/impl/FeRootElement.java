@@ -9,10 +9,10 @@ import de.fieben.fengine.surface.FeSurface;
 import de.fieben.fengine.surface.FeSurfaceElement;
 import de.fieben.fengine.surface.FeSurfaceElement.FeSurfaceTouchable;
 
-// TODO make impl elements protected?
-public class FeRootElement extends FeSurfaceElement implements
+public final class FeRootElement extends FeSurfaceElement implements
 		FeSurfaceTouchable {
 
+	// TAI add touch mode rotate
 	private enum TouchMode {
 		NONE, DRAG, ZOOM
 	};
@@ -51,9 +51,9 @@ public class FeRootElement extends FeSurfaceElement implements
 
 	@Override
 	public void addTranslate(final float translateX, final float translateY) {
+		super.addTranslate(translateX, translateY);
 		FeSurface.OFFSET_X += translateX;
 		FeSurface.OFFSET_Y += translateY;
-		super.addTranslate(translateX, translateY);
 	}
 
 	public void registerTouchable(final FeSurfaceTouchable touchableElement) {
@@ -62,11 +62,11 @@ public class FeRootElement extends FeSurfaceElement implements
 
 	private float mTouchPointerLastDistance = 0f;
 
-	// WIP zoom gesture
 	// TAI stop scrolling if tile border is reached?
 	@Override
 	public boolean onTouch(final MotionEvent event) {
 		final int action = event.getAction();
+		// TODO prevent jumping after mode changes from zoom to drag
 		final int pointerCount = event.getPointerCount();
 
 		if (mTouchMode == TouchMode.NONE) {
@@ -94,8 +94,6 @@ public class FeRootElement extends FeSurfaceElement implements
 			mTouchMode = TouchMode.ZOOM;
 			return true;
 		case MotionEvent.ACTION_MOVE:
-			// mDebugOutput = "ACTION_MOVE";
-
 			if (mScrollEnabled && mTouchMode == TouchMode.DRAG) {
 				addTranslate(event.getX() - mLastTouchX, event.getY()
 						- mLastTouchY);
@@ -104,11 +102,6 @@ public class FeRootElement extends FeSurfaceElement implements
 				return true;
 			}
 			if (mZoomEnabled && mTouchMode == TouchMode.ZOOM) {
-				// android.util.Log.i(
-				// "testing",
-				// "::onTouch:: "
-				// + Math.hypot(event.getX(0) - event.getX(1),
-				// event.getY(0) - event.getY(1)));
 				final float newDistance = (float) Math.hypot(event.getX(0)
 						- event.getX(1), event.getY(0) - event.getY(1));
 
@@ -130,9 +123,6 @@ public class FeRootElement extends FeSurfaceElement implements
 			mTouchMode = TouchMode.DRAG;
 			mLastTouchX = event.getX(0);
 			mLastTouchY = event.getY(0);
-			// android.util.Log.i("testing", "::onTouch:: " + event.getX(0) +
-			// "|"
-			// + mLastTouchX);
 			return true;
 		case MotionEvent.ACTION_UP:
 			mDebugOutput = "ACTION_UP";
@@ -141,8 +131,6 @@ public class FeRootElement extends FeSurfaceElement implements
 			mTouchPointerLastDistance = 0f;
 			return true;
 		}
-
-		// mDebugOutput = mTouchMode.name();
 
 		return false;
 	}

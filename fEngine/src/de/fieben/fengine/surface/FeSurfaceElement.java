@@ -13,24 +13,24 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import de.fieben.fengine.surface.impl.FeSoundElement;
 
-// TODO impl FeSurfaceObject as parent and FeSurfaceTile as child of FSO.
 public abstract class FeSurfaceElement {
 
-	protected Bitmap mBitmap = null;
-	public final int mWidth;
-	public final int mHeight;
+	private Bitmap mBitmap = null;
+	// TODO needed? nur für animation wichtig, und die geht eh nicht ohne bitmap
+	private final int mWidth;
+	private final int mHeight;
 
 	// TODO final + sync block or volatile?
 	private final Matrix mMatrix;
 	private final float[] mMatrixValues = new float[9];
 
-	// TODO right way with seperate rotation matrix? -> better do it with pre-
-	// and postRotate() and store only the current rotation degrees
+	// WIP ++++ right way with seperate rotation matrix? -> better do it with
+	// pre- and postRotate() and store only the current rotation degrees
 	private final Matrix mRotationMatrix = new Matrix();
 	private float mRotationDegrees = 0f;
 	private float mRotationAroundCenterDegrees = 0f;
 
-	protected FeSurfaceElement mParent;
+	private FeSurfaceElement mParent;
 
 	// TODO add translate modifier to layers. e.g. 0f equals no translation, 1f
 	// full

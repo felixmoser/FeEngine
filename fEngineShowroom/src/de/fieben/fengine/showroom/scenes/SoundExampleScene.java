@@ -28,6 +28,7 @@ public class SoundExampleScene extends FeSurface {
 
 	@Override
 	public void surfaceDestroyed(final SurfaceHolder holder) {
+		// TODO resume audio playback after home is pressed...
 		mElement.stopSound();
 		super.surfaceDestroyed(holder);
 	}

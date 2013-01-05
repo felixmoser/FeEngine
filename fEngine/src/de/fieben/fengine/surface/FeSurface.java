@@ -36,6 +36,9 @@ public abstract class FeSurface extends SurfaceView implements
 		getHolder().addCallback(this);
 		mSurfaceThread = new FeSurfaceThread(this);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+		// TODO to this with ThemedArray (das erspart auch die xmlattr in
+		// string.xml)
 		final int voidColor = getIntValue(attrs, R.string.xmlattr_voidColor,
 				Color.BLACK);
 		final boolean scrollEnabled = getBooleanValue(attrs,

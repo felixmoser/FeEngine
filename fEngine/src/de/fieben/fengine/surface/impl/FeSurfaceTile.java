@@ -5,10 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-// TODO make comments everywhere!
+// TODO !!!!!!! make comments everywhere!
 /**
  * @author Felix Moser - felix.ernesto.moser@gmail.com
  */
+// TODO impl of FeSurfacElement?
 public abstract class FeSurfaceTile {
 
 	protected Bitmap mBitmap = null;

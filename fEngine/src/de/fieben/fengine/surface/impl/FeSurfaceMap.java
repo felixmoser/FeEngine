@@ -6,7 +6,7 @@ import android.util.SparseArray;
 import de.fieben.fengine.surface.FeSurface;
 import de.fieben.fengine.surface.FeSurfaceElement;
 
-public class FeSurfaceMap extends FeSurfaceElement {
+public final class FeSurfaceMap extends FeSurfaceElement {
 
 	public static enum MapMode {
 		NORMAL, ISOMETRIC

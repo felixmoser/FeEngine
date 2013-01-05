@@ -64,7 +64,7 @@ public class SolarSystemScene extends FeSurface {
 		mMars.setFastRotation(true);
 		mAnimationSun.addChild(mMars);
 
-		// TODO scaling correct?
+		// WIP replace scaling with no scaling after impl of mEnableZoom
 		setScale(1.5f, 1.5f);
 	}
 }
