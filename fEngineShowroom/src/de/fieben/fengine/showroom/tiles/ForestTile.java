@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Pair;
-import de.fieben.fengine.surface.impl.FeSurfaceTile;
+import de.fieben.fengine.FeSurfaceTile;
 
 public class ForestTile extends FeSurfaceTile {
 	private Bitmap mTreeBitmap;

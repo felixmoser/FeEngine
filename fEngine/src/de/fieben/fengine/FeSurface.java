@@ -1,4 +1,4 @@
-package de.fieben.fengine.surface;
+package de.fieben.fengine;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,17 +11,16 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import de.fieben.fengine.R;
-import de.fieben.fengine.surface.FeSurfaceElement.FeSurfaceTouchable;
-import de.fieben.fengine.surface.impl.FeRootElement;
-import de.fieben.fengine.surface.impl.FeSurfaceMap;
-import de.fieben.fengine.surface.impl.FeSurfaceTile;
+import de.fieben.fengine.FeSurfaceElement.FeSurfaceTouchable;
 
 public abstract class FeSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
 	private final String LOG_TAG = FeSurface.class.getSimpleName();
 
-	// TODO ist static hier ok?
+	public static enum MapMode {
+		NORMAL, ISOMETRIC
+	};
+
 	public static int WIDTH;
 	public static int HEIGHT;
 	public static float OFFSET_X;
@@ -118,7 +117,7 @@ public abstract class FeSurface extends SurfaceView implements
 				element);
 	}
 
-	public void addMap(final FeSurfaceMap.MapMode mode,
+	public void addMap(final MapMode mode,
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
 		mMap = new FeSurfaceMap(mode, tiles);
 		mRootElement.addChild(FeRootElement.BACKGROUND_LAYER, mMap);

@@ -1,4 +1,4 @@
-package de.fieben.fengine.surface.impl;
+package de.fieben.fengine;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -13,7 +13,7 @@ public final class FeSoundElement {
 	private float mLeftVolume;
 	private float mRightVolume;
 
-	public FeSoundElement(final Context context, final int resourceId,
+	protected FeSoundElement(final Context context, final int resourceId,
 			final LoadCompleteCallback callback) {
 		mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		mSoundId = mSoundPool.load(context, resourceId, 1);

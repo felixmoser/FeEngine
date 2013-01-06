@@ -11,11 +11,10 @@ import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.util.SparseArray;
+import de.fieben.fengine.FeSurface;
+import de.fieben.fengine.FeSurfaceTile;
 import de.fieben.fengine.showroom.R;
 import de.fieben.fengine.showroom.tiles.ForestTile;
-import de.fieben.fengine.surface.FeSurface;
-import de.fieben.fengine.surface.impl.FeSurfaceMap;
-import de.fieben.fengine.surface.impl.FeSurfaceTile;
 
 public class TiledForestScene extends FeSurface {
 
@@ -24,7 +23,7 @@ public class TiledForestScene extends FeSurface {
 	public TiledForestScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		addMap(FeSurfaceMap.MapMode.NORMAL, buildTiledBackground());
+		addMap(FeSurface.MapMode.NORMAL, buildTiledBackground());
 	}
 
 	private SparseArray<SparseArray<? extends FeSurfaceTile>> buildTiledBackground() {

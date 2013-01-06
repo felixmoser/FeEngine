@@ -5,11 +5,11 @@ import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import de.fieben.fengine.FeSoundElement;
+import de.fieben.fengine.FeSurface;
+import de.fieben.fengine.FeSurfaceElement.FeSurfaceTouchable;
 import de.fieben.fengine.showroom.R;
 import de.fieben.fengine.showroom.elements.CircleElement;
-import de.fieben.fengine.surface.FeSurface;
-import de.fieben.fengine.surface.FeSurfaceElement.FeSurfaceTouchable;
-import de.fieben.fengine.surface.impl.FeSoundElement;
 
 public class SoundExampleScene extends FeSurface {
 

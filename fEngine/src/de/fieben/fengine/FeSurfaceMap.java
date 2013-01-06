@@ -1,16 +1,11 @@
-package de.fieben.fengine.surface.impl;
+package de.fieben.fengine;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.SparseArray;
-import de.fieben.fengine.surface.FeSurface;
-import de.fieben.fengine.surface.FeSurfaceElement;
+import de.fieben.fengine.FeSurface.MapMode;
 
-public final class FeSurfaceMap extends FeSurfaceElement {
-
-	public static enum MapMode {
-		NORMAL, ISOMETRIC
-	};
+final class FeSurfaceMap extends FeSurfaceElement {
 
 	private final MapMode mMode;
 
@@ -100,17 +95,15 @@ public final class FeSurfaceMap extends FeSurfaceElement {
 	// DEBUG
 	private int mTileCountDrawn = 0;
 
-	public String getDebugOutput() {
+	protected String getDebugOutput() {
 		return "drawn tiles: " + mTileCountDrawn;
 	}
 
 	@Override
 	public void onUpdate(final long elapsedMillis) {
-
 	}
 
 	@Override
 	public void doUpdate() {
-
 	}
 }

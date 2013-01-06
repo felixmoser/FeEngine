@@ -8,17 +8,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.SparseArray;
+import de.fieben.fengine.FeSurface;
+import de.fieben.fengine.FeSurfaceTile;
 import de.fieben.fengine.showroom.R;
-import de.fieben.fengine.surface.FeSurface;
-import de.fieben.fengine.surface.impl.FeSurfaceMap;
-import de.fieben.fengine.surface.impl.FeSurfaceTile;
 
 public class IsometricForestScene extends FeSurface {
 
 	public IsometricForestScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		addMap(FeSurfaceMap.MapMode.ISOMETRIC, buildTiledBackground());
+		addMap(FeSurface.MapMode.ISOMETRIC, buildTiledBackground());
 	}
 
 	private SparseArray<SparseArray<? extends FeSurfaceTile>> buildTiledBackground() {

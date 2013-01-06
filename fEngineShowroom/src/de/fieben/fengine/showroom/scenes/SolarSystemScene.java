@@ -6,10 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import de.fieben.fengine.FeSurface;
+import de.fieben.fengine.FeSurfaceElement;
 import de.fieben.fengine.showroom.R;
 import de.fieben.fengine.showroom.elements.CircleElement;
-import de.fieben.fengine.surface.FeSurface;
-import de.fieben.fengine.surface.FeSurfaceElement;
 
 public class SolarSystemScene extends FeSurface {
 

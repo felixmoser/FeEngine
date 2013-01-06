@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import de.fieben.fengine.surface.FeSurfaceElement;
+import de.fieben.fengine.FeSurfaceElement;
 
 // TODO class needed?
 public class RectangleElement extends FeSurfaceElement {

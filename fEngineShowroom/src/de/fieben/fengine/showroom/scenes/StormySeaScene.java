@@ -2,7 +2,7 @@ package de.fieben.fengine.showroom.scenes;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import de.fieben.fengine.surface.FeSurface;
+import de.fieben.fengine.FeSurface;
 
 public class StormySeaScene extends FeSurface {
 	public StormySeaScene(final Context context, final AttributeSet attrs) {

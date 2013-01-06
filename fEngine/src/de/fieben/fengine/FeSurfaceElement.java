@@ -1,4 +1,4 @@
-package de.fieben.fengine.surface;
+package de.fieben.fengine;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.SparseArray;
 import android.view.MotionEvent;
-import de.fieben.fengine.surface.impl.FeSoundElement;
 
 public abstract class FeSurfaceElement {
 	// TAI what about display density?

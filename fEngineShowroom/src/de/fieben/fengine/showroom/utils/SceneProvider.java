@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import de.fieben.fengine.FeSurface;
 import de.fieben.fengine.showroom.R;
 import de.fieben.fengine.showroom.scenes.ClockScene;
 import de.fieben.fengine.showroom.scenes.IsometricForestScene;
@@ -15,7 +16,6 @@ import de.fieben.fengine.showroom.scenes.SoundExampleScene;
 import de.fieben.fengine.showroom.scenes.StormySeaScene;
 import de.fieben.fengine.showroom.scenes.TiledForestScene;
 import de.fieben.fengine.showroom.scenes.UpdateTestScene;
-import de.fieben.fengine.surface.FeSurface;
 
 public class SceneProvider {
 	private static List<SceneItem> SCENE_ITEMS = new ArrayList<SceneItem>();

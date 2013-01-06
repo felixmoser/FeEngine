@@ -1,8 +1,8 @@
-package de.fieben.fengine.surface;
+package de.fieben.fengine;
 
 import android.graphics.Canvas;
 
-public final class FeSurfaceThread extends Thread {
+final class FeSurfaceThread extends Thread {
 	private FeSurface mSurface;
 	public boolean mRun = true;
 

@@ -1,4 +1,4 @@
-package de.fieben.fengine.surface.impl;
+package de.fieben.fengine;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

@@ -4,9 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
+import de.fieben.fengine.FeSurface;
 import de.fieben.fengine.showroom.elements.CircleElement;
 import de.fieben.fengine.showroom.elements.GridElement;
-import de.fieben.fengine.surface.FeSurface;
 
 public class UpdateTestScene extends FeSurface {
 

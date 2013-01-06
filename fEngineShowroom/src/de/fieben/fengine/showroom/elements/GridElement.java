@@ -3,7 +3,7 @@ package de.fieben.fengine.showroom.elements;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import de.fieben.fengine.surface.FeSurfaceElement;
+import de.fieben.fengine.FeSurfaceElement;
 
 public class GridElement extends FeSurfaceElement {
 

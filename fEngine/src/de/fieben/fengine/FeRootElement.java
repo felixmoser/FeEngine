@@ -1,15 +1,13 @@
-package de.fieben.fengine.surface.impl;
+package de.fieben.fengine;
 
 import java.util.ArrayList;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;
-import de.fieben.fengine.surface.FeSurface;
-import de.fieben.fengine.surface.FeSurfaceElement;
-import de.fieben.fengine.surface.FeSurfaceElement.FeSurfaceTouchable;
+import de.fieben.fengine.FeSurfaceElement.FeSurfaceTouchable;
 
-public final class FeRootElement extends FeSurfaceElement implements
+final class FeRootElement extends FeSurfaceElement implements
 		FeSurfaceTouchable {
 
 	// TAI add touch mode rotate
