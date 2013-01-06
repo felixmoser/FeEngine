@@ -20,7 +20,7 @@ public class SoundExampleScene extends FeSurface {
 
 		mElement = new SoundTestElement(context, 100, R.raw.sound_view_clicked,
 				true);
-		mElement.addTranslate(200, 200);
+		mElement.setTranslation(200, 200);
 		addElement(mElement);
 		// TAI schöner machen? evtl mit flag @ addElement?
 		registerTouchable(mElement);
@@ -64,7 +64,7 @@ public class SoundExampleScene extends FeSurface {
 				mDragMode = true;
 				break;
 			case MotionEvent.ACTION_MOVE:
-				addTranslate(event.getX() - mLastTouchX, event.getY()
+				addTranslation(event.getX() - mLastTouchX, event.getY()
 						- mLastTouchY);
 				mLastTouchX = event.getX();
 				mLastTouchY = event.getY();
@@ -78,10 +78,12 @@ public class SoundExampleScene extends FeSurface {
 		}
 
 		private void limitTranslation() {
-			if (getTranslateX() < 0 || getTranslateX() > WIDTH
-					|| getTranslateY() < 0 || getTranslateY() > HEIGHT) {
-				setTranslate(Math.max(0, Math.min(getTranslateX(), WIDTH)),
-						Math.max(0, Math.min(getTranslateY(), HEIGHT)));
+			final float translationX = getTranslationX();
+			final float translationY = getTranslationY();
+			if (translationX < 0 || translationX > WIDTH || translationY < 0
+					|| translationY > HEIGHT) {
+				setTranslation(Math.max(0, Math.min(translationX, WIDTH)),
+						Math.max(0, Math.min(translationY, HEIGHT)));
 			}
 		}
 

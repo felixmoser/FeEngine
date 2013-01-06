@@ -37,12 +37,12 @@ public class CircleElement extends FeSurfaceElement {
 		setUpdateInterval(1000);
 	}
 
-	public void setNormalRotation(final boolean rotation) {
+	public void setNormalTestRotation(final boolean rotation) {
 		mRotateAroundParentSpeed = 360f / 8000;
 		mNormalRotation = rotation;
 	}
 
-	public void setFastRotation(final boolean rotation) {
+	public void setFastTestRotation(final boolean rotation) {
 		mRotateAroundParentSpeed = 360f / 4000;
 		mNormalRotation = rotation;
 	}
@@ -50,10 +50,10 @@ public class CircleElement extends FeSurfaceElement {
 	@Override
 	public void onUpdate(final long elapsedMillis) {
 		if (mUpdateTestRotation) {
-			setRotate(mRotateAroundParentSpeed * elapsedMillis);
-			setRotateAroundCenter(mRotateArountCenterSpeed * elapsedMillis);
+			addRotate(mRotateAroundParentSpeed * elapsedMillis);
+			addRotateAroundCenter(mRotateArountCenterSpeed * elapsedMillis);
 		} else if (mNormalRotation) {
-			setRotate(mRotateAroundParentSpeed * elapsedMillis);
+			addRotate(mRotateAroundParentSpeed * elapsedMillis);
 		}
 	}
 

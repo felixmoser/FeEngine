@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import de.fieben.fengine.surface.impl.FeSoundElement;
 
 public abstract class FeSurfaceElement {
+	// TAI what about display density?
 
 	private Bitmap mBitmap = null;
 	// TODO needed? nur für animation wichtig, und die geht eh nicht ohne bitmap
@@ -24,9 +25,6 @@ public abstract class FeSurfaceElement {
 	private final Matrix mMatrix;
 	private final float[] mMatrixValues = new float[9];
 
-	// WIP ++++ right way with seperate rotation matrix? -> better do it with
-	// pre- and postRotate() and store only the current rotation degrees
-	private final Matrix mRotationMatrix = new Matrix();
 	private float mRotationDegrees = 0f;
 	private float mRotationAroundCenterDegrees = 0f;
 
@@ -35,9 +33,7 @@ public abstract class FeSurfaceElement {
 	// TODO add translate modifier to layers. e.g. 0f equals no translation, 1f
 	// full
 	private SparseArray<ArrayList<FeSurfaceElement>> mChildLayers;
-	// TODO default layer
-	public static int BACKGROUND_LAYER = 10;
-	public static int FOREGROUND_LAYER = 25;
+
 	private int mMaxLayerLevel = 0;
 
 	private int mDoUpdateInterval;
@@ -69,121 +65,137 @@ public abstract class FeSurfaceElement {
 		mBitmap = bitmap;
 	}
 
-	public void setTranslate(final float translateX, final float translateY) {
+	public void setTranslation(final float translationX,
+			final float translationY) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrixValues[Matrix.MTRANS_X] = translateX;
-			mMatrixValues[Matrix.MTRANS_Y] = translateY;
-			mMatrix.setValues(mMatrixValues);
+			mMatrix.postTranslate(
+					translationX - mMatrixValues[Matrix.MTRANS_X], translationY
+							- mMatrixValues[Matrix.MTRANS_Y]);
 		}
 	}
 
-	public void addTranslate(final float translateX, final float translateY) {
+	public void addTranslation(final float translationX,
+			final float translationY) {
 		synchronized (mMatrix) {
-			mMatrix.getValues(mMatrixValues);
-			mMatrixValues[Matrix.MTRANS_X] += translateX;
-			mMatrixValues[Matrix.MTRANS_Y] += translateY;
-			mMatrix.setValues(mMatrixValues);
+			mMatrix.postTranslate(translationX, translationY);
 		}
 	}
 
-	// TODO simplifiy. dont get values unnessersery often
-	public float getTranslateX() {
-		mMatrix.getValues(mMatrixValues);
-		return mMatrixValues[Matrix.MTRANS_X];
+	// TODO impl all getter
+	// TODO naming conflict? rename to getSurfaceTranslationX?
+	public float getTranslationX() {
+		synchronized (mMatrix) {
+			mMatrix.getValues(mMatrixValues);
+			return mMatrixValues[Matrix.MTRANS_X];
+		}
 	}
 
-	public float getTranslateY() {
-		mMatrix.getValues(mMatrixValues);
-		return mMatrixValues[Matrix.MTRANS_Y];
+	public float getTranslationY() {
+		synchronized (mMatrix) {
+			mMatrix.getValues(mMatrixValues);
+			return mMatrixValues[Matrix.MTRANS_Y];
+		}
 	}
 
-	// TODO make all methods final, if possible
+	// WIP make all methods final, if possible
 	public final Point getAbsoluteSurfacePosition() {
 		if (mParent == null) {
 			return new Point();
 		} else {
 			final Point cords = mParent.getAbsoluteSurfacePosition();
-			mMatrix.getValues(mMatrixValues);
-			cords.x += mMatrixValues[Matrix.MTRANS_X];
-			cords.y += mMatrixValues[Matrix.MTRANS_Y];
+			synchronized (mMatrix) {
+				mMatrix.getValues(mMatrixValues);
+				cords.x += mMatrixValues[Matrix.MTRANS_X];
+				cords.y += mMatrixValues[Matrix.MTRANS_Y];
+			}
 			return cords;
 		}
 	}
 
-	// TAI make depending on display density?
 	public void setScale(final float scaleX, final float scaleY) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrixValues[Matrix.MSCALE_X] = scaleX;
-			mMatrixValues[Matrix.MSCALE_Y] = scaleY;
-			mMatrix.setValues(mMatrixValues);
+			mMatrix.postScale(scaleX / mMatrixValues[Matrix.MSCALE_X], scaleY
+					/ mMatrixValues[Matrix.MSCALE_Y]);
 		}
 	}
 
-	public void postScale(final float scaleX, final float scaleY) {
+	public void addScale(final float scaleX, final float scaleY) {
 		synchronized (mMatrix) {
 			mMatrix.postScale(scaleX, scaleY);
 		}
 	}
 
-	// WIP !!!! scaling needs to be checked everywhere. -> onTouch, map (?), ...
-	public void postScale(final float scaleX, final float scaleY,
+	public void setScale(final float scaleX, final float scaleY,
+			final float pointX, final float pointY) {
+		synchronized (mMatrix) {
+			mMatrix.getValues(mMatrixValues);
+			mMatrix.postScale(scaleX / mMatrixValues[Matrix.MSCALE_X], scaleY
+					/ mMatrixValues[Matrix.MSCALE_Y], pointX, pointY);
+		}
+	}
+
+	public void addScale(final float scaleX, final float scaleY,
 			final float pointX, final float pointY) {
 		synchronized (mMatrix) {
 			mMatrix.postScale(scaleX, scaleY, pointX, pointY);
 		}
 	}
 
-	public void addScale(final float scaleX, final float scaleY) {
+	public void setScaleFromCenter(final float scaleX, final float scaleY) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrixValues[Matrix.MSCALE_X] += scaleX;
-			mMatrixValues[Matrix.MSCALE_Y] += scaleY;
-			mMatrix.setValues(mMatrixValues);
+			mMatrix.postScale(scaleX / mMatrixValues[Matrix.MSCALE_X], scaleY
+					/ mMatrixValues[Matrix.MSCALE_Y],
+					mMatrixValues[Matrix.MTRANS_X],
+					mMatrixValues[Matrix.MTRANS_Y]);
 		}
 	}
 
-	public void setRotate(final float degrees) {
+	public void addScaleFromCenter(final float scaleX, final float scaleY) {
 		synchronized (mMatrix) {
+			mMatrix.getValues(mMatrixValues);
+			mMatrix.postScale(scaleX, scaleY, mMatrixValues[Matrix.MTRANS_X],
+					mMatrixValues[Matrix.MTRANS_Y]);
+		}
+	}
+
+	public void setRotation(final float degrees) {
+		synchronized (mMatrix) {
+			mMatrix.postRotate(degrees - mRotationDegrees);
 			mRotationDegrees = degrees;
-			mRotationMatrix.setRotate(mRotationDegrees);
-			mMatrix.postConcat(mRotationMatrix);
 		}
 	}
 
 	public void addRotate(final float degrees) {
 		synchronized (mMatrix) {
+			mMatrix.postRotate(degrees);
 			mRotationDegrees += degrees;
-			mRotationMatrix.setRotate(mRotationDegrees);
-			mMatrix.postConcat(mRotationMatrix);
 		}
 	}
 
 	public void setRotateAroundCenter(final float degrees) {
 		synchronized (mMatrix) {
-			mRotationAroundCenterDegrees = degrees;
 			mMatrix.getValues(mMatrixValues);
-			mRotationMatrix.setRotate(mRotationAroundCenterDegrees,
+			mMatrix.postRotate(degrees - mRotationAroundCenterDegrees,
 					mMatrixValues[Matrix.MTRANS_X],
 					mMatrixValues[Matrix.MTRANS_Y]);
-			mMatrix.postConcat(mRotationMatrix);
+			mRotationAroundCenterDegrees = degrees;
 		}
 	}
 
 	public void addRotateAroundCenter(final float degrees) {
 		synchronized (mMatrix) {
-			mRotationAroundCenterDegrees += degrees;
 			mMatrix.getValues(mMatrixValues);
-			mRotationMatrix.setRotate(mRotationAroundCenterDegrees,
-					mMatrixValues[Matrix.MTRANS_X],
+			mMatrix.postRotate(degrees, mMatrixValues[Matrix.MTRANS_X],
 					mMatrixValues[Matrix.MTRANS_Y]);
-			mMatrix.postConcat(mRotationMatrix);
+			mRotationAroundCenterDegrees += degrees;
 		}
 	}
 
 	public void addChild(final FeSurfaceElement child) {
-		addChild(FOREGROUND_LAYER, child);
+		addChild(0, child);
 	}
 
 	public void addChild(final int layerLevel, final FeSurfaceElement child) {
@@ -323,7 +335,7 @@ public abstract class FeSurfaceElement {
 		mSoundElement.setMasterVolume(volume);
 	}
 
-	// TAI change to mono, stereo and surround
+	// TODO change to mono, stereo and surround
 	public void setSurroundSound(final boolean enabled) {
 		m3DSound = enabled;
 	}
@@ -335,6 +347,7 @@ public abstract class FeSurfaceElement {
 				/ FeSurface.WIDTH;
 		final float rightVolume = (FeSurface.OFFSET_X + cords.x)
 				/ FeSurface.WIDTH;
+		// TODO if stereo yMod = 1f
 		final float yMod = (FeSurface.OFFSET_Y + cords.y) / FeSurface.HEIGHT;
 		mSoundElement.setChannelVolumes(leftVolume * yMod, rightVolume * yMod);
 	}

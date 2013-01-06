@@ -44,8 +44,6 @@ public abstract class FeSurface extends SurfaceView implements
 		final boolean scrollEnabled = getBooleanValue(attrs,
 				R.string.xmlattr_scrollable, false);
 		mRootElement = new FeRootElement(voidColor, scrollEnabled);
-		OFFSET_X = 0f;
-		OFFSET_Y = 0f;
 	}
 
 	@Override
@@ -112,25 +110,33 @@ public abstract class FeSurface extends SurfaceView implements
 	}
 
 	public void addElement(final FeSurfaceElement element) {
-		mRootElement.addChild(element);
+		mRootElement.addChild(FeRootElement.FOREGROUND_LAYER, element);
+	}
+
+	public void addElement(final int layerLevel, final FeSurfaceElement element) {
+		mRootElement.addChild(layerLevel + FeRootElement.FOREGROUND_LAYER,
+				element);
 	}
 
 	public void addMap(final FeSurfaceMap.MapMode mode,
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
 		mMap = new FeSurfaceMap(mode, tiles);
-		mRootElement.addChild(FeSurfaceElement.BACKGROUND_LAYER, mMap);
+		mRootElement.addChild(FeRootElement.BACKGROUND_LAYER, mMap);
 	}
 
-	public void addTranslate(final float translateX, final float translateY) {
-		mRootElement.addTranslate(translateX, translateY);
+	// TODO support all add and set methods
+	public void addTranslation(final float translationX,
+			final float translationY) {
+		mRootElement.addTranslation(translationX, translationY);
 	}
 
 	public void setScale(final float scaleX, final float scaleY) {
 		mRootElement.setScale(scaleX, scaleY);
 	}
 
-	public void setRotate(final float degrees) {
-		mRootElement.setRotate(degrees);
+	@Override
+	public void setRotation(final float degrees) {
+		mRootElement.setRotation(degrees);
 	}
 
 	// TODO getter/setter for all (xml)attributes?
@@ -152,7 +158,6 @@ public abstract class FeSurface extends SurfaceView implements
 	private String mFPS = "";
 	private long[] mLastElapsed = new long[20];
 	private int mElapsedIndex = 0;
-
 	private FeSurfaceMap mMap = null;
 
 	private void calculateFPS(final long elapsedMillis) {

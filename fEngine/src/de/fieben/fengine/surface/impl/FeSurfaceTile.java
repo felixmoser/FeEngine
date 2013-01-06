@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-// TODO !!!!!!! make comments everywhere!
+// WIP make comments everywhere!
 /**
  * @author Felix Moser - felix.ernesto.moser@gmail.com
  */

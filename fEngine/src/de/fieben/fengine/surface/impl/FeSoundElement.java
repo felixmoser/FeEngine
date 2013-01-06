@@ -34,8 +34,10 @@ public final class FeSoundElement {
 
 	public void playSound(final float leftVolume, final float rightVolume,
 			final boolean loop) {
-		mStreamId = mSoundPool.play(mSoundId, leftVolume, rightVolume, 0,
-				loop ? -1 : 0, 1f);
+		mStreamId = mSoundPool.play(mSoundId, leftVolume * mMasterVolume,
+				rightVolume * mMasterVolume, 0, loop ? -1 : 0, 1f);
+		mLeftVolume = leftVolume;
+		mRightVolume = rightVolume;
 	}
 
 	public void stopSound() {

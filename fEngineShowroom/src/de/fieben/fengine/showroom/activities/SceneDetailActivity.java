@@ -16,7 +16,6 @@ public class SceneDetailActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// TODO make own layout and use <merge again
 		setContentView(R.layout.activity_scene_detail);
 
 		mSceneId = getIntent().getIntExtra(SceneDetailFragment.ARG_ITEM_ID, -1);

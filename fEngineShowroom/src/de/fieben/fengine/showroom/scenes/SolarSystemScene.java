@@ -42,29 +42,26 @@ public class SolarSystemScene extends FeSurface {
 			public void doUpdate() {
 			}
 		};
-		mAnimationSun.setTranslate(450, 450);
+		mAnimationSun.setTranslation(450, 450);
 		mAnimationSun.setAnimation(4, 100);
 		addElement(mAnimationSun);
 
 		mEarth = new CircleElement(20);
-		mEarth.setTranslate(0, -350);
+		mEarth.setTranslation(0, -350);
 		mEarth.setColor(Color.BLUE);
-		mEarth.setNormalRotation(true);
+		mEarth.setNormalTestRotation(true);
 		mAnimationSun.addChild(mEarth);
 
 		final CircleElement moon = new CircleElement(5);
 		moon.setColor(Color.MAGENTA);
-		moon.setTranslate(0, 35);
-		moon.setNormalRotation(true);
+		moon.setTranslation(0, 35);
+		moon.setNormalTestRotation(true);
 		mEarth.addChild(moon);
 
 		mMars = new CircleElement(15);
 		mMars.setColor(Color.RED);
-		mMars.setTranslate(0, -450);
-		mMars.setFastRotation(true);
+		mMars.setTranslation(0, -450);
+		mMars.setFastTestRotation(true);
 		mAnimationSun.addChild(mMars);
-
-		// WIP replace scaling with no scaling after impl of mEnableZoom
-		setScale(1.5f, 1.5f);
 	}
 }

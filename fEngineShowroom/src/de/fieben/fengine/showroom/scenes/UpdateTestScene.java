@@ -23,12 +23,12 @@ public class UpdateTestScene extends FeSurface {
 		addElement(mBackgroundGrid);
 
 		mInnerCircle = new CircleElement(200);
-		mInnerCircle.setTranslate(700, 600);
+		mInnerCircle.setTranslation(700, 600);
 		mInnerCircle.setColor(Color.BLUE);
 
 		mOrbitElipse = new CircleElement(50);
-		mOrbitElipse.setTranslate(0, -400);
-		mOrbitElipse.setScale(0.5f, 3);
+		mOrbitElipse.setTranslation(0, -400);
+		mOrbitElipse.setScaleFromCenter(0.5f, 3f);
 		mOrbitElipse.setUpdateTestRotation(true);
 
 		mInnerCircle.addChild(mOrbitElipse);

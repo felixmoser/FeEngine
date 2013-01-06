@@ -56,17 +56,4 @@ public class IsometricForestScene extends FeSurface {
 			canvas.drawText(String.valueOf(mId + 1), x + 10, y + 25, paint);
 		}
 	}
-
-	// TODO
-	// @Override
-	// public void surfaceChanged(final SurfaceHolder holder, final int format,
-	// final int width, final int height) {
-	// final GridElement mBackgroundGrid;
-	// mBackgroundGrid = new GridElement(177);
-	// mBackgroundGrid.setColor(Color.YELLOW);
-	// addElement(mBackgroundGrid);
-	// mBackgroundGrid.calculateGrid(width, height);
-	//
-	// super.surfaceChanged(holder, format, width, height);
-	// }
 }

@@ -30,14 +30,18 @@ public final class FeSurfaceMap extends FeSurfaceElement {
 		// TODO complete isometric mode -> recalculation of child before drawing
 		if (mode == MapMode.ISOMETRIC) {
 			setRotateAroundCenter(45f);
-			postScale(1f, 0.5f);
+			addScale(1f, 0.5f);
 		}
 
 		mMode = mode;
+
+		final SparseArray<? extends FeSurfaceTile> firstColumn = tiles.get(0);
+		final FeSurfaceTile firstTile = firstColumn.get(0);
+
 		mRowCount = tiles.size();
-		mColumnCount = tiles.get(0).size();
-		mTileWidth = tiles.get(0).get(0).mWidth;
-		mTileHeight = tiles.get(0).get(0).mHeight;
+		mColumnCount = firstColumn.size();
+		mTileWidth = firstTile.mWidth;
+		mTileHeight = firstTile.mHeight;
 	}
 
 	@Override
