@@ -1,9 +1,8 @@
-<manifest
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="de.fieben.fengine"
-	android:versionCode="1"
-	android:versionName="1.0">
-	<uses-sdk
-		android:minSdkVersion="14"
-		android:targetSdkVersion="17"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.fieben.feengine"
+    android:versionCode="1"
+    android:versionName="1.0" >
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
 </manifest>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<de.fieben.fengine.showroom.scenes.SolarSystemScene xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fe="http://schemas.android.com/apk/res-de.fieben.fengine"
+<de.fieben.feengine.showroom.scenes.SolarSystemScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fe="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scene"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    fe:scrollable="true" />
+    fe:touchMode="zoom" />

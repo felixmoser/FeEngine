@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="de.fieben.fengine.surface.FeSurface">
+    <declare-styleable name="FeSurface">
         <attr name="voidColor" format="color" />
-        <attr name="scrollable" format="boolean" />
-        <!-- <attr name="backgroundRowCount" format="integer" /> -->
-        <!-- <attr name="backgroundColumnCount" format="integer" /> -->
-        <!-- <attr name="tileResource" format="integer" /> -->
+        <attr name="touchMode" format="enum">
+            <enum name="none" value="0" />
+            <enum name="drag" value="1" />
+            <enum name="zoom" value="2" />
+        </attr>
     </declare-styleable>
 </resources>
