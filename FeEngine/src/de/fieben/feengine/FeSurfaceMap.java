@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import android.util.SparseArray;
 import de.fieben.feengine.FeSurface.MapMode;
 
-final class FeSurfaceMap extends FeSurfaceElement {
+class FeSurfaceMap extends FeSurfaceElement {
 
 	private final MapMode mMode;
 
@@ -22,7 +22,7 @@ final class FeSurfaceMap extends FeSurfaceElement {
 				* tiles.get(0).get(0).mHeight);
 		mBackgroundTiles = tiles;
 
-		// TODO complete isometric mode -> recalculation of child before drawing
+		// WIP complete isometric mode -> recalculation of child before drawing
 		if (mode == MapMode.ISOMETRIC) {
 			setRotateAroundCenter(45f);
 			addScale(1f, 0.5f);
@@ -49,7 +49,6 @@ final class FeSurfaceMap extends FeSurfaceElement {
 		int firstVisibleColumn = 0;
 		int lastVisibleColumn = 0;
 
-		// TODO calculate visible tiles in isometric mode
 		// switch (mMode) {
 		// case NORMAL:
 		firstVisibleRow = limitTo((int) -FeSurface.OFFSET_Y / mTileHeight,

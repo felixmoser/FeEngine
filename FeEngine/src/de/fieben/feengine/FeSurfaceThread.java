@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-final class FeSurfaceThread extends Thread {
+class FeSurfaceThread extends Thread {
 	private static final String LOG_TAG = FeSurfaceThread.class.getSimpleName();
 
 	private FeSurface mSurface;

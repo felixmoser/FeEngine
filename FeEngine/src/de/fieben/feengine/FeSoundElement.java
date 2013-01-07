@@ -3,8 +3,9 @@ package de.fieben.feengine;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import de.fieben.feengine.FeSurfaceElement.LoadCompleteCallback;
 
-public final class FeSoundElement {
+class FeSoundElement {
 
 	private SoundPool mSoundPool;
 	private int mSoundId;
@@ -59,9 +60,5 @@ public final class FeSoundElement {
 	private void updateVolume() {
 		mSoundPool.setVolume(mStreamId, mLeftVolume * mMasterVolume,
 				mRightVolume * mMasterVolume);
-	}
-
-	public interface LoadCompleteCallback {
-		public void soundLoaded();
 	}
 }

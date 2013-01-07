@@ -12,20 +12,21 @@ public class ForestTile extends FeSurfaceTile {
 	private Bitmap mTreeBitmap;
 	private final ArrayList<Pair<Integer, Integer>> mTrees;
 
-	public ForestTile(final int id, final Bitmap background, final Bitmap tree,
+	public ForestTile(final Bitmap background, final Bitmap tree,
 			final ArrayList<Pair<Integer, Integer>> trees) {
-		super(id, background);
+		super(background);
 		mTreeBitmap = tree;
 		mTrees = trees;
 	}
 
 	@Override
-	public void draw(final Canvas canvas, final int x, final int y,
+	public void onDraw(final Canvas canvas, final int x, final int y,
 			final Paint paint) {
-		super.draw(canvas, x, y, paint);
-		for (final Pair<Integer, Integer> treeCords : mTrees) {
-			canvas.drawBitmap(mTreeBitmap, x + treeCords.first, y
-					+ treeCords.second, paint);
+		if (mTreeBitmap != null && mTrees != null) {
+			for (final Pair<Integer, Integer> treeCords : mTrees) {
+				canvas.drawBitmap(mTreeBitmap, x + treeCords.first, y
+						+ treeCords.second, paint);
+			}
 		}
 	}
 }

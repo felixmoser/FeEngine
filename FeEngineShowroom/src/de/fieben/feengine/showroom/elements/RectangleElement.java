@@ -15,7 +15,7 @@ public class RectangleElement extends FeSurfaceElement {
 	public RectangleElement(final int width, final int height,
 			final boolean centerAnchor) {
 		super(width, height);
-		// TODO replace centerAnchor with flag. eg. x-achses center
+		// TAI replace centerAnchor with flag. eg. x-achses center
 		if (centerAnchor) {
 			mDimensions = new Rect(-width / 2, -height / 2, width / 2,
 					height / 2);

@@ -44,8 +44,6 @@ public class TiledForestScene extends FeSurface {
 			}
 		};
 
-		int id = 0;
-		boolean colorBlack = true;
 		for (int i = 0; i < 100; i++) {
 			final SparseArray<ForestTile> row = new SparseArray<ForestTile>(100);
 			for (int j = 0; j < 100; j++) {
@@ -71,12 +69,10 @@ public class TiledForestScene extends FeSurface {
 				}
 				// TODO integrate y-axis ordering into FeSurface?
 				Collections.sort(trees, yLastComparator);
-				row.append(j, new ForestTile(id++, forestBackground,
-						treeBitmap, trees));
-				colorBlack = !colorBlack;
+				row.append(j, new ForestTile(forestBackground, treeBitmap,
+						trees));
 			}
 			tiles.append(i, row);
-			colorBlack = !colorBlack;
 		}
 		return tiles;
 	}

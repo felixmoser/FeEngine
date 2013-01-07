@@ -20,6 +20,10 @@ public abstract class FeSurface extends SurfaceView implements
 		NORMAL, ISOMETRIC
 	};
 
+	private final static int LAYER_BACKGROUND = 0;
+	private final static int LAYER_MAP = 1;
+	private final static int LAYER_ELEMENTS = 2;
+
 	public static int WIDTH;
 	public static int HEIGHT;
 	public static float OFFSET_X;
@@ -32,20 +36,18 @@ public abstract class FeSurface extends SurfaceView implements
 	public FeSurface(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 		getHolder().addCallback(this);
-		mSurfaceThread = new FeSurfaceThread(this);
-		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
 		final TypedArray styleAttrs = context.getTheme()
 				.obtainStyledAttributes(attrs, R.styleable.FeSurface, 0, 0);
-		try {
-			final int voidColor = styleAttrs.getInteger(
-					R.styleable.FeSurface_voidColor, Color.BLACK);
-			final int touchMode = styleAttrs.getInt(
-					R.styleable.FeSurface_touchMode, 0);
-			mRootElement = new FeRootElement(voidColor, touchMode);
-		} finally {
-			styleAttrs.recycle();
-		}
+		final int voidColor = styleAttrs.getInteger(
+				R.styleable.FeSurface_voidColor, Color.BLACK);
+		final int touchMode = styleAttrs.getInt(
+				R.styleable.FeSurface_touchMode, 0);
+		styleAttrs.recycle();
+
+		mRootElement = new FeRootElement(voidColor, touchMode);
+		mSurfaceThread = new FeSurfaceThread(this);
+		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	}
 
 	@Override
@@ -98,33 +100,54 @@ public abstract class FeSurface extends SurfaceView implements
 	}
 
 	public void addElement(final FeSurfaceElement element) {
-		mRootElement.addChild(FeRootElement.LAYER_ELEMENTS, element);
+		mRootElement.addChild(LAYER_ELEMENTS, element);
 	}
 
 	public void addElement(final int layerLevel, final FeSurfaceElement element) {
-		mRootElement.addChild(layerLevel + FeRootElement.LAYER_ELEMENTS,
-				element);
+		mRootElement.addChild(layerLevel + LAYER_ELEMENTS, element);
+	}
+
+	/**
+	 * Adds an {@link FeSurfaceElement} in the background. Behind all elements
+	 * and even behind the map.
+	 * 
+	 * @param element
+	 *            The background element to add.
+	 */
+	public void addBackgroundElement(final FeSurfaceElement element) {
+		mRootElement.addChild(LAYER_BACKGROUND, element);
 	}
 
 	public void addMap(final MapMode mode,
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
 		mMap = new FeSurfaceMap(mode, tiles);
-		mRootElement.addChild(FeRootElement.LAYER_MAP, mMap);
+		mRootElement.addChild(LAYER_MAP, mMap);
 	}
 
-	// TODO support all add and set methods
-	public void addTranslation(final float translationX,
-			final float translationY) {
-		mRootElement.addTranslation(translationX, translationY);
+	public void setTranslate(final float translationX, final float translationY) {
+		mRootElement.setTranslate(translationX, translationY);
 	}
 
-	public void setScale(final float scaleX, final float scaleY) {
-		mRootElement.setScale(scaleX, scaleY);
+	public void addTranslate(final float translationX, final float translationY) {
+		mRootElement.addTranslate(translationX, translationY);
 	}
 
-	@Override
-	public void setRotation(final float degrees) {
-		mRootElement.setRotation(degrees);
+	public void setScale(final float scaleX, final float scaleY,
+			final float pointX, final float pointY) {
+		mRootElement.setScale(scaleX, scaleY, pointX, pointY);
+	}
+
+	public void addScale(final float scaleX, final float scaleY,
+			final float pointX, final float pointY) {
+		mRootElement.addScale(scaleX, scaleY, pointX, pointY);
+	}
+
+	public void setRotate(final float degrees) {
+		mRootElement.setRotate(degrees);
+	}
+
+	public void addRotate(final float degrees) {
+		mRootElement.addRotate(degrees);
 	}
 
 	// DEBUG

@@ -7,11 +7,7 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import de.fieben.feengine.FeSurfaceElement.FeSurfaceTouchable;
 
-final class FeRootElement extends FeSurfaceElement implements
-		FeSurfaceTouchable {
-
-	public final static int LAYER_MAP = 0;
-	public final static int LAYER_ELEMENTS = 1;
+class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
 	// TAI add touch mode rotate
 	public final static int TOUCH_NONE = 0;
@@ -28,7 +24,6 @@ final class FeRootElement extends FeSurfaceElement implements
 
 	private ArrayList<FeSurfaceTouchable> mTouchableElements = new ArrayList<FeSurfaceTouchable>();
 
-	// WIP try to improve package struckture
 	public FeRootElement(final int voidColor, final int touchMode) {
 		// TODO -1 indicates infinity size and no reaction on touch, check if
 		// nessesary or right.
@@ -54,17 +49,15 @@ final class FeRootElement extends FeSurfaceElement implements
 	}
 
 	@Override
-	public void setTranslation(final float translationX,
-			final float translationY) {
-		super.addTranslation(translationX, translationY);
+	public void setTranslate(final float translationX, final float translationY) {
+		super.addTranslate(translationX, translationY);
 		FeSurface.OFFSET_X = translationX;
 		FeSurface.OFFSET_Y = translationY;
 	}
 
 	@Override
-	public void addTranslation(final float translationX,
-			final float translationY) {
-		super.addTranslation(translationX, translationY);
+	public void addTranslate(final float translationX, final float translationY) {
+		super.addTranslate(translationX, translationY);
 		FeSurface.OFFSET_X += translationX;
 		FeSurface.OFFSET_Y += translationY;
 	}
@@ -82,7 +75,7 @@ final class FeRootElement extends FeSurfaceElement implements
 
 		if (mCurrentTouch == TOUCH_NONE) {
 			final MotionEvent offsetEvent = MotionEvent.obtain(event);
-			offsetEvent.offsetLocation(-getTranslationX(), -getTranslationY());
+			offsetEvent.offsetLocation(-getTranslateX(), -getTranslateY());
 			for (final FeSurfaceTouchable e : mTouchableElements) {
 				// TODO change to detect element on position x,y?
 				if (e.onTouch(offsetEvent)) {
@@ -113,7 +106,7 @@ final class FeRootElement extends FeSurfaceElement implements
 		case MotionEvent.ACTION_MOVE:
 			switch (mCurrentTouch) {
 			case TOUCH_DRAG:
-				addTranslation(event.getX() - mLastTouchX, event.getY()
+				addTranslate(event.getX() - mLastTouchX, event.getY()
 						- mLastTouchY);
 				mLastTouchX = event.getX(0);
 				mLastTouchY = event.getY(0);

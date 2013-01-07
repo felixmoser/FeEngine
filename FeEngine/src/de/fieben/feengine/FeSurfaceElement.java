@@ -15,14 +15,10 @@ import android.view.MotionEvent;
 public abstract class FeSurfaceElement {
 	// TAI what about display density?
 
-	private Bitmap mBitmap = null;
-	// TODO needed? nur für animation wichtig, und die geht eh nicht ohne bitmap
-	private final int mWidth;
-	private final int mHeight;
+	private final Bitmap mBitmap;
 
-	// TODO final + sync block or volatile?
 	private final Matrix mMatrix;
-	private final float[] mMatrixValues = new float[9];
+	private final float[] mMatrixValues;
 
 	private float mRotationDegrees = 0f;
 	private float mRotationAroundCenterDegrees = 0f;
@@ -31,7 +27,7 @@ public abstract class FeSurfaceElement {
 
 	// TAI add translate modifier to layers. e.g. 0f equals no translation, 1f
 	// full
-	private SparseArray<ArrayList<FeSurfaceElement>> mChildLayers;
+	private final SparseArray<ArrayList<FeSurfaceElement>> mChildLayers;
 	private int mMaxLayerLevel = 0;
 
 	private int mDoUpdateInterval;
@@ -41,8 +37,7 @@ public abstract class FeSurfaceElement {
 	private int mAnimationCounter;
 	private int mAnimationSteps;
 	private int mAnimationCurrentIndex;
-	// TODO rename
-	private int mAnimationStepRootCeiled;
+	private int mAnimationBitmapGridDimension;
 	private int mAnimationWidth;
 	private int mAnimationHeight;
 	private Rect mAnimationSrcRect;
@@ -52,51 +47,70 @@ public abstract class FeSurfaceElement {
 	private boolean m3DSound = false;
 
 	public FeSurfaceElement(final int width, final int height) {
-		mWidth = width;
-		mHeight = height;
 		mMatrix = new Matrix();
+		mMatrixValues = new float[9];
 		mChildLayers = new SparseArray<ArrayList<FeSurfaceElement>>();
+		mBitmap = null;
 	}
 
 	public FeSurfaceElement(final Bitmap bitmap) {
-		this(bitmap.getWidth(), bitmap.getHeight());
+		mMatrix = new Matrix();
+		mMatrixValues = new float[9];
+		mChildLayers = new SparseArray<ArrayList<FeSurfaceElement>>();
 		mBitmap = bitmap;
 	}
 
-	public void setTranslation(final float translationX,
-			final float translationY) {
+	public FeSurfaceElement(final Bitmap bitmap, final int stepCount,
+			final int animationInterval) {
+		mMatrix = new Matrix();
+		mMatrixValues = new float[9];
+		mChildLayers = new SparseArray<ArrayList<FeSurfaceElement>>();
+		mBitmap = bitmap;
+
+		mAnimationCounter = mAnimationInterval = animationInterval;
+
+		mAnimationSteps = stepCount;
+		mAnimationCurrentIndex = 0;
+
+		mAnimationBitmapGridDimension = (int) Math.ceil(Math.sqrt(stepCount));
+		mAnimationWidth = mBitmap.getWidth() / mAnimationBitmapGridDimension;
+		mAnimationHeight = mBitmap.getHeight() / mAnimationBitmapGridDimension;
+
+		mAnimationDstRect = new Rect(-mAnimationWidth / 2,
+				-mAnimationHeight / 2, mAnimationWidth / 2,
+				mAnimationHeight / 2);
+		mAnimationSrcRect = new Rect(0, 0, mAnimationWidth, mAnimationHeight);
+	}
+
+	public void setTranslate(final float translateX, final float translateY) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrix.postTranslate(
-					translationX - mMatrixValues[Matrix.MTRANS_X], translationY
-							- mMatrixValues[Matrix.MTRANS_Y]);
+			mMatrix.postTranslate(translateX - mMatrixValues[Matrix.MTRANS_X],
+					translateY - mMatrixValues[Matrix.MTRANS_Y]);
 		}
 	}
 
-	public void addTranslation(final float translationX,
-			final float translationY) {
+	public void addTranslate(final float translateX, final float translateY) {
 		synchronized (mMatrix) {
-			mMatrix.postTranslate(translationX, translationY);
+			mMatrix.postTranslate(translateX, translateY);
 		}
 	}
 
-	// TODO impl all getter
-	// TODO naming conflict? rename to getSurfaceTranslationX?
-	public float getTranslationX() {
+	// WIP impl all getter
+	public float getTranslateX() {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
 			return mMatrixValues[Matrix.MTRANS_X];
 		}
 	}
 
-	public float getTranslationY() {
+	public float getTranslateY() {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
 			return mMatrixValues[Matrix.MTRANS_Y];
 		}
 	}
 
-	// WIP make all methods final, if possible
 	public final Point getAbsoluteSurfacePosition() {
 		if (mParent == null) {
 			return new Point();
@@ -159,7 +173,7 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
-	public void setRotation(final float degrees) {
+	public void setRotate(final float degrees) {
 		synchronized (mMatrix) {
 			mMatrix.postRotate(degrees - mRotationDegrees);
 			mRotationDegrees = degrees;
@@ -215,8 +229,8 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
-	// TODO only draw visible elements
-	public final void draw(final Canvas canvas, final Paint paint) {
+	// TODO only draw (or iterate over?) visible elements
+	protected final void draw(final Canvas canvas, final Paint paint) {
 		synchronized (mMatrix) {
 			canvas.save();
 			canvas.concat(mMatrix);
@@ -244,7 +258,7 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
-	public final void update(final long elapsedMillis) {
+	protected final void update(final long elapsedMillis) {
 		synchronized (mMatrix) {
 			onUpdate(elapsedMillis);
 
@@ -261,6 +275,7 @@ public abstract class FeSurfaceElement {
 				update3DVolume();
 			}
 
+			// TAI start and stop animation
 			if (mAnimationInterval > 0) {
 				mAnimationCounter -= elapsedMillis;
 				if (mAnimationCounter <= 0) {
@@ -268,9 +283,9 @@ public abstract class FeSurfaceElement {
 					if (++mAnimationCurrentIndex >= mAnimationSteps) {
 						mAnimationCurrentIndex = 0;
 					}
-					final int left = (mAnimationCurrentIndex % mAnimationStepRootCeiled)
+					final int left = (mAnimationCurrentIndex % mAnimationBitmapGridDimension)
 							* mAnimationWidth;
-					final int top = (mAnimationCurrentIndex / mAnimationStepRootCeiled)
+					final int top = (mAnimationCurrentIndex / mAnimationBitmapGridDimension)
 							* mAnimationHeight;
 					final int right = left + mAnimationWidth;
 					final int bottom = top + mAnimationHeight;
@@ -295,29 +310,12 @@ public abstract class FeSurfaceElement {
 
 	public abstract void doUpdate();
 
-	public final void setUpdateInterval(final int updateInterval) {
+	public void setUpdateInterval(final int updateInterval) {
 		mDoUpdateCounter = mDoUpdateInterval = updateInterval;
 	}
 
-	// TAI start and stop animation
-	public void setAnimation(final int stepCount, final int animationInterval) {
-		mAnimationCounter = mAnimationInterval = animationInterval;
-
-		mAnimationSteps = stepCount;
-		mAnimationCurrentIndex = 0;
-
-		mAnimationStepRootCeiled = (int) Math.ceil(Math.sqrt(stepCount));
-		mAnimationWidth = mWidth / mAnimationStepRootCeiled;
-		mAnimationHeight = mHeight / mAnimationStepRootCeiled;
-
-		mAnimationDstRect = new Rect(-mAnimationWidth / 2,
-				-mAnimationHeight / 2, mAnimationWidth / 2,
-				mAnimationHeight / 2);
-		mAnimationSrcRect = new Rect(0, 0, mAnimationWidth, mAnimationHeight);
-	}
-
 	public void setSound(final Context context, final int resourceId,
-			final FeSoundElement.LoadCompleteCallback callback) {
+			final LoadCompleteCallback callback) {
 		mSoundElement = new FeSoundElement(context, resourceId, callback);
 	}
 
@@ -353,8 +351,11 @@ public abstract class FeSurfaceElement {
 		mSoundElement.setChannelVolumes(leftVolume * yMod, rightVolume * yMod);
 	}
 
-	// TODO extract?
 	public interface FeSurfaceTouchable {
 		public boolean onTouch(final MotionEvent event);
+	}
+
+	public interface LoadCompleteCallback {
+		public void soundLoaded();
 	}
 }

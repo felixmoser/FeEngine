@@ -17,23 +17,22 @@ public class UpdateTestScene extends FeSurface {
 	public UpdateTestScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		mBackgroundGrid = new GridElement(100);
-		mBackgroundGrid.setColor(Color.YELLOW);
-		// TODO impl addBackgroundElement() to FeSurface
-		addElement(mBackgroundGrid);
-
 		mInnerCircle = new CircleElement(200);
-		mInnerCircle.setTranslation(700, 600);
+		mInnerCircle.setTranslate(700, 600);
 		mInnerCircle.setColor(Color.BLUE);
 
 		mOrbitElipse = new CircleElement(50);
-		mOrbitElipse.setTranslation(0, -400);
+		mOrbitElipse.setTranslate(0, -400);
 		mOrbitElipse.setScaleFromCenter(0.5f, 3f);
 		mOrbitElipse.setUpdateTestRotation(true);
 
 		mInnerCircle.addChild(mOrbitElipse);
 
 		addElement(mInnerCircle);
+
+		mBackgroundGrid = new GridElement(100);
+		mBackgroundGrid.setColor(Color.YELLOW);
+		addBackgroundElement(mBackgroundGrid);
 	}
 
 	@Override
