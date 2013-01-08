@@ -5,19 +5,17 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 public abstract class FeSurfaceTile {
-	private Bitmap mBitmap = null;
-	protected int mWidth;
-	protected int mHeight;
+	final Bitmap mBitmap;
 
 	public FeSurfaceTile(final Bitmap bitmap) {
-		mWidth = bitmap.getWidth();
-		mHeight = bitmap.getHeight();
 		mBitmap = bitmap;
 	}
 
 	protected final void draw(final Canvas canvas, final int x, final int y,
 			final Paint paint) {
-		canvas.drawBitmap(mBitmap, x, y, paint);
+		if (mBitmap != null) {
+			canvas.drawBitmap(mBitmap, x, y, paint);
+		}
 		onDraw(canvas, x, y, paint);
 	}
 

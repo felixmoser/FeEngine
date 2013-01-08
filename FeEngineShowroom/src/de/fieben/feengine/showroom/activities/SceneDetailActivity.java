@@ -14,7 +14,7 @@ public class SceneDetailActivity extends FragmentActivity {
 	private int mSceneId;
 
 	@Override
-	protected void onCreate(final Bundle savedInstanceState) {
+	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scene_detail);
 

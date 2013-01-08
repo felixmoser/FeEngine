@@ -14,6 +14,7 @@ class FeSurfaceThread extends Thread {
 		mSurface = surface;
 	}
 
+	// TAI thread pausieren wenn surface weg?
 	@Override
 	public void run() {
 		final SurfaceHolder holder = mSurface.getHolder();
