@@ -15,6 +15,10 @@ import android.view.MotionEvent;
 public abstract class FeSurfaceElement {
 	// TAI what about display density?
 
+	public static enum SoundMode {
+		MONO, STEREO, SURROUND
+	}
+
 	private final Bitmap mBitmap;
 
 	private final Matrix mMatrix;
@@ -44,7 +48,7 @@ public abstract class FeSurfaceElement {
 	private Rect mAnimationDstRect;
 
 	private FeSoundElement mSoundElement = null;
-	private boolean m3DSound = false;
+	private SoundMode mSoundMode = SoundMode.MONO;
 
 	public FeSurfaceElement(final int width, final int height) {
 		mMatrix = new Matrix();
@@ -96,7 +100,6 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
-	// WIP impl all getter
 	public float getTranslateX() {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
@@ -155,6 +158,20 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
+	public float getScaleX() {
+		synchronized (mMatrix) {
+			mMatrix.getValues(mMatrixValues);
+			return mMatrixValues[Matrix.MSCALE_X];
+		}
+	}
+
+	public float getScaleY() {
+		synchronized (mMatrix) {
+			mMatrix.getValues(mMatrixValues);
+			return mMatrixValues[Matrix.MSCALE_Y];
+		}
+	}
+
 	public void setScaleFromCenter(final float scaleX, final float scaleY) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
@@ -187,6 +204,12 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
+	public float getRotate() {
+		synchronized (mMatrix) {
+			return mRotationDegrees;
+		}
+	}
+
 	public void setRotateAroundCenter(final float degrees) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
@@ -203,6 +226,12 @@ public abstract class FeSurfaceElement {
 			mMatrix.postRotate(degrees, mMatrixValues[Matrix.MTRANS_X],
 					mMatrixValues[Matrix.MTRANS_Y]);
 			mRotationAroundCenterDegrees += degrees;
+		}
+	}
+
+	public float getRotateAroundCenter() {
+		synchronized (mMatrix) {
+			return mRotationAroundCenterDegrees;
 		}
 	}
 
@@ -271,8 +300,8 @@ public abstract class FeSurfaceElement {
 				}
 			}
 
-			if (m3DSound) {
-				update3DVolume();
+			if (mSoundMode != SoundMode.MONO) {
+				updateVolumes();
 			}
 
 			// TAI start and stop animation
@@ -319,10 +348,11 @@ public abstract class FeSurfaceElement {
 		mSoundElement = new FeSoundElement(context, resourceId, callback);
 	}
 
-	public void playSound(final boolean loop) {
+	public void playSound(final SoundMode mode, final boolean loop) {
 		mSoundElement.playSound(1f, 1f, loop);
-		if (m3DSound) {
-			update3DVolume();
+		mSoundMode = mode;
+		if (mode != SoundMode.MONO) {
+			updateVolumes();
 		}
 	}
 
@@ -334,20 +364,24 @@ public abstract class FeSurfaceElement {
 		mSoundElement.setMasterVolume(volume);
 	}
 
-	// WIP change to mono, stereo and surround
-	public void setSurroundSound(final boolean enabled) {
-		m3DSound = enabled;
-	}
-
 	// TAI handle offscreen elements?
-	private void update3DVolume() {
+	private void updateVolumes() {
 		final Point cords = getAbsoluteSurfacePosition();
-		final float leftVolume = (FeSurface.WIDTH - FeSurface.OFFSET_X - cords.x)
-				/ FeSurface.WIDTH;
-		final float rightVolume = (FeSurface.OFFSET_X + cords.x)
-				/ FeSurface.WIDTH;
-		// TODO if stereo yMod = 1f
-		final float yMod = (FeSurface.OFFSET_Y + cords.y) / FeSurface.HEIGHT;
+
+		final float surfaceScaleX = FeSurface.SURFACE.getSurfaceScaleX();
+		final float surfaceTranslateX = FeSurface.SURFACE
+				.getSurfaceTranslationX();
+
+		final float leftVolume = (FeSurface.SURFACE.getSurfaceWidth()
+				- surfaceTranslateX - cords.x * surfaceScaleX)
+				/ FeSurface.SURFACE.getSurfaceWidth();
+		final float rightVolume = (surfaceTranslateX + cords.x * surfaceScaleX)
+				/ FeSurface.SURFACE.getSurfaceWidth();
+		final float yMod = mSoundMode == SoundMode.SURROUND ? (FeSurface.SURFACE
+				.getSurfaceTranslationY() + cords.y
+				* FeSurface.SURFACE.getSurfaceScaleY())
+				/ FeSurface.SURFACE.getSurfaceHeight() : 1f;
+
 		mSoundElement.setChannelVolumes(leftVolume * yMod, rightVolume * yMod);
 	}
 

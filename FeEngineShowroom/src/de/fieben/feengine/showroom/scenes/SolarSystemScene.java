@@ -28,9 +28,8 @@ public class SolarSystemScene extends FeSurface {
 	public SolarSystemScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		// WIP check all resources and clean them
 		mAnimationSun = new AnimationTestElement(BitmapFactory.decodeResource(
-				getResources(), R.drawable.sun_rotation01), 4, 100);
+				getResources(), R.drawable.sun_animation), 4, 100);
 		mAnimationSun.setTranslate(450, 450);
 		addElement(mAnimationSun);
 
@@ -86,7 +85,7 @@ public class SolarSystemScene extends FeSurface {
 		// mDragMode = true;
 		// break;
 		// case MotionEvent.ACTION_MOVE:
-		// addTranslation(event.getX() - mLastTouchX, event.getY()
+		// addTranslate(event.getX() - mLastTouchX, event.getY()
 		// - mLastTouchY);
 		// mLastTouchX = event.getX();
 		// mLastTouchY = event.getY();
@@ -100,12 +99,12 @@ public class SolarSystemScene extends FeSurface {
 		// }
 		//
 		// private void limitTranslation() {
-		// final float translationX = getTranslationX();
-		// final float translationY = getTranslationY();
-		// if (translationX < 0 || translationX > WIDTH || translationY < 0
-		// || translationY > HEIGHT) {
-		// setTranslation(Math.max(0, Math.min(translationX, WIDTH)),
-		// Math.max(0, Math.min(translationY, HEIGHT)));
+		// final float translateX = getTranslateX();
+		// final float translateY = getTranslateY();
+		// if (translateX < 0 || translateX > WIDTH || translateY < 0
+		// || translateY > HEIGHT) {
+		// setTranslate(Math.max(0, Math.min(translateX, WIDTH)),
+		// Math.max(0, Math.min(translateY, HEIGHT)));
 		// }
 		// }
 

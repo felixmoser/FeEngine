@@ -24,14 +24,14 @@ public abstract class FeSurface extends SurfaceView implements
 	private final static int LAYER_MAP = 1;
 	private final static int LAYER_ELEMENTS = 2;
 
-	public static int WIDTH;
-	public static int HEIGHT;
-	public static float OFFSET_X;
-	public static float OFFSET_Y;
+	static FeSurface SURFACE;
+
+	private int mWidth;
+	private int mHeight;
 
 	private FeSurfaceThread mSurfaceThread;
 	private final Paint mPaint;
-	private final FeRootElement mRootElement;
+	private FeRootElement mRootElement;
 
 	public FeSurface(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
@@ -48,6 +48,8 @@ public abstract class FeSurface extends SurfaceView implements
 		mRootElement = new FeRootElement(voidColor, touchMode);
 		mSurfaceThread = new FeSurfaceThread(this);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+		SURFACE = this;
 	}
 
 	@Override
@@ -61,8 +63,8 @@ public abstract class FeSurface extends SurfaceView implements
 	@Override
 	public void surfaceChanged(final SurfaceHolder holder, final int format,
 			final int width, final int height) {
-		WIDTH = width;
-		HEIGHT = height;
+		mWidth = width;
+		mHeight = height;
 	}
 
 	@Override
@@ -120,37 +122,71 @@ public abstract class FeSurface extends SurfaceView implements
 
 	public void addMap(final MapMode mode,
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
-		mMap = new FeSurfaceMap(mode, tiles);
+		mMap = new FeSurfaceMap(this, mode, tiles);
 		mRootElement.addChild(LAYER_MAP, mMap);
 	}
 
-	public void setTranslate(final float translationX, final float translationY) {
-		mRootElement.setTranslate(translationX, translationY);
+	public void setSurfaceTranslation(final float translateX,
+			final float translateY) {
+		mRootElement.setTranslate(translateX, translateY);
 	}
 
-	public void addTranslate(final float translationX, final float translationY) {
-		mRootElement.addTranslate(translationX, translationY);
+	public void addSurfaceTranslation(final float translateX,
+			final float translateY) {
+		mRootElement.addTranslate(translateX, translateY);
 	}
 
-	public void setScale(final float scaleX, final float scaleY,
+	public void setSurfaceScale(final float scaleX, final float scaleY,
 			final float pointX, final float pointY) {
 		mRootElement.setScale(scaleX, scaleY, pointX, pointY);
 	}
 
-	public void addScale(final float scaleX, final float scaleY,
+	public void addSurfaceScale(final float scaleX, final float scaleY,
 			final float pointX, final float pointY) {
 		mRootElement.addScale(scaleX, scaleY, pointX, pointY);
 	}
 
-	public void setRotate(final float degrees) {
+	public void setSurfaceRotation(final float degrees) {
 		mRootElement.setRotate(degrees);
 	}
 
-	public void addRotate(final float degrees) {
+	public void addSurfaceRotation(final float degrees) {
 		mRootElement.addRotate(degrees);
 	}
 
-	// DEBUG
+	public float getSurfaceTranslationX() {
+		return mRootElement.getTranslateX();
+	}
+
+	public float getSurfaceTranslationY() {
+		return mRootElement.getTranslateY();
+	}
+
+	public float getSurfaceScaleX() {
+		return mRootElement.getScaleX();
+	}
+
+	public float getSurfaceScaleY() {
+		return mRootElement.getScaleY();
+	}
+
+	public float getSurfaceRotationX() {
+		return mRootElement.getTranslateX();
+	}
+
+	public float getSurfaceRotateionY() {
+		return mRootElement.getTranslateY();
+	}
+
+	public int getSurfaceWidth() {
+		return mWidth;
+	}
+
+	public int getSurfaceHeight() {
+		return mHeight;
+	}
+
+	// DEBUG general
 	private String mFPS = "";
 	private long[] mLastElapsed = new long[20];
 	private int mElapsedIndex = 0;

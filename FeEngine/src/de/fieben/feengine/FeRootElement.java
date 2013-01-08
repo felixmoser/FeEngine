@@ -30,9 +30,6 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 		super(-1, -1);
 		mVoidColor = voidColor;
 		mTouchMode = touchMode;
-
-		FeSurface.OFFSET_X = 0f;
-		FeSurface.OFFSET_Y = 0f;
 	}
 
 	@Override
@@ -46,20 +43,6 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
 	@Override
 	public void doUpdate() {
-	}
-
-	@Override
-	public void setTranslate(final float translationX, final float translationY) {
-		super.addTranslate(translationX, translationY);
-		FeSurface.OFFSET_X = translationX;
-		FeSurface.OFFSET_Y = translationY;
-	}
-
-	@Override
-	public void addTranslate(final float translationX, final float translationY) {
-		super.addTranslate(translationX, translationY);
-		FeSurface.OFFSET_X += translationX;
-		FeSurface.OFFSET_Y += translationY;
 	}
 
 	public void registerTouchable(final FeSurfaceTouchable touchableElement) {

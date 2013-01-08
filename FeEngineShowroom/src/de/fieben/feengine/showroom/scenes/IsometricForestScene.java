@@ -23,7 +23,7 @@ public class IsometricForestScene extends FeSurface {
 				100);
 
 		final Bitmap tileBitmap = BitmapFactory.decodeResource(getResources(),
-				R.drawable.tile_large00);
+				R.drawable.forest_tile);
 		for (int i = 0; i < 100; i++) {
 			final SparseArray<ForestTile> row = new SparseArray<ForestTile>(100);
 			for (int j = 0; j < 100; j++) {

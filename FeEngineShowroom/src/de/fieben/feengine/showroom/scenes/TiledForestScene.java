@@ -31,9 +31,9 @@ public class TiledForestScene extends FeSurface {
 				100);
 
 		final Bitmap forestBackground = BitmapFactory.decodeResource(
-				getResources(), R.drawable.tile_large00);
+				getResources(), R.drawable.forest_tile);
 		final Bitmap treeBitmap = BitmapFactory.decodeResource(getResources(),
-				R.drawable.tree00);
+				R.drawable.tree);
 		ArrayList<Pair<Integer, Integer>> trees;
 		final Random random = new Random();
 		final Comparator<Pair<Integer, Integer>> yLastComparator = new Comparator<Pair<Integer, Integer>>() {

@@ -16,10 +16,10 @@ class FeSurfaceMap extends FeSurfaceElement {
 	private int mRowCount = 0;
 	private int mColumnCount = 0;
 
-	public FeSurfaceMap(final MapMode mode,
+	public FeSurfaceMap(final FeSurface surface, final MapMode mode,
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
-		super(tiles.get(0).size() * tiles.get(0).get(0).mWidth, tiles.size()
-				* tiles.get(0).get(0).mHeight);
+		super(tiles.get(0).size() * tiles.get(0).get(0).mBitmap.getWidth(),
+				tiles.size() * tiles.get(0).get(0).mBitmap.getHeight());
 		mBackgroundTiles = tiles;
 
 		// WIP complete isometric mode -> recalculation of child before drawing
@@ -35,8 +35,8 @@ class FeSurfaceMap extends FeSurfaceElement {
 
 		mRowCount = tiles.size();
 		mColumnCount = firstColumn.size();
-		mTileWidth = firstTile.mWidth;
-		mTileHeight = firstTile.mHeight;
+		mTileWidth = firstTile.mBitmap.getWidth();
+		mTileHeight = firstTile.mBitmap.getHeight();
 	}
 
 	@Override
@@ -51,17 +51,35 @@ class FeSurfaceMap extends FeSurfaceElement {
 
 		// switch (mMode) {
 		// case NORMAL:
-		firstVisibleRow = limitTo((int) -FeSurface.OFFSET_Y / mTileHeight,
+
+		// DEBUG scale: tile dimension * surfaceScale?
+		firstVisibleRow = limitTo(
+				(int) -FeSurface.SURFACE.getSurfaceTranslationY() / mTileHeight,
 				mRowCount);
 		lastVisibleRow = limitTo(
-				(FeSurface.HEIGHT - (int) FeSurface.OFFSET_Y + mTileHeight)
+				(FeSurface.SURFACE.getSurfaceHeight()
+						- (int) FeSurface.SURFACE.getSurfaceTranslationY() + mTileHeight)
 						/ mTileHeight, mRowCount);
 
-		firstVisibleColumn = limitTo((int) -FeSurface.OFFSET_X / mTileWidth,
+		firstVisibleColumn = limitTo(
+				(int) -FeSurface.SURFACE.getSurfaceTranslationX() / mTileWidth,
 				mColumnCount);
 		lastVisibleColumn = limitTo(
-				(FeSurface.WIDTH - (int) FeSurface.OFFSET_X + mTileWidth)
+				(FeSurface.SURFACE.getSurfaceWidth()
+						- (int) FeSurface.SURFACE.getSurfaceTranslationX() + mTileWidth)
 						/ mTileWidth, mColumnCount);
+		// firstVisibleRow = limitTo((int) -FeSurface.OFFSET_Y / mTileHeight,
+		// mRowCount);
+		// lastVisibleRow = limitTo(
+		// (FeSurface.HEIGHT - (int) FeSurface.OFFSET_Y + mTileHeight)
+		// / mTileHeight, mRowCount);
+		//
+		// firstVisibleColumn = limitTo((int) -FeSurface.OFFSET_X / mTileWidth,
+		// mColumnCount);
+		// lastVisibleColumn = limitTo(
+		// (FeSurface.WIDTH - (int) FeSurface.OFFSET_X + mTileWidth)
+		// / mTileWidth, mColumnCount);
+
 		// break;
 		// case ISOMETRIC:
 		// firstVisibleRow = 0;
@@ -91,7 +109,7 @@ class FeSurfaceMap extends FeSurfaceElement {
 		return Math.max(0, Math.min(value, maxValue));
 	}
 
-	// DEBUG
+	// DEBUG isometric
 	private int mTileCountDrawn = 0;
 
 	protected String getDebugOutput() {
