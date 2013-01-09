@@ -8,13 +8,12 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.FeSurfaceElement;
-import de.fieben.feengine.FeSurfaceElement.FeSurfaceTouchable;
-import de.fieben.feengine.FeSurfaceElement.LoadCompleteCallback;
+import de.fieben.feengine.FeSurfaceTouchable;
+import de.fieben.feengine.SoundLoadCallback;
 import de.fieben.feengine.showroom.R;
 import de.fieben.feengine.showroom.elements.CircleElement;
 
-public class SoundExampleScene extends FeSurface implements
-		LoadCompleteCallback {
+public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 	// WIP add "sound mode"-switch FSE
 
 	private SoundTestElement mSoundElement;
@@ -34,9 +33,11 @@ public class SoundExampleScene extends FeSurface implements
 	}
 
 	@Override
-	public void soundLoaded() {
-		mSoundElement.playSound(FeSurfaceElement.SoundMode.SURROUND, true);
-		mSoundLoaded = true;
+	public void soundLoaded(final boolean success) {
+		if (success) {
+			mSoundElement.playSound(FeSurfaceElement.SoundMode.SURROUND, true);
+			mSoundLoaded = true;
+		}
 	}
 
 	@Override

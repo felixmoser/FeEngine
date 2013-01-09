@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import de.fieben.feengine.FeSurfaceElement;
 
-// TODO clean this class up
 public class CircleElement extends FeSurfaceElement {
 
 	protected final int mRadius;

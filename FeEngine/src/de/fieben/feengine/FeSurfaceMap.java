@@ -16,7 +16,7 @@ class FeSurfaceMap extends FeSurfaceElement {
 	private int mRowCount = 0;
 	private int mColumnCount = 0;
 
-	public FeSurfaceMap(final FeSurface surface, final MapMode mode,
+	public FeSurfaceMap(final MapMode mode,
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
 		super(tiles.get(0).size() * tiles.get(0).get(0).mBitmap.getWidth(),
 				tiles.size() * tiles.get(0).get(0).mBitmap.getHeight());

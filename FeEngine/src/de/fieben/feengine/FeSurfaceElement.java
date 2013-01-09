@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.SparseArray;
-import android.view.MotionEvent;
 
 public abstract class FeSurfaceElement {
 	// TAI what about display density?
@@ -235,6 +234,7 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
+	// TAI provide removeChild method
 	public void addChild(final FeSurfaceElement child) {
 		addChild(0, child);
 	}
@@ -258,7 +258,6 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
-	// TODO only draw (or iterate over?) visible elements
 	protected final void draw(final Canvas canvas, final Paint paint) {
 		synchronized (mMatrix) {
 			canvas.save();
@@ -344,7 +343,7 @@ public abstract class FeSurfaceElement {
 	}
 
 	public void setSound(final Context context, final int resourceId,
-			final LoadCompleteCallback callback) {
+			final SoundLoadCallback callback) {
 		mSoundElement = new FeSoundElement(context, resourceId, callback);
 	}
 
@@ -383,13 +382,5 @@ public abstract class FeSurfaceElement {
 				/ FeSurface.SURFACE.getSurfaceHeight() : 1f;
 
 		mSoundElement.setChannelVolumes(leftVolume * yMod, rightVolume * yMod);
-	}
-
-	public interface FeSurfaceTouchable {
-		public boolean onTouch(final MotionEvent event);
-	}
-
-	public interface LoadCompleteCallback {
-		public void soundLoaded();
 	}
 }

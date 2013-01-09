@@ -11,10 +11,10 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import de.fieben.feengine.FeSurfaceElement.FeSurfaceTouchable;
 
 public abstract class FeSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
+	// TAI to enable hw-acceleration use textureview instead
 
 	public static enum MapMode {
 		NORMAL, ISOMETRIC
@@ -46,7 +46,6 @@ public abstract class FeSurface extends SurfaceView implements
 		styleAttrs.recycle();
 
 		mRootElement = new FeRootElement(voidColor, touchMode);
-		mSurfaceThread = new FeSurfaceThread(this);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
 		SURFACE = this;
@@ -54,8 +53,8 @@ public abstract class FeSurface extends SurfaceView implements
 
 	@Override
 	public void surfaceCreated(final SurfaceHolder holder) {
-		if (!mSurfaceThread.isAlive()) {
-			mSurfaceThread = new FeSurfaceThread(this);
+		if (mSurfaceThread == null || !mSurfaceThread.isAlive()) {
+			mSurfaceThread = new FeSurfaceThread();
 		}
 		mSurfaceThread.start();
 	}
@@ -122,7 +121,7 @@ public abstract class FeSurface extends SurfaceView implements
 
 	public void addMap(final MapMode mode,
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
-		mMap = new FeSurfaceMap(this, mode, tiles);
+		mMap = new FeSurfaceMap(mode, tiles);
 		mRootElement.addChild(LAYER_MAP, mMap);
 	}
 

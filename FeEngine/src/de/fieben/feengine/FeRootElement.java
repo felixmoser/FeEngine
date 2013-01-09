@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;
-import de.fieben.feengine.FeSurfaceElement.FeSurfaceTouchable;
 
 class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
@@ -60,7 +59,7 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 			final MotionEvent offsetEvent = MotionEvent.obtain(event);
 			offsetEvent.offsetLocation(-getTranslateX(), -getTranslateY());
 			for (final FeSurfaceTouchable e : mTouchableElements) {
-				// TODO change to detect element on position x,y?
+				// TAI change to detect element on position x,y?
 				if (e.onTouch(offsetEvent)) {
 					return true;
 				}

@@ -7,24 +7,19 @@ import android.view.SurfaceHolder;
 class FeSurfaceThread extends Thread {
 	private static final String LOG_TAG = FeSurfaceThread.class.getSimpleName();
 
-	private FeSurface mSurface;
 	private boolean mRun = true;
-
-	public FeSurfaceThread(final FeSurface surface) {
-		mSurface = surface;
-	}
 
 	// TAI thread pausieren wenn surface weg?
 	@Override
 	public void run() {
-		final SurfaceHolder holder = mSurface.getHolder();
+		final SurfaceHolder holder = FeSurface.SURFACE.getHolder();
 		long lastUpdate = System.currentTimeMillis();
 		while (mRun) {
 			final Canvas canvas = holder.lockCanvas();
 			if (canvas != null) {
 				final long currentSystemTime = System.currentTimeMillis();
-				mSurface.onUpdate(currentSystemTime - lastUpdate);
-				mSurface.onDraw(canvas);
+				FeSurface.SURFACE.onUpdate(currentSystemTime - lastUpdate);
+				FeSurface.SURFACE.onDraw(canvas);
 				lastUpdate = currentSystemTime;
 				holder.unlockCanvasAndPost(canvas);
 			}

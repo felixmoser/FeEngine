@@ -3,7 +3,6 @@ package de.fieben.feengine;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import de.fieben.feengine.FeSurfaceElement.LoadCompleteCallback;
 
 class FeSoundElement {
 
@@ -15,7 +14,7 @@ class FeSoundElement {
 	private float mRightVolume;
 
 	protected FeSoundElement(final Context context, final int resourceId,
-			final LoadCompleteCallback callback) {
+			final SoundLoadCallback callback) {
 		mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		mSoundId = mSoundPool.load(context, resourceId, 1);
 		if (callback != null) {
@@ -24,7 +23,7 @@ class FeSoundElement {
 						@Override
 						public void onLoadComplete(final SoundPool soundPool,
 								final int sampleId, final int status) {
-							callback.soundLoaded();
+							callback.soundLoaded(status == 0 ? true : false);
 						}
 					});
 		}
