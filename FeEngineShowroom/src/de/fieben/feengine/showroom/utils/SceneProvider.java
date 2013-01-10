@@ -9,7 +9,6 @@ import android.widget.ListAdapter;
 import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.showroom.R;
 import de.fieben.feengine.showroom.scenes.ClockScene;
-import de.fieben.feengine.showroom.scenes.IsometricForestScene;
 import de.fieben.feengine.showroom.scenes.JumpNRunScene;
 import de.fieben.feengine.showroom.scenes.SolarSystemScene;
 import de.fieben.feengine.showroom.scenes.SoundExampleScene;
@@ -31,8 +30,6 @@ public class SceneProvider {
 				SolarSystemScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_tiled_forest,
 				TiledForestScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_isometric_forest,
-				IsometricForestScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sound,
 				SoundExampleScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_clock,

@@ -40,15 +40,7 @@
       <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
-  <enumeration id="6" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurface.MapMode" 
-    project="FeEngine" file="/FeEngine/src/de/fieben/feengine/FeSurface.java" binary="false">    
-    <position height="110" width="138" x="1254" y="993"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="false"/>      
-      <operations public="true" package="true" protected="true" private="false"/>    
-    </display>  
-  </enumeration>  
-  <class id="7" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurfaceThread" project="FeEngine" 
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurfaceThread" project="FeEngine" 
     file="/FeEngine/src/de/fieben/feengine/FeSurfaceThread.java" binary="false">    
     <position height="110" width="167" x="1294" y="724"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -56,7 +48,7 @@
       <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
-  <class id="8" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurface" project="FeEngine" 
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurface" project="FeEngine" 
     file="/FeEngine/src/de/fieben/feengine/FeSurface.java" binary="false">    
     <position height="501" width="355" x="1254" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -64,7 +56,7 @@
       <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
-  <interface id="9" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurfaceTouchable" 
+  <interface id="8" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurfaceTouchable" 
     project="FeEngine" file="/FeEngine/src/de/fieben/feengine/FeSurfaceTouchable.java" binary="false">    
     <position height="76" width="173" x="537" y="993"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -72,7 +64,7 @@
       <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </interface>  
-  <class id="10" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurfaceMap" project="FeEngine" 
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurfaceMap" project="FeEngine" 
     file="/FeEngine/src/de/fieben/feengine/FeSurfaceMap.java" binary="false">    
     <position height="144" width="418" x="815" y="724"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -80,7 +72,7 @@
       <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
-  <enumeration id="11" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurfaceElement.SoundMode" 
+  <enumeration id="10" corner="BOTTOM_RIGHT" language="java" name="de.fieben.feengine.FeSurfaceElement.SoundMode" 
     project="FeEngine" file="/FeEngine/src/de/fieben/feengine/FeSurfaceElement.java" binary="false">    
     <position height="127" width="151" x="346" y="724"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -88,100 +80,83 @@
       <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </enumeration>  
-  <nesting id="12">    
-    <bendpoint x="1263" y="724"/>    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="6"/>  
-  </nesting>  
-  <generalization id="13">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="5"/>  
-  </generalization>  
-  <association id="14">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="15" name="SURFACE"/>      
-      <multiplicity id="16" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="17">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="11"/>  
-  </nesting>  
-  <association id="18">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="19" name="mRootElement"/>      
-      <multiplicity id="20" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="21">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="22" name="mTouchableElements"/>      
-      <multiplicity id="23" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="24">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="25" name="mSurfaceThread"/>      
-      <multiplicity id="26" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="27">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="5"/>  
-  </generalization>  
-  <association id="28">    
+  <association id="11">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="29" name="mSoundMode"/>      
-      <multiplicity id="30" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="31">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="32" name="mMap"/>      
-      <multiplicity id="33" minimum="0" maximum="1"/>    
+      <attribute id="12" name="mSoundMode"/>      
+      <multiplicity id="13" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="34">    
+  <generalization id="14">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <association id="15">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="16" name="mMap"/>      
+      <multiplicity id="17" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="18">    
     <bendpoint x="668" y="682"/>    
     <bendpoint x="705" y="683"/>    
     <bendpoint x="705" y="648"/>    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="35" name="mParent"/>      
-      <multiplicity id="36" minimum="0" maximum="1"/>    
+      <attribute id="19" name="mParent"/>      
+      <multiplicity id="20" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="37">    
+  <realization id="21">    
     <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="9"/>  
+    <end type="TARGET" refId="8"/>  
   </realization>  
-  <association id="38">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="39" name="mMode"/>      
-      <multiplicity id="40" minimum="0" maximum="1"/>    
+  <association id="22">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="23" name="SURFACE"/>      
+      <multiplicity id="24" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
+    <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="41">    
+  <nesting id="25">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="10"/>  
+  </nesting>  
+  <association id="26">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="42" name="mSoundElement"/>      
-      <multiplicity id="43" minimum="0" maximum="1"/>    
+      <attribute id="27" name="mSoundElement"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="29">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="30" name="mRootElement"/>      
+      <multiplicity id="31" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="32">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="33" name="mTouchableElements"/>      
+      <multiplicity id="34" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="35">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="36" name="mSurfaceThread"/>      
+      <multiplicity id="37" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

@@ -16,22 +16,22 @@ public abstract class FeSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
 	// TAI to enable hw-acceleration use textureview instead
 
-	public static enum MapMode {
-		NORMAL, ISOMETRIC
-	};
+	// TAI impl isometric mode
+	// public static enum MapMode {
+	// NORMAL, ISOMETRIC
+	// };
 
 	private final static int LAYER_BACKGROUND = 0;
 	private final static int LAYER_MAP = 1;
 	private final static int LAYER_ELEMENTS = 2;
 
 	static FeSurface SURFACE;
+	private FeRootElement mRootElement;
+	private FeSurfaceThread mSurfaceThread;
 
+	private final Paint mPaint;
 	private int mWidth;
 	private int mHeight;
-
-	private FeSurfaceThread mSurfaceThread;
-	private final Paint mPaint;
-	private FeRootElement mRootElement;
 
 	public FeSurface(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
@@ -45,10 +45,11 @@ public abstract class FeSurface extends SurfaceView implements
 				R.styleable.FeSurface_touchMode, 0);
 		styleAttrs.recycle();
 
+		SURFACE = this;
 		mRootElement = new FeRootElement(voidColor, touchMode);
+
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-		SURFACE = this;
 	}
 
 	@Override
@@ -119,9 +120,9 @@ public abstract class FeSurface extends SurfaceView implements
 		mRootElement.addChild(LAYER_BACKGROUND, element);
 	}
 
-	public void addMap(final MapMode mode,
+	public void addMap(
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
-		mMap = new FeSurfaceMap(mode, tiles);
+		mMap = new FeSurfaceMap(tiles);
 		mRootElement.addChild(LAYER_MAP, mMap);
 	}
 

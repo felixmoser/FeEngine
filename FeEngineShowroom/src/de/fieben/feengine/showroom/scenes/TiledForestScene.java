@@ -23,7 +23,7 @@ public class TiledForestScene extends FeSurface {
 	public TiledForestScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		addMap(FeSurface.MapMode.NORMAL, buildTiledBackground());
+		addMap(buildTiledBackground());
 	}
 
 	private SparseArray<SparseArray<? extends FeSurfaceTile>> buildTiledBackground() {

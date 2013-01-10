@@ -9,6 +9,7 @@ public abstract class FeSurfaceTile {
 
 	public FeSurfaceTile(final Bitmap bitmap) {
 		mBitmap = bitmap;
+
 	}
 
 	protected final void draw(final Canvas canvas, final int x, final int y,
