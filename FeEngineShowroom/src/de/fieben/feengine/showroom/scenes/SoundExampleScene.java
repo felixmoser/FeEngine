@@ -105,7 +105,6 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 							- getSurfaceTranslationX()
 					|| cords.y < getSurfaceTranslationY()
 					|| cords.y > getSurfaceHeight() - getSurfaceTranslationY()) {
-				// DEBUG scale
 				setColor(Color.YELLOW);
 			}
 

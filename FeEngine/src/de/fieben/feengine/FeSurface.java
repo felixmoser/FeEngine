@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.MotionEvent;
@@ -78,13 +77,7 @@ public abstract class FeSurface extends SurfaceView implements
 
 		mPaint.setColor(Color.MAGENTA);
 		mPaint.setTextSize(34);
-		String debugString = null;
-		if (mMap != null) {
-			debugString = mFPS + "\n" + mMap.getDebugOutput();
-		} else {
-			debugString = mFPS + " | " + mRootElement.getDebugOutput();
-		}
-		drawMultilineText(debugString, 35, 50, canvas);
+		canvas.drawText(mFPS, 35, 50, mPaint);
 	}
 
 	protected void onUpdate(final long elapsedMillis) {
@@ -122,8 +115,7 @@ public abstract class FeSurface extends SurfaceView implements
 
 	public void addMap(
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
-		mMap = new FeSurfaceMap(tiles);
-		mRootElement.addChild(LAYER_MAP, mMap);
+		mRootElement.addChild(LAYER_MAP, new FeSurfaceMap(tiles));
 	}
 
 	public void setSurfaceTranslation(final float translateX,
@@ -190,7 +182,6 @@ public abstract class FeSurface extends SurfaceView implements
 	private String mFPS = "";
 	private long[] mLastElapsed = new long[20];
 	private int mElapsedIndex = 0;
-	private FeSurfaceMap mMap = null;
 
 	private void calculateFPS(final long elapsedMillis) {
 		if (mElapsedIndex >= 20) {
@@ -202,20 +193,5 @@ public abstract class FeSurface extends SurfaceView implements
 			averageFPS += mLastElapsed[i];
 		}
 		mFPS = "FPS: " + String.valueOf(20000 / averageFPS);
-	}
-
-	private void drawMultilineText(final String str, final int x, final int y,
-			final Canvas canvas) {
-		final Rect bounds = new Rect();
-		int lineHeight = 0;
-		int yoffset = 0;
-		final String[] lines = str.split("\n");
-
-		mPaint.getTextBounds("Ig", 0, 2, bounds);
-		lineHeight = (int) (bounds.height() * 1.2);
-		for (int i = 0; i < lines.length; ++i) {
-			canvas.drawText(lines[i], x, y + yoffset, mPaint);
-			yoffset = yoffset + lineHeight;
-		}
 	}
 }

@@ -13,6 +13,7 @@ import android.util.SparseArray;
 
 public abstract class FeSurfaceElement {
 	// TAI what about display density?
+	// TAI impl ancor point/coorinats
 
 	public static enum SoundMode {
 		MONO, STEREO, SURROUND
@@ -49,13 +50,11 @@ public abstract class FeSurfaceElement {
 	private FeSoundElement mSoundElement = null;
 	private SoundMode mSoundMode = SoundMode.MONO;
 
-	public FeSurfaceElement(final int width, final int height) {
-		mMatrix = new Matrix();
-		mMatrixValues = new float[9];
-		mChildLayers = new SparseArray<ArrayList<FeSurfaceElement>>();
-		mBitmap = null;
-	}
-
+	/**
+	 * 
+	 * @param bitmap
+	 *            May be null.
+	 */
 	public FeSurfaceElement(final Bitmap bitmap) {
 		mMatrix = new Matrix();
 		mMatrixValues = new float[9];
@@ -290,7 +289,7 @@ public abstract class FeSurfaceElement {
 		synchronized (mMatrix) {
 			onUpdate(elapsedMillis);
 
-			// TODO handle "screen off"
+			// TAI handle "screen off"
 			if (mDoUpdateInterval > 0) {
 				mDoUpdateCounter -= elapsedMillis;
 				if (mDoUpdateCounter <= 0) {

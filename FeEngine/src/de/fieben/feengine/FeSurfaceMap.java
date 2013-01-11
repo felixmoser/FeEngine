@@ -1,87 +1,79 @@
 package de.fieben.feengine;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.SparseArray;
 
 class FeSurfaceMap extends FeSurfaceElement {
 
 	private final SparseArray<SparseArray<? extends FeSurfaceTile>> mBackgroundTiles;
-	private final int mTileWidth;
-	private final int mTileHeight;
 
 	private final int mRowCount;
 	private final int mColumnCount;
 
+	private final int mTileWidth;
+	private final int mTileHeight;
+
 	public FeSurfaceMap(
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
-		super(tiles.get(0).size() * tiles.get(0).get(0).mBitmap.getWidth(),
-				tiles.size() * tiles.get(0).get(0).mBitmap.getHeight());
+		super(null);
 
 		mBackgroundTiles = tiles;
 
-		final SparseArray<? extends FeSurfaceTile> firstColumn = tiles.get(0);
-		final FeSurfaceTile firstTile = firstColumn.get(0);
-
-		mRowCount = tiles.size();
+		final SparseArray<? extends FeSurfaceTile> firstColumn = mBackgroundTiles
+				.get(0);
+		mRowCount = mBackgroundTiles.size();
 		mColumnCount = firstColumn.size();
+
+		final FeSurfaceTile firstTile = firstColumn.get(0);
 		mTileWidth = firstTile.mBitmap.getWidth();
 		mTileHeight = firstTile.mBitmap.getHeight();
 	}
 
 	@Override
 	public void onDraw(final Canvas canvas, final Paint paint) {
-		mTileCountDrawn = 0;
-
-		int firstVisibleRow = 0;
-		int lastVisibleRow = 0;
-
-		int firstVisibleColumn = 0;
-		int lastVisibleColumn = 0;
-
-		int drawOffsetY;
-
-		// DEBUG scale: tile dimension * surfaceScale?
-
-		firstVisibleRow = limitTo(
-				(int) -FeSurface.SURFACE.getSurfaceTranslationY() / mTileHeight,
-				mRowCount);
-		lastVisibleRow = limitTo(
+		// WIP scale: tile dimension * surfaceScale?
+		final int firstVisibleRow = limitTo(
+				(int) -(FeSurface.SURFACE.getSurfaceTranslationY() * FeSurface.SURFACE.getSurfaceScaleX())
+						/ mTileHeight, mRowCount);
+		final int lastVisibleRow = limitTo(
 				(FeSurface.SURFACE.getSurfaceHeight()
-						- (int) FeSurface.SURFACE.getSurfaceTranslationY() + mTileHeight)
+						- (int) (FeSurface.SURFACE.getSurfaceTranslationY() * FeSurface.SURFACE.getSurfaceScaleX()) + mTileHeight)
 						/ mTileHeight, mRowCount);
 
-		firstVisibleColumn = limitTo(
-				(int) -FeSurface.SURFACE.getSurfaceTranslationX() / mTileWidth,
-				mColumnCount);
-		lastVisibleColumn = limitTo(
+		final int firstVisibleColumn = limitTo(
+				(int) (-FeSurface.SURFACE.getSurfaceTranslationX() * FeSurface.SURFACE.getSurfaceScaleX())
+						/ mTileWidth, mColumnCount);
+		final int lastVisibleColumn = limitTo(
 				(FeSurface.SURFACE.getSurfaceWidth()
-						- (int) FeSurface.SURFACE.getSurfaceTranslationX() + mTileWidth)
+						- (int) (FeSurface.SURFACE.getSurfaceTranslationX() * FeSurface.SURFACE.getSurfaceScaleX()) + mTileWidth)
 						/ mTileWidth, mColumnCount);
 
-		drawOffsetY = firstVisibleRow * mTileHeight;
+		int tilesDrawn = 0;
+		int drawOffsetY = firstVisibleRow * mTileHeight;
 		for (int i = firstVisibleRow; i < lastVisibleRow; i++) {
 			final SparseArray<? extends FeSurfaceTile> row = mBackgroundTiles
 					.get(i);
 			int drawOffsetX = firstVisibleColumn * mTileWidth;
 			for (int j = firstVisibleColumn; j < lastVisibleColumn; j++) {
 				row.get(j).draw(canvas, drawOffsetX, drawOffsetY, paint);
-				mTileCountDrawn++;
 				drawOffsetX += mTileWidth;
+				tilesDrawn++;
 			}
 			drawOffsetY += mTileHeight;
 		}
+
+		paint.setColor(Color.YELLOW);
+		canvas.drawText(String.valueOf(tilesDrawn),
+				(-FeSurface.SURFACE.getSurfaceTranslationX() + 35)
+						/ FeSurface.SURFACE.getSurfaceScaleX(),
+				(-FeSurface.SURFACE.getSurfaceTranslationY() + 100)
+						/ FeSurface.SURFACE.getSurfaceScaleY(), paint);
 	}
 
 	private int limitTo(final int value, final int maxValue) {
 		return Math.max(0, Math.min(value, maxValue));
-	}
-
-	// DEBUG isometric
-	private int mTileCountDrawn = 0;
-
-	protected String getDebugOutput() {
-		return "drawn tiles: " + mTileCountDrawn;
 	}
 
 	@Override

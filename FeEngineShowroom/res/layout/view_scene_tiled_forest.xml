@@ -4,5 +4,5 @@
     android:id="@+id/scene"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    fe:touchMode="drag"
+    fe:touchMode="zoom"
     fe:voidColor="#0000ff" />

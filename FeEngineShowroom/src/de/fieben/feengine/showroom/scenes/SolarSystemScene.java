@@ -50,63 +50,13 @@ public class SolarSystemScene extends FeSurface {
 		mMars.setTranslate(0, -450);
 		mMars.setFastTestRotation(true);
 		mAnimationSun.addChild(mMars);
-
-		// registerTouchable(mAnimationSun);
 	}
 
 	private class AnimationTestElement extends FeSurfaceElement {
-		// private class AnimationElement extends FeSurfaceElement implements
-		// FeSurfaceTouchable {
-
 		public AnimationTestElement(final Bitmap animationBitmap,
 				final int stepCount, final int animationInterval) {
 			super(animationBitmap, stepCount, animationInterval);
 		}
-
-		// private boolean mDragMode = false;
-		// private float mLastTouchX;
-		// private float mLastTouchY;
-		//
-		// @Override
-		// public boolean onTouch(final MotionEvent event) {
-		// final Point cords = getAbsoluteSurfacePosition();
-		//
-		// if (!mDragMode
-		// && Math.hypot(event.getX() - cords.x, event.getY()
-		// - cords.y) > (mHeight + mWidth) / 4) {
-		// return false;
-		// }
-		//
-		// switch (event.getAction()) {
-		// case MotionEvent.ACTION_DOWN:
-		// mLastTouchX = event.getX();
-		// mLastTouchY = event.getY();
-		//
-		// mDragMode = true;
-		// break;
-		// case MotionEvent.ACTION_MOVE:
-		// addTranslate(event.getX() - mLastTouchX, event.getY()
-		// - mLastTouchY);
-		// mLastTouchX = event.getX();
-		// mLastTouchY = event.getY();
-		// break;
-		// case MotionEvent.ACTION_UP:
-		// mDragMode = false;
-		// break;
-		// }
-		// limitTranslation();
-		// return true;
-		// }
-		//
-		// private void limitTranslation() {
-		// final float translateX = getTranslateX();
-		// final float translateY = getTranslateY();
-		// if (translateX < 0 || translateX > WIDTH || translateY < 0
-		// || translateY > HEIGHT) {
-		// setTranslate(Math.max(0, Math.min(translateX, WIDTH)),
-		// Math.max(0, Math.min(translateY, HEIGHT)));
-		// }
-		// }
 
 		@Override
 		public void onDraw(final Canvas canvas, final Paint paint) {

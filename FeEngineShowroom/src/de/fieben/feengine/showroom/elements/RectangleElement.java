@@ -12,16 +12,9 @@ public class RectangleElement extends FeSurfaceElement {
 	private final Rect mDimensions;
 	private int mColor;
 
-	public RectangleElement(final int width, final int height,
-			final boolean centerAnchor) {
-		super(width, height);
-		// TAI replace centerAnchor with flag. eg. x-achses center
-		if (centerAnchor) {
-			mDimensions = new Rect(-width / 2, -height / 2, width / 2,
-					height / 2);
-		} else {
-			mDimensions = new Rect(0, 0, width, height);
-		}
+	public RectangleElement(final int width, final int height) {
+		super(null);
+		mDimensions = new Rect(0, 0, width, height);
 		mColor = Color.WHITE;
 	}
 

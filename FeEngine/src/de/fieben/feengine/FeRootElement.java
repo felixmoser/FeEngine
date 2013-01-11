@@ -9,9 +9,9 @@ import android.view.MotionEvent;
 class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
 	// TAI add touch mode rotate
-	public final static int TOUCH_NONE = 0;
-	public final static int TOUCH_DRAG = 1;
-	public final static int TOUCH_ZOOM = 2;
+	private final static int TOUCH_NONE = 0;
+	private final static int TOUCH_DRAG = 1;
+	private final static int TOUCH_ZOOM = 2;
 
 	private int mVoidColor;
 	private int mTouchMode;
@@ -24,9 +24,7 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 	private ArrayList<FeSurfaceTouchable> mTouchableElements = new ArrayList<FeSurfaceTouchable>();
 
 	public FeRootElement(final int voidColor, final int touchMode) {
-		// TODO -1 indicates infinity size and no reaction on touch, check if
-		// nessesary or right.
-		super(-1, -1);
+		super(null);
 		mVoidColor = voidColor;
 		mTouchMode = touchMode;
 	}
@@ -68,8 +66,6 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN:
-			mDebugOutput = "ACTION_DOWN";
-
 			if (mTouchMode >= TOUCH_DRAG) {
 				mCurrentTouch = TOUCH_DRAG;
 				mLastTouchX = event.getX(0);
@@ -78,8 +74,6 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 			}
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
-			mDebugOutput = "ACTION_POINTER_DOWN";
-
 			if (mTouchMode >= TOUCH_ZOOM) {
 				mCurrentTouch = TOUCH_ZOOM;
 				return true;
@@ -107,8 +101,6 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 			}
 			break;
 		case MotionEvent.ACTION_POINTER_UP:
-			mDebugOutput = "ACTION_POINTER_UP";
-
 			if (mTouchMode >= TOUCH_DRAG) {
 				mCurrentTouch = TOUCH_DRAG;
 				mLastTouchX = event.getX(0);
@@ -117,19 +109,11 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 			}
 			break;
 		case MotionEvent.ACTION_UP:
-			mDebugOutput = "ACTION_UP";
-
 			mCurrentTouch = TOUCH_NONE;
 			mTouchPointerLastDistance = 0f;
 			return true;
 		}
 
 		return false;
-	}
-
-	private String mDebugOutput = "";
-
-	public String getDebugOutput() {
-		return mDebugOutput;
 	}
 }
