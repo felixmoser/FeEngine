@@ -22,7 +22,7 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 	public SoundExampleScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		mSoundElement = new SoundTestElement(context, 100,
+		mSoundElement = new SoundTestElement(context, 150,
 				R.raw.sound_view_clicked);
 		mSoundElement.setTranslate(300, 300);
 		addElement(mSoundElement);
@@ -91,6 +91,7 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 						(event.getY() - mLastTouchY) / surfaceScaleFactor);
 				mLastTouchX = event.getX();
 				mLastTouchY = event.getY();
+				setColor(Color.BLUE);
 				break;
 			case MotionEvent.ACTION_UP:
 				mDragMode = false;
@@ -98,29 +99,20 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 				break;
 			}
 
-			// WIP finisch
 			cords = getAbsoluteSurfacePosition();
-			if (cords.x * surfaceScaleFactor < getSurfaceTranslationX()
-					|| cords.x * surfaceScaleFactor > getSurfaceWidth()
-							- getSurfaceTranslationX()
-					|| cords.y < getSurfaceTranslationY()
-					|| cords.y > getSurfaceHeight() - getSurfaceTranslationY()) {
+			final float minX = -getSurfaceTranslationX() / surfaceScaleFactor;
+			final float maxX = (getSurfaceWidth() - getSurfaceTranslationX())
+					/ surfaceScaleFactor;
+			final float minY = -getSurfaceTranslationY() / surfaceScaleFactor;
+			final float maxY = (getSurfaceHeight() - getSurfaceTranslationY())
+					/ surfaceScaleFactor;
+			if (cords.x < minX || cords.x > maxX || cords.y < minY
+					|| cords.y > maxY) {
 				setColor(Color.YELLOW);
+				setTranslate(Math.max(minX, Math.min(getTranslateX(), maxX)),
+						Math.max(minY, Math.min(getTranslateY(), maxY)));
 			}
-
-			// limitTranslation();
 			return true;
 		}
-
-		// private void limitTranslation() {
-		// final float translateX = getTranslateX();
-		// final float translateY = getTranslateY();
-		// if (translateX < 0 || translateX > WIDTH || translateY < 0
-		// || translateY > HEIGHT) {
-		// setColor(Color.YELLOW);
-		// setTranslate(Math.max(0, Math.min(translateX, WIDTH)),
-		// Math.max(0, Math.min(translateY, HEIGHT)));
-		// }
-		// }
 	}
 }

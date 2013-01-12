@@ -19,12 +19,12 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
 	private float mLastTouchX;
 	private float mLastTouchY;
-	private float mTouchPointerLastDistance = 0f;
+	private float mLastTouchDistance = 0f;
 
 	private ArrayList<FeSurfaceTouchable> mTouchableElements = new ArrayList<FeSurfaceTouchable>();
 
 	public FeRootElement(final int voidColor, final int touchMode) {
-		super(null);
+		super(-1);
 		mVoidColor = voidColor;
 		mTouchMode = touchMode;
 	}
@@ -49,10 +49,6 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 	// TAI stop scrolling if tile border is reached?
 	@Override
 	public boolean onTouch(final MotionEvent event) {
-		// TODO prevent jumping after mode changes from zoom to drag (einfach
-		// mit mTouchMode = TouchMode.NONE in MotionEvent.ACTION_POINTER_UP? das
-		// verhindert allerdings wechsel zwischen zoom und drag)
-
 		if (mCurrentTouch == TOUCH_NONE) {
 			final MotionEvent offsetEvent = MotionEvent.obtain(event);
 			offsetEvent.offsetLocation(-getTranslateX(), -getTranslateY());
@@ -76,6 +72,9 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 		case MotionEvent.ACTION_POINTER_DOWN:
 			if (mTouchMode >= TOUCH_ZOOM) {
 				mCurrentTouch = TOUCH_ZOOM;
+				mLastTouchDistance = (float) Math.hypot(
+						event.getX(0) - event.getX(1),
+						event.getY(0) - event.getY(1));
 				return true;
 			}
 			break;
@@ -90,30 +89,27 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 			case TOUCH_ZOOM:
 				final float newDistance = (float) Math.hypot(event.getX(0)
 						- event.getX(1), event.getY(0) - event.getY(1));
-				if (mTouchPointerLastDistance > 0f) {
-					final float pointX = (event.getX(0) + event.getX(1)) / 2;
-					final float pointY = (event.getY(0) + event.getY(1)) / 2;
-					final float scale = newDistance / mTouchPointerLastDistance;
-					addScale(scale, scale, pointX, pointY);
-				}
-				mTouchPointerLastDistance = newDistance;
+				final float centerPointX = (event.getX(0) + event.getX(1)) / 2;
+				final float centerPointY = (event.getY(0) + event.getY(1)) / 2;
+				final float scale = newDistance / mLastTouchDistance;
+				addScale(scale, scale, centerPointX, centerPointY);
+				mLastTouchDistance = newDistance;
 				return true;
 			}
 			break;
 		case MotionEvent.ACTION_POINTER_UP:
-			if (mTouchMode >= TOUCH_DRAG) {
-				mCurrentTouch = TOUCH_DRAG;
-				mLastTouchX = event.getX(0);
-				mLastTouchY = event.getY(0);
-				return true;
-			}
-			break;
 		case MotionEvent.ACTION_UP:
 			mCurrentTouch = TOUCH_NONE;
-			mTouchPointerLastDistance = 0f;
 			return true;
+			// TAI impl mode changing and prevent jumping afterwards
+			// if (mTouchMode >= TOUCH_DRAG) {
+			// (the above is a workaround)
+			// mCurrentTouch = TOUCH_DRAG;
+			// mLastTouchX = event.getX(0);
+			// mLastTouchY = event.getY(0);
+			// return true;
+			// }
 		}
-
 		return false;
 	}
 }

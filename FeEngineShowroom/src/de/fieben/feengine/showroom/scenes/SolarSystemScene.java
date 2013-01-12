@@ -1,12 +1,12 @@
 package de.fieben.feengine.showroom.scenes;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import de.fieben.feengine.FeBitmapPool;
 import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.FeSurfaceElement;
 import de.fieben.feengine.showroom.R;
@@ -28,8 +28,9 @@ public class SolarSystemScene extends FeSurface {
 	public SolarSystemScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		mAnimationSun = new AnimationTestElement(BitmapFactory.decodeResource(
-				getResources(), R.drawable.sun_animation), 4, 100);
+		mAnimationSun = new AnimationTestElement(
+				FeBitmapPool.addBitmap(BitmapFactory.decodeResource(
+						getResources(), R.drawable.sun_animation)), 4, 100);
 		mAnimationSun.setTranslate(450, 450);
 		addElement(mAnimationSun);
 
@@ -53,9 +54,9 @@ public class SolarSystemScene extends FeSurface {
 	}
 
 	private class AnimationTestElement extends FeSurfaceElement {
-		public AnimationTestElement(final Bitmap animationBitmap,
+		public AnimationTestElement(final int animationBitmapKey,
 				final int stepCount, final int animationInterval) {
-			super(animationBitmap, stepCount, animationInterval);
+			super(animationBitmapKey, stepCount, animationInterval);
 		}
 
 		@Override

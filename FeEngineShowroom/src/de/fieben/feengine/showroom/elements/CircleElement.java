@@ -13,7 +13,7 @@ public class CircleElement extends FeSurfaceElement {
 	private float mRotateAroundParentSpeed, mRotateArountCenterSpeed;
 
 	public CircleElement(final int radius) {
-		super(null);
+		super(-1);
 		mRadius = radius;
 		mColor = Color.WHITE;
 	}

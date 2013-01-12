@@ -19,7 +19,7 @@ public abstract class FeSurfaceElement {
 		MONO, STEREO, SURROUND
 	}
 
-	private final Bitmap mBitmap;
+	private final int mBitmapKey;
 
 	private final Matrix mMatrix;
 	private final float[] mMatrixValues;
@@ -52,22 +52,23 @@ public abstract class FeSurfaceElement {
 
 	/**
 	 * 
-	 * @param bitmap
-	 *            May be null.
+	 * @param bitmapKey
+	 *            The key of the bitmap in the {@link SufaceView}s bitmappool.
+	 *            -1 if no bitmap should be used.
 	 */
-	public FeSurfaceElement(final Bitmap bitmap) {
+	public FeSurfaceElement(final int bitmapKey) {
 		mMatrix = new Matrix();
 		mMatrixValues = new float[9];
 		mChildLayers = new SparseArray<ArrayList<FeSurfaceElement>>();
-		mBitmap = bitmap;
+		mBitmapKey = bitmapKey;
 	}
 
-	public FeSurfaceElement(final Bitmap bitmap, final int stepCount,
+	public FeSurfaceElement(final int bitmapKey, final int stepCount,
 			final int animationInterval) {
 		mMatrix = new Matrix();
 		mMatrixValues = new float[9];
 		mChildLayers = new SparseArray<ArrayList<FeSurfaceElement>>();
-		mBitmap = bitmap;
+		mBitmapKey = bitmapKey;
 
 		mAnimationCounter = mAnimationInterval = animationInterval;
 
@@ -75,13 +76,19 @@ public abstract class FeSurfaceElement {
 		mAnimationCurrentIndex = 0;
 
 		mAnimationBitmapGridDimension = (int) Math.ceil(Math.sqrt(stepCount));
-		mAnimationWidth = mBitmap.getWidth() / mAnimationBitmapGridDimension;
-		mAnimationHeight = mBitmap.getHeight() / mAnimationBitmapGridDimension;
+		mAnimationWidth = getBitmap().getWidth()
+				/ mAnimationBitmapGridDimension;
+		mAnimationHeight = getBitmap().getHeight()
+				/ mAnimationBitmapGridDimension;
 
 		mAnimationDstRect = new Rect(-mAnimationWidth / 2,
 				-mAnimationHeight / 2, mAnimationWidth / 2,
 				mAnimationHeight / 2);
 		mAnimationSrcRect = new Rect(0, 0, mAnimationWidth, mAnimationHeight);
+	}
+
+	private Bitmap getBitmap() {
+		return FeBitmapPool.getBitmap(mBitmapKey);
 	}
 
 	public void setTranslate(final float translateX, final float translateY) {
@@ -262,12 +269,12 @@ public abstract class FeSurfaceElement {
 			canvas.save();
 			canvas.concat(mMatrix);
 
-			if (mBitmap != null) {
+			if (mBitmapKey != -1) {
 				if (mAnimationSteps > 0) {
-					canvas.drawBitmap(mBitmap, mAnimationSrcRect,
+					canvas.drawBitmap(getBitmap(), mAnimationSrcRect,
 							mAnimationDstRect, paint);
 				} else {
-					canvas.drawBitmap(mBitmap, 0, 0, paint);
+					canvas.drawBitmap(getBitmap(), 0, 0, paint);
 				}
 			}
 			onDraw(canvas, paint);

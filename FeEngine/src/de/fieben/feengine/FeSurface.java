@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 
 public abstract class FeSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
+	// TAI impl preparation thread and "loading" support
 	// TAI to enable hw-acceleration use textureview instead
 
 	// TAI impl isometric mode
@@ -48,11 +49,14 @@ public abstract class FeSurface extends SurfaceView implements
 		mRootElement = new FeRootElement(voidColor, touchMode);
 
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
 	}
 
 	@Override
 	public void surfaceCreated(final SurfaceHolder holder) {
+		startSurfaceThread();
+	}
+
+	private void startSurfaceThread() {
 		if (mSurfaceThread == null || !mSurfaceThread.isAlive()) {
 			mSurfaceThread = new FeSurfaceThread();
 		}
@@ -82,6 +86,7 @@ public abstract class FeSurface extends SurfaceView implements
 
 	protected void onUpdate(final long elapsedMillis) {
 		mRootElement.update(elapsedMillis);
+
 		calculateFPS(elapsedMillis);
 	}
 
@@ -178,7 +183,7 @@ public abstract class FeSurface extends SurfaceView implements
 		return mHeight;
 	}
 
-	// DEBUG general
+	// DEBUG
 	private String mFPS = "";
 	private long[] mLastElapsed = new long[20];
 	private int mElapsedIndex = 0;

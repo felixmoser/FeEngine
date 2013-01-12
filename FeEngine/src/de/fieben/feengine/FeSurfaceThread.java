@@ -22,6 +22,8 @@ class FeSurfaceThread extends Thread {
 				FeSurface.SURFACE.onDraw(canvas);
 				lastUpdate = currentSystemTime;
 				holder.unlockCanvasAndPost(canvas);
+			} else {
+				android.util.Log.i("testing", "::run:: ");
 			}
 		}
 		super.run();

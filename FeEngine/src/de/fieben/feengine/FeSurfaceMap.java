@@ -17,7 +17,7 @@ class FeSurfaceMap extends FeSurfaceElement {
 
 	public FeSurfaceMap(
 			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
-		super(null);
+		super(-1);
 
 		mBackgroundTiles = tiles;
 
@@ -27,8 +27,8 @@ class FeSurfaceMap extends FeSurfaceElement {
 		mColumnCount = firstColumn.size();
 
 		final FeSurfaceTile firstTile = firstColumn.get(0);
-		mTileWidth = firstTile.mBitmap.getWidth();
-		mTileHeight = firstTile.mBitmap.getHeight();
+		mTileWidth = firstTile.getBitmap().getWidth();
+		mTileHeight = firstTile.getBitmap().getHeight();
 	}
 
 	@Override

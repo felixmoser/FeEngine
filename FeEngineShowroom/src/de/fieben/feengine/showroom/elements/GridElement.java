@@ -12,7 +12,7 @@ public class GridElement extends FeSurfaceElement {
 	private float[] mGrid;
 
 	public GridElement(final int spacing) {
-		super(null);
+		super(-1);
 		mSpacing = spacing;
 	}
 
