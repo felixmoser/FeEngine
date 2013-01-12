@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -118,8 +117,7 @@ public abstract class FeSurface extends SurfaceView implements
 		mRootElement.addChild(LAYER_BACKGROUND, element);
 	}
 
-	public void addMap(
-			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
+	public void addMap(final FeSurfaceTile[][] tiles) {
 		mRootElement.addChild(LAYER_MAP, new FeSurfaceMap(tiles));
 	}
 

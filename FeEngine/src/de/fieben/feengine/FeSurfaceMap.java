@@ -3,11 +3,12 @@ package de.fieben.feengine;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.SparseArray;
 
 class FeSurfaceMap extends FeSurfaceElement {
 
-	private final SparseArray<SparseArray<? extends FeSurfaceTile>> mBackgroundTiles;
+	// private final SparseArray<SparseArray<? extends FeSurfaceTile>>
+	// mBackgroundTiles;
+	private FeSurfaceTile[][] mBackgroundTiles;
 
 	private final int mRowCount;
 	private final int mColumnCount;
@@ -15,18 +16,16 @@ class FeSurfaceMap extends FeSurfaceElement {
 	private final int mTileWidth;
 	private final int mTileHeight;
 
-	public FeSurfaceMap(
-			final SparseArray<SparseArray<? extends FeSurfaceTile>> tiles) {
+	public FeSurfaceMap(final FeSurfaceTile[][] tiles) {
 		super(-1);
 
 		mBackgroundTiles = tiles;
 
-		final SparseArray<? extends FeSurfaceTile> firstColumn = mBackgroundTiles
-				.get(0);
-		mRowCount = mBackgroundTiles.size();
-		mColumnCount = firstColumn.size();
+		final FeSurfaceTile[] firstColumn = mBackgroundTiles[0];
+		mRowCount = mBackgroundTiles.length;
+		mColumnCount = firstColumn.length;
 
-		final FeSurfaceTile firstTile = firstColumn.get(0);
+		final FeSurfaceTile firstTile = firstColumn[0];
 		mTileWidth = firstTile.getBitmap().getWidth();
 		mTileHeight = firstTile.getBitmap().getHeight();
 	}
@@ -53,11 +52,10 @@ class FeSurfaceMap extends FeSurfaceElement {
 		int tilesDrawn = 0;
 		int drawOffsetY = firstVisibleRow * mTileHeight;
 		for (int i = firstVisibleRow; i < lastVisibleRow; i++) {
-			final SparseArray<? extends FeSurfaceTile> row = mBackgroundTiles
-					.get(i);
+			final FeSurfaceTile[] row = mBackgroundTiles[i];
 			int drawOffsetX = firstVisibleColumn * mTileWidth;
 			for (int j = firstVisibleColumn; j < lastVisibleColumn; j++) {
-				row.get(j).draw(canvas, drawOffsetX, drawOffsetY, paint);
+				row[j].draw(canvas, drawOffsetX, drawOffsetY, paint);
 				drawOffsetX += mTileWidth;
 				tilesDrawn++;
 			}
