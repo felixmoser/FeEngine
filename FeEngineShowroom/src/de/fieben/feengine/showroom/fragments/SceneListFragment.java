@@ -11,7 +11,7 @@ public class SceneListFragment extends ListFragment {
 
 	private static final String STATE_ACTIVATED_POSITION = "activated_position";
 
-	private Callbacks mCallbacks = sDummyCallbacks;
+	private Callbacks mCallbacks;
 	private int mActivatedPosition = ListView.INVALID_POSITION;
 
 	@Override
@@ -44,7 +44,7 @@ public class SceneListFragment extends ListFragment {
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		mCallbacks = sDummyCallbacks;
+		mCallbacks = null;
 	}
 
 	@Override
@@ -76,12 +76,6 @@ public class SceneListFragment extends ListFragment {
 		}
 		mActivatedPosition = position;
 	}
-
-	private static Callbacks sDummyCallbacks = new Callbacks() {
-		@Override
-		public void onItemSelected(final int id) {
-		}
-	};
 
 	public interface Callbacks {
 		public void onItemSelected(int id);

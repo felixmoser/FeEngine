@@ -1,6 +1,7 @@
 package de.fieben.feengine.showroom.activities;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +23,10 @@ public class SceneListActivity extends FragmentActivity implements
 			mTwoPane = true;
 			((SceneListFragment) getSupportFragmentManager().findFragmentById(
 					R.id.scene_list)).setActivateOnItemClick(true);
+
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		} else {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		}
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);

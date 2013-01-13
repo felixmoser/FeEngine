@@ -94,6 +94,7 @@ public abstract class FeSurface extends SurfaceView implements
 		return mRootElement.onTouch(event);
 	}
 
+	// TAI schöner machen? evtl mit flag @ addElement?
 	public void registerTouchable(final FeSurfaceTouchable touchableElement) {
 		mRootElement.registerTouchable(touchableElement);
 	}

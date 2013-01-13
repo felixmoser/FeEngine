@@ -9,10 +9,8 @@ import android.widget.ListAdapter;
 import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.showroom.R;
 import de.fieben.feengine.showroom.scenes.ClockScene;
-import de.fieben.feengine.showroom.scenes.JumpNRunScene;
 import de.fieben.feengine.showroom.scenes.SolarSystemScene;
 import de.fieben.feengine.showroom.scenes.SoundExampleScene;
-import de.fieben.feengine.showroom.scenes.StormySeaScene;
 import de.fieben.feengine.showroom.scenes.TiledForestScene;
 import de.fieben.feengine.showroom.scenes.UpdateTestScene;
 
@@ -34,10 +32,6 @@ public class SceneProvider {
 				SoundExampleScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_clock,
 				ClockScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sea,
-				StormySeaScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_jump,
-				JumpNRunScene.class));
 	}
 
 	public static SceneItem findSceneById(final int id) {
@@ -74,40 +68,4 @@ public class SceneProvider {
 			return mClass.getSimpleName();
 		}
 	}
-
-	// class Test<t> {
-	// t value;
-	//
-	// public void put(final t fe) {
-	// value = fe;
-	// }
-	//
-	// public t get() {
-	// return value;
-	// }
-	// }
-	//
-	// class A {
-	// };
-	//
-	// class B extends A {
-	// };
-	//
-	// void main1() {
-	// final Test<? extends B> testB = new Test<B>();
-	// final Test<? extends A> test = testB;
-	// final A a = new A();
-	// final B b = new B();
-	// test.put(a);
-	// b = testB.get();
-	// }
-	//
-	// void main2() {
-	// final Test<? super A> testA = new Test<A>();
-	// final Test<? super B> test = testA;
-	// final A a = new A();
-	// final B b = new B();
-	// testA.put(a);
-	// b = test.get();
-	// }
 }

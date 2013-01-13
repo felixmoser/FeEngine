@@ -1,13 +1,10 @@
 package de.fieben.feengine;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 class FeSurfaceMap extends FeSurfaceElement {
 
-	// private final SparseArray<SparseArray<? extends FeSurfaceTile>>
-	// mBackgroundTiles;
 	private FeSurfaceTile[][] mBackgroundTiles;
 
 	private final int mRowCount;
@@ -30,26 +27,30 @@ class FeSurfaceMap extends FeSurfaceElement {
 		mTileHeight = firstTile.getBitmap().getHeight();
 	}
 
+	// TAI fix little (1px) offset between tiles @ scaling != 1f
 	@Override
 	public void onDraw(final Canvas canvas, final Paint paint) {
-		// WIP scale: tile dimension * surfaceScale?
+		final int scaledTileHeight = (int) (mTileHeight * FeSurface.SURFACE
+				.getSurfaceScaleY());
+		final int scaledTileWidth = (int) (mTileWidth * FeSurface.SURFACE
+				.getSurfaceScaleX());
+		final float surfaceTranslationX = FeSurface.SURFACE
+				.getSurfaceTranslationX();
+		final float surfaceTranslationY = FeSurface.SURFACE
+				.getSurfaceTranslationY();
+
+		// TAI -1 & +1 is a workaround. rounding does not work with low skaling
 		final int firstVisibleRow = limitTo(
-				(int) -(FeSurface.SURFACE.getSurfaceTranslationY() * FeSurface.SURFACE.getSurfaceScaleX())
-						/ mTileHeight, mRowCount);
+				(-surfaceTranslationY / scaledTileHeight) - 1, mRowCount);
 		final int lastVisibleRow = limitTo(
-				(FeSurface.SURFACE.getSurfaceHeight()
-						- (int) (FeSurface.SURFACE.getSurfaceTranslationY() * FeSurface.SURFACE.getSurfaceScaleX()) + mTileHeight)
-						/ mTileHeight, mRowCount);
-
+				((FeSurface.SURFACE.getSurfaceHeight() - surfaceTranslationY + scaledTileHeight) / scaledTileHeight) + 1,
+				mRowCount);
 		final int firstVisibleColumn = limitTo(
-				(int) (-FeSurface.SURFACE.getSurfaceTranslationX() * FeSurface.SURFACE.getSurfaceScaleX())
-						/ mTileWidth, mColumnCount);
+				(-surfaceTranslationX / scaledTileWidth) - 1, mColumnCount);
 		final int lastVisibleColumn = limitTo(
-				(FeSurface.SURFACE.getSurfaceWidth()
-						- (int) (FeSurface.SURFACE.getSurfaceTranslationX() * FeSurface.SURFACE.getSurfaceScaleX()) + mTileWidth)
-						/ mTileWidth, mColumnCount);
+				((FeSurface.SURFACE.getSurfaceWidth() - surfaceTranslationX + scaledTileWidth) / scaledTileWidth) + 1,
+				mColumnCount);
 
-		int tilesDrawn = 0;
 		int drawOffsetY = firstVisibleRow * mTileHeight;
 		for (int i = firstVisibleRow; i < lastVisibleRow; i++) {
 			final FeSurfaceTile[] row = mBackgroundTiles[i];
@@ -57,21 +58,13 @@ class FeSurfaceMap extends FeSurfaceElement {
 			for (int j = firstVisibleColumn; j < lastVisibleColumn; j++) {
 				row[j].draw(canvas, drawOffsetX, drawOffsetY, paint);
 				drawOffsetX += mTileWidth;
-				tilesDrawn++;
 			}
 			drawOffsetY += mTileHeight;
 		}
-
-		paint.setColor(Color.YELLOW);
-		canvas.drawText(String.valueOf(tilesDrawn),
-				(-FeSurface.SURFACE.getSurfaceTranslationX() + 35)
-						/ FeSurface.SURFACE.getSurfaceScaleX(),
-				(-FeSurface.SURFACE.getSurfaceTranslationY() + 100)
-						/ FeSurface.SURFACE.getSurfaceScaleY(), paint);
 	}
 
-	private int limitTo(final int value, final int maxValue) {
-		return Math.max(0, Math.min(value, maxValue));
+	private int limitTo(final float f, final int maxValue) {
+		return Math.max(0, Math.min((int) f, maxValue));
 	}
 
 	@Override

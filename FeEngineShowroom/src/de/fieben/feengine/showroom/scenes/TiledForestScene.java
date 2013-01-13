@@ -9,6 +9,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.util.Pair;
@@ -16,18 +18,28 @@ import de.fieben.feengine.FeBitmapPool;
 import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.FeSurfaceTile;
 import de.fieben.feengine.showroom.R;
-import de.fieben.feengine.showroom.tiles.ForestTile;
 
 public class TiledForestScene extends FeSurface {
+	private ProgressDialog mLoadingDialog;
 
 	public TiledForestScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 		new TileLoadingTask(context).execute();
 	}
 
+	@Override
+	public void addSurfaceScale(final float scaleX, final float scaleY,
+			final float pointX, final float pointY) {
+		super.addSurfaceScale(scaleX, scaleY, pointX, pointY);
+		final float lowerScaleLimit = 0.5f;
+		if (getSurfaceScaleX() < lowerScaleLimit
+				|| getSurfaceScaleY() < lowerScaleLimit) {
+			setSurfaceScale(lowerScaleLimit, lowerScaleLimit, pointX, pointY);
+		}
+	}
+
 	private class TileLoadingTask extends
 			AsyncTask<Void, Void, FeSurfaceTile[][]> {
-		private final ProgressDialog mLoadingDialog;
 
 		public TileLoadingTask(final Context context) {
 			mLoadingDialog = ProgressDialog.show(context,
@@ -38,7 +50,7 @@ public class TiledForestScene extends FeSurface {
 
 		@Override
 		protected FeSurfaceTile[][] doInBackground(final Void... params) {
-			final int size = 150;
+			final int size = 100;
 			final FeSurfaceTile[][] tiles = new FeSurfaceTile[size][size];
 
 			final Bitmap forestBackground = BitmapFactory.decodeResource(
@@ -99,7 +111,31 @@ public class TiledForestScene extends FeSurface {
 			try {
 				addMap(tiles);
 			} finally {
-				mLoadingDialog.dismiss();
+				if (mLoadingDialog.isShowing()) {
+					mLoadingDialog.dismiss();
+				}
+			}
+		}
+	}
+
+	private class ForestTile extends FeSurfaceTile {
+		private int mTreeBitmapKey;
+		private final ArrayList<Pair<Integer, Integer>> mTrees;
+
+		public ForestTile(final int backgroundBitmapKey,
+				final int treeBitmapKey,
+				final ArrayList<Pair<Integer, Integer>> trees) {
+			super(backgroundBitmapKey);
+			mTreeBitmapKey = treeBitmapKey;
+			mTrees = trees;
+		}
+
+		@Override
+		public void onDraw(final Canvas canvas, final int x, final int y,
+				final Paint paint) {
+			for (final Pair<Integer, Integer> treeCords : mTrees) {
+				canvas.drawBitmap(FeBitmapPool.getBitmap(mTreeBitmapKey), x
+						+ treeCords.first, y + treeCords.second, paint);
 			}
 		}
 	}

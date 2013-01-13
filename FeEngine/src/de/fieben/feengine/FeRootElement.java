@@ -81,8 +81,8 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 		case MotionEvent.ACTION_MOVE:
 			switch (mCurrentTouch) {
 			case TOUCH_DRAG:
-				addTranslate(event.getX() - mLastTouchX, event.getY()
-						- mLastTouchY);
+				FeSurface.SURFACE.addSurfaceTranslation(event.getX()
+						- mLastTouchX, event.getY() - mLastTouchY);
 				mLastTouchX = event.getX(0);
 				mLastTouchY = event.getY(0);
 				return true;
@@ -92,7 +92,8 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 				final float centerPointX = (event.getX(0) + event.getX(1)) / 2;
 				final float centerPointY = (event.getY(0) + event.getY(1)) / 2;
 				final float scale = newDistance / mLastTouchDistance;
-				addScale(scale, scale, centerPointX, centerPointY);
+				FeSurface.SURFACE.addSurfaceScale(scale, scale, centerPointX,
+						centerPointY);
 				mLastTouchDistance = newDistance;
 				return true;
 			}

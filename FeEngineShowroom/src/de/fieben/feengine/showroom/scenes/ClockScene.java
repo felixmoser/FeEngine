@@ -6,7 +6,7 @@ import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.showroom.elements.CircleElement;
 
 public class ClockScene extends FeSurface {
-	// TODO rename to performance test
+	// TODO rename to performance test or delete
 	// (requires fps impl in this scene)
 	public ClockScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);

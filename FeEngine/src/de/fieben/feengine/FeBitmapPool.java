@@ -8,7 +8,6 @@ public class FeBitmapPool {
 
 	private static SparseArray<Bitmap> mBitmapPool = new SparseArray<Bitmap>();
 
-	// WIP rename without pool
 	public static int addBitmap(final Bitmap bitmap) {
 		mBitmapPool.append(mNextKey, bitmap);
 		return mNextKey++;
