@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.showroom.R;
-import de.fieben.feengine.showroom.scenes.ClockScene;
 import de.fieben.feengine.showroom.scenes.SolarSystemScene;
 import de.fieben.feengine.showroom.scenes.SoundExampleScene;
 import de.fieben.feengine.showroom.scenes.TiledForestScene;
@@ -30,8 +29,6 @@ public class SceneProvider {
 				TiledForestScene.class));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sound,
 				SoundExampleScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_clock,
-				ClockScene.class));
 	}
 
 	public static SceneItem findSceneById(final int id) {

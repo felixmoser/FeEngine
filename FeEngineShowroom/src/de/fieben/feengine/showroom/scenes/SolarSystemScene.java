@@ -14,9 +14,6 @@ import de.fieben.feengine.showroom.elements.CircleElement;
 
 public class SolarSystemScene extends FeSurface {
 
-	// TODO punkte/sterne im hintergrund verteilen (nicht mitzoomend. farbe weiß
-	// bis hellgrau "flackernd")
-
 	public SolarSystemScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 

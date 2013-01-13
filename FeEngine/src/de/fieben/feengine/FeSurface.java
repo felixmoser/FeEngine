@@ -10,6 +10,12 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+/**
+ * This view provides functionalities to arrange {@link FeSurfaceElement}s
+ * 
+ * @author Felix Moser - felix.ernesto.moser@googlemail.com
+ * 
+ */
 public abstract class FeSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
 	// TAI impl preparation thread and "loading" support

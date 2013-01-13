@@ -7,7 +7,9 @@ import android.graphics.Paint;
 public abstract class FeSurfaceTile {
 	final int mBitmapKey;
 
-	// TODO comment like element
+	/**
+	 * comment like element
+	 */
 	public FeSurfaceTile(final int bitmapKey) {
 		mBitmapKey = bitmapKey;
 	}

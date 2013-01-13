@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FeEngine</string>
-    <string name="title_scene_detail">Scene Detail</string>
-    <string name="title_scene_list">Scenes</string>
     <string name="loading_scene_title">Loading Scene&#8230;</string>
     <string name="loading_scene_message_tiles">TiledForestScene is loading.</string>
 </resources>
