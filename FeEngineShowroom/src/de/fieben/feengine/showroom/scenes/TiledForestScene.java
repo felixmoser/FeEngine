@@ -130,7 +130,6 @@ public class TiledForestScene extends FeSurface {
 						}
 						trees.add(Pair.create(xValue, yValue));
 					}
-					// TAI integrate y-axis ordering into FeSurface?
 					Collections.sort(trees, yLastComparator);
 					row[j] = new ForestTile(forestBackgroundKey, treeBitmapKey,
 							trees);

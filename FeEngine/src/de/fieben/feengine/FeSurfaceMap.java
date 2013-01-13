@@ -34,7 +34,6 @@ class FeSurfaceMap extends FeSurfaceElement {
 		mTileHeight = firstTile.getBitmap().getHeight();
 	}
 
-	// TAI fix little (1px) offset between tiles @ scaling != 1f
 	@Override
 	public void onDraw(final Canvas canvas, final Paint paint) {
 		final int scaledTileHeight = (int) (mTileHeight * FeSurface.SURFACE
@@ -46,7 +45,6 @@ class FeSurfaceMap extends FeSurfaceElement {
 		final float surfaceTranslationY = FeSurface.SURFACE
 				.getSurfaceTranslationY();
 
-		// TAI -1 & +1 is a workaround. rounding does not work with low skaling
 		final int firstVisibleRow = limitTo(
 				(-surfaceTranslationY / scaledTileHeight) - 1, mRowCount);
 		final int lastVisibleRow = limitTo(

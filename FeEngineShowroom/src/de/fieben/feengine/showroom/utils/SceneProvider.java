@@ -16,10 +16,6 @@ import de.fieben.feengine.showroom.scenes.UpdateTestScene;
 public class SceneProvider {
 	private static List<SceneItem> SCENE_ITEMS = new ArrayList<SceneItem>();
 
-	// TAI make "build-packages" for scenes. maybe xml files. this packages
-	// include all informations to build a scene. also these scene descriptions
-	// can be used to handle loading of resources etc.
-
 	static {
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_update,
 				UpdateTestScene.class));

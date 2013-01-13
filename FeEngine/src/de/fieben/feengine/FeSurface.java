@@ -19,13 +19,6 @@ import android.view.SurfaceView;
  */
 public abstract class FeSurface extends SurfaceView implements
 		SurfaceHolder.Callback {
-	// TAI impl preparation thread and "loading" support
-	// TAI to enable hw-acceleration use textureview instead
-
-	// TAI impl isometric mode
-	// public static enum MapMode {
-	// NORMAL, ISOMETRIC
-	// };
 
 	private final static int LAYER_BACKGROUND = 0;
 	private final static int LAYER_MAP = 1;
@@ -107,7 +100,6 @@ public abstract class FeSurface extends SurfaceView implements
 		return mRootElement.onTouch(event);
 	}
 
-	// TAI schöner machen? evtl mit flag @ addElement?
 	/**
 	 * Adds an {@link FeSurfaceTouchable} to the list of elements that get
 	 * notified about touch inputs.

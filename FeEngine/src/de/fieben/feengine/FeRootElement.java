@@ -14,7 +14,6 @@ import android.view.MotionEvent;
  */
 class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
-	// TAI add touch mode rotate
 	private final static int TOUCH_NONE = 0;
 	private final static int TOUCH_DRAG = 1;
 	private final static int TOUCH_ZOOM = 2;
@@ -52,14 +51,12 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 		mTouchableElements.add(touchableElement);
 	}
 
-	// TAI stop scrolling if tile border is reached?
 	@Override
 	public boolean onTouch(final MotionEvent event) {
 		if (mCurrentTouch == TOUCH_NONE) {
 			final MotionEvent offsetEvent = MotionEvent.obtain(event);
 			offsetEvent.offsetLocation(-getTranslateX(), -getTranslateY());
 			for (final FeSurfaceTouchable e : mTouchableElements) {
-				// TAI change to detect element on position x,y?
 				if (e.onTouch(offsetEvent)) {
 					return true;
 				}
@@ -108,14 +105,6 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 		case MotionEvent.ACTION_UP:
 			mCurrentTouch = TOUCH_NONE;
 			return true;
-			// TAI impl mode changing and prevent jumping afterwards
-			// if (mTouchMode >= TOUCH_DRAG) {
-			// (the above is a workaround)
-			// mCurrentTouch = TOUCH_DRAG;
-			// mLastTouchX = event.getX(0);
-			// mLastTouchY = event.getY(0);
-			// return true;
-			// }
 		}
 		return false;
 	}

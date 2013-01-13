@@ -22,8 +22,6 @@ import android.util.SparseArray;
  * 
  */
 public abstract class FeSurfaceElement {
-	// TAI what about display density?
-	// TAI impl ancor point/coorinats
 
 	/**
 	 * The mode used for sound playback.
@@ -42,8 +40,6 @@ public abstract class FeSurfaceElement {
 
 	private FeSurfaceElement mParent;
 
-	// TAI add translate modifier to layers. e.g. 0f equals no translation, 1f
-	// full
 	private final SparseArray<ArrayList<FeSurfaceElement>> mChildLayers;
 	private int mMaxLayerLevel = 0;
 
@@ -269,7 +265,6 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
-	// TAI provide removeChild method
 	/**
 	 * Equivalent to {@link #addChild(layerLevel, child)} with layer value 0.
 	 * 
@@ -340,7 +335,6 @@ public abstract class FeSurfaceElement {
 		synchronized (mMatrix) {
 			onUpdate(elapsedMillis);
 
-			// TAI handle "screen off"
 			if (mDoUpdateInterval > 0) {
 				mDoUpdateCounter -= elapsedMillis;
 				if (mDoUpdateCounter <= 0) {
@@ -353,7 +347,6 @@ public abstract class FeSurfaceElement {
 				updateVolumes();
 			}
 
-			// TAI start and stop animation
 			if (mAnimationInterval > 0) {
 				mAnimationCounter -= elapsedMillis;
 				if (mAnimationCounter <= 0) {
@@ -472,7 +465,6 @@ public abstract class FeSurfaceElement {
 		mSoundElement.setMasterVolume(volume);
 	}
 
-	// TAI handle offscreen elements?
 	private void updateVolumes() {
 		final Point cords = getAbsoluteSurfacePosition();
 
