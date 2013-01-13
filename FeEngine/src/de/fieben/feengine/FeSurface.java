@@ -11,7 +11,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /**
- * This view provides functionalities to arrange {@link FeSurfaceElement}s
+ * This view provides methods to draw {@link FeSurfaceElement}s on a dedicated
+ * drawing surface. It holds a scene graph with all elements to draw.
  * 
  * @author Felix Moser - felix.ernesto.moser@googlemail.com
  * 
@@ -34,7 +35,7 @@ public abstract class FeSurface extends SurfaceView implements
 	private FeRootElement mRootElement;
 	private FeSurfaceThread mSurfaceThread;
 
-	private final Paint mPaint;
+	protected final Paint mPaint;
 	private int mWidth;
 	private int mHeight;
 
@@ -80,19 +81,25 @@ public abstract class FeSurface extends SurfaceView implements
 		mSurfaceThread.end();
 	}
 
+	/**
+	 * Draws the scene graph on the canvas. Implement to do custom drawing.
+	 * 
+	 * @param canvas
+	 *            The canvas the scene graph gets drawn onto.
+	 */
 	@Override
 	protected void onDraw(final Canvas canvas) {
 		mRootElement.draw(canvas, mPaint);
-
-		mPaint.setColor(Color.MAGENTA);
-		mPaint.setTextSize(34);
-		canvas.drawText(mFPS, 35, 50, mPaint);
 	}
 
+	/**
+	 * Updates the scene graph.
+	 * 
+	 * @param elapsedMillis
+	 *            The elapsed milliseconds since last call of this method.
+	 */
 	protected void onUpdate(final long elapsedMillis) {
 		mRootElement.update(elapsedMillis);
-
-		calculateFPS(elapsedMillis);
 	}
 
 	@Override
@@ -101,29 +108,62 @@ public abstract class FeSurface extends SurfaceView implements
 	}
 
 	// TAI schöner machen? evtl mit flag @ addElement?
+	/**
+	 * Adds an {@link FeSurfaceTouchable} to the list of elements that get
+	 * notified about touch inputs.
+	 * 
+	 * @param touchableElement
+	 *            The {@link FeSurfaceTouchable} to add.
+	 */
 	public void registerTouchable(final FeSurfaceTouchable touchableElement) {
 		mRootElement.registerTouchable(touchableElement);
 	}
 
+	/**
+	 * Adds an {@link FeSurfaceElement} as a child to the scene graphs root
+	 * element on the element layer. Equivalent to
+	 * {@link #addElement(layerLevel, element)} with layer 0.
+	 * 
+	 * @param element
+	 *            The {@link FeSurfaceElement} to add.
+	 */
 	public void addElement(final FeSurfaceElement element) {
 		mRootElement.addChild(LAYER_ELEMENTS, element);
 	}
 
+	/**
+	 * Adds an {@link FeSurfaceElement} as a child to the scene graphs root
+	 * element on the element layer plus layerLevel.
+	 * 
+	 * @param layerLevel
+	 *            The layer level offset to the element layer. Needs to be >=0.
+	 * @param element
+	 *            The {@link FeSurfaceElement} to add.
+	 */
 	public void addElement(final int layerLevel, final FeSurfaceElement element) {
 		mRootElement.addChild(layerLevel + LAYER_ELEMENTS, element);
 	}
 
 	/**
-	 * Adds an {@link FeSurfaceElement} in the background. Behind all elements
-	 * and even behind the map.
+	 * Adds an {@link FeSurfaceElement} as a child to the scene graphs root
+	 * element on the background layer. This element gets drawn even behind the
+	 * map.
 	 * 
 	 * @param element
-	 *            The background element to add.
+	 *            The {@link FeSurfaceElement} to add.
 	 */
 	public void addBackgroundElement(final FeSurfaceElement element) {
 		mRootElement.addChild(LAYER_BACKGROUND, element);
 	}
 
+	/**
+	 * Creates and adds a {@link FeSurfaceMap} to the scene graphs root element
+	 * on the map layer.
+	 * 
+	 * @param tiles
+	 *            The {@link FeSurfaceTile}s that gets drawn on the map. First
+	 *            dimension indicates the row, second the column.
+	 */
 	public void addMap(final FeSurfaceTile[][] tiles) {
 		mRootElement.addChild(LAYER_MAP, new FeSurfaceMap(tiles));
 	}
@@ -186,22 +226,5 @@ public abstract class FeSurface extends SurfaceView implements
 
 	public int getSurfaceHeight() {
 		return mHeight;
-	}
-
-	// DEBUG
-	private String mFPS = "";
-	private long[] mLastElapsed = new long[20];
-	private int mElapsedIndex = 0;
-
-	private void calculateFPS(final long elapsedMillis) {
-		if (mElapsedIndex >= 20) {
-			mElapsedIndex = 0;
-		}
-		mLastElapsed[mElapsedIndex++] = elapsedMillis;
-		long averageFPS = 0;
-		for (int i = 0; i < 20; i++) {
-			averageFPS += mLastElapsed[i];
-		}
-		mFPS = "FPS: " + String.valueOf(20000 / averageFPS);
 	}
 }

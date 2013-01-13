@@ -10,6 +10,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
@@ -20,7 +21,12 @@ import de.fieben.feengine.FeSurfaceTile;
 import de.fieben.feengine.showroom.R;
 
 public class TiledForestScene extends FeSurface {
+
 	private ProgressDialog mLoadingDialog;
+
+	private String mFrameInformation;
+	private long[] mLastElapsed = new long[20];
+	private int mElapsedIndex = 0;
 
 	public TiledForestScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
@@ -36,6 +42,34 @@ public class TiledForestScene extends FeSurface {
 				|| getSurfaceScaleY() < lowerScaleLimit) {
 			setSurfaceScale(lowerScaleLimit, lowerScaleLimit, pointX, pointY);
 		}
+	}
+
+	@Override
+	protected void onDraw(final Canvas canvas) {
+		super.onDraw(canvas);
+
+		mPaint.setColor(Color.MAGENTA);
+		mPaint.setTextSize(34);
+		canvas.drawText(mFrameInformation, 35, 50, mPaint);
+	}
+
+	@Override
+	protected void onUpdate(final long elapsedMillis) {
+		super.onUpdate(elapsedMillis);
+
+		calculateFPS(elapsedMillis);
+	}
+
+	private void calculateFPS(final long elapsedMillis) {
+		if (mElapsedIndex >= 20) {
+			mElapsedIndex = 0;
+		}
+		mLastElapsed[mElapsedIndex++] = elapsedMillis;
+		long averageFPS = 0;
+		for (int i = 0; i < 20; i++) {
+			averageFPS += mLastElapsed[i];
+		}
+		mFrameInformation = "FPS: " + String.valueOf(20000 / averageFPS);
 	}
 
 	private class TileLoadingTask extends

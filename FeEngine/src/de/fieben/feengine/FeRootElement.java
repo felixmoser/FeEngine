@@ -6,6 +6,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 
+/**
+ * This is the root element of the {@link FeSurface}s scene graph.
+ * 
+ * @author Felix Moser - felix.ernesto.moser@googlemail.com
+ * 
+ */
 class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
 	// TAI add touch mode rotate

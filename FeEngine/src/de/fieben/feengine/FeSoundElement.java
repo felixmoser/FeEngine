@@ -4,6 +4,12 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
+/**
+ * Used from {@link FeSurfaceElement} for soundplayback.
+ * 
+ * @author Felix Moser - felix.ernesto.moser@googlemail.com
+ * 
+ */
 class FeSoundElement {
 
 	private SoundPool mSoundPool;

@@ -9,12 +9,25 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.media.SoundPool;
 import android.util.SparseArray;
 
+/**
+ * This class builds the basis for all elements in the {@link FeSurface}s scene
+ * graph that gets drawn on its surface. Provides method for scaling,
+ * translation and rotation. Native support of drawing bitmaps, update
+ * mechanisms, animations, child layers and playback of sound.
+ * 
+ * @author Felix Moser - felix.ernesto.moser@googlemail.com
+ * 
+ */
 public abstract class FeSurfaceElement {
 	// TAI what about display density?
 	// TAI impl ancor point/coorinats
 
+	/**
+	 * The mode used for sound playback.
+	 */
 	public static enum SoundMode {
 		MONO, STEREO, SURROUND
 	}
@@ -51,10 +64,9 @@ public abstract class FeSurfaceElement {
 	private SoundMode mSoundMode = SoundMode.MONO;
 
 	/**
-	 * 
 	 * @param bitmapKey
-	 *            The key of the bitmap in the {@link SufaceView}s bitmappool.
-	 *            -1 if no bitmap should be used.
+	 *            The key retrieved from {@link FeBitmapPool} after adding a
+	 *            bitmap. -1 if no bitmap should be used.
 	 */
 	public FeSurfaceElement(final int bitmapKey) {
 		mMatrix = new Matrix();
@@ -63,6 +75,16 @@ public abstract class FeSurfaceElement {
 		mBitmapKey = bitmapKey;
 	}
 
+	/**
+	 * @param bitmapKey
+	 *            The key retrieved from {@link FeBitmapPool} after adding an
+	 *            animation bitmap. -1 if no bitmap should be used.
+	 * @param stepCount
+	 *            The count of steps used for the animation.
+	 * @param animationInterval
+	 *            The time in milliseconds each animationstep should be
+	 *            displayed.
+	 */
 	public FeSurfaceElement(final int bitmapKey, final int stepCount,
 			final int animationInterval) {
 		mMatrix = new Matrix();
@@ -119,6 +141,13 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
+	/**
+	 * Calculates all translation values of all parents together and returns the
+	 * absolute surface position of this element, including its own translation.
+	 * 
+	 * @return A {@link Point} contains the absolute position of this element on
+	 *         the surface.
+	 */
 	public final Point getAbsoluteSurfacePosition() {
 		if (mParent == null) {
 			return new Point();
@@ -241,10 +270,25 @@ public abstract class FeSurfaceElement {
 	}
 
 	// TAI provide removeChild method
+	/**
+	 * Equivalent to {@link #addChild(layerLevel, child)} with layer value 0.
+	 * 
+	 * @param child
+	 *            The {@link FeSurfaceElement} to add.
+	 */
 	public void addChild(final FeSurfaceElement child) {
 		addChild(0, child);
 	}
 
+	/**
+	 * Adds a {@link FeSurfaceElement} as a child of this element on a given
+	 * layer.
+	 * 
+	 * @param layerLevel
+	 *            The level of which the child gets added. Needs to be >=0.
+	 * @param child
+	 *            The {@link FeSurfaceElement} to add.
+	 */
 	public void addChild(final int layerLevel, final FeSurfaceElement child) {
 		synchronized (mMatrix) {
 			child.mParent = this;
@@ -338,21 +382,71 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
+	/**
+	 * This method is used to do custom drawing of this element.
+	 * 
+	 * @param canvas
+	 *            The {@link Canvas} to draw on.
+	 * @param paint
+	 *            The {@link Paint} used for drawing.
+	 */
 	public abstract void onDraw(final Canvas canvas, final Paint paint);
 
+	/**
+	 * This method is used to do continuous update of this element.
+	 * 
+	 * @param elapsedMillis
+	 *            The elapsed milliseconds since last call of this method.
+	 */
 	public abstract void onUpdate(final long elapsedMillis);
 
+	/**
+	 * This method is used to do interval based updates of this element. The
+	 * interval needs to be set with {@link #setUpdateInterval(updateInterval)}.
+	 * 
+	 * @param elapsedMillis
+	 *            The elapsed milliseconds since last call of this method.
+	 */
 	public abstract void doUpdate();
 
+	/**
+	 * Sets the update in which {@link #doUpdate()} gets called. First
+	 * {@link #doUpdate()} call after the interval elapsed.
+	 * 
+	 * @param updateInterval
+	 *            Interval in milliseconds.
+	 */
 	public void setUpdateInterval(final int updateInterval) {
 		mDoUpdateCounter = mDoUpdateInterval = updateInterval;
 	}
 
+	/**
+	 * Creates a {@link FeSoundElement} with a given sound resource.
+	 * 
+	 * @param context
+	 *            The context used to get the resource.
+	 * @param resourceId
+	 *            The android id of the sound resource to load. All types
+	 *            support by {@link SoundPool} are supported as well.
+	 * @param callback
+	 *            The {@link SoundLoadCallback#soundLoaded(success)} of this
+	 *            callback gets triggered after the sound is loaded, can be
+	 *            null.
+	 */
 	public void setSound(final Context context, final int resourceId,
 			final SoundLoadCallback callback) {
 		mSoundElement = new FeSoundElement(context, resourceId, callback);
 	}
 
+	/**
+	 * Starts the playback of a previous set sound resource if sound has
+	 * finished loading.
+	 * 
+	 * @param mode
+	 *            The {@link SoundMode} used for playback.
+	 * @param loop
+	 *            true if sound playback should be looping.
+	 */
 	public void playSound(final SoundMode mode, final boolean loop) {
 		mSoundElement.playSound(1f, 1f, loop);
 		mSoundMode = mode;
@@ -361,10 +455,19 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
+	/**
+	 * Stops the playback of a sound previous started.
+	 */
 	public void stopSound() {
 		mSoundElement.stopSound();
 	}
 
+	/**
+	 * Sets the maximum volume of a previous loaded sound.
+	 * 
+	 * @param volume
+	 *            The volume range from 0f to 1f.
+	 */
 	public void setVolume(final float volume) {
 		mSoundElement.setMasterVolume(volume);
 	}

@@ -4,6 +4,14 @@ import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+/**
+ * This is the {@link FeSurface}s update and drawing loop. Once started it
+ * triggers {@link FeSurface#onDraw(canvas)} and
+ * {@link FeSurface#onUpdate(elapsedMillis)} as often as possible until stopped.
+ * 
+ * @author Felix Moser - felix.ernesto.moser@googlemail.com
+ * 
+ */
 class FeSurfaceThread extends Thread {
 	private static final String LOG_TAG = FeSurfaceThread.class.getSimpleName();
 

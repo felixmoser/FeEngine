@@ -3,6 +3,13 @@ package de.fieben.feengine;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+/**
+ * Holds and draws a tiled map on the {@link FeSurface} set with
+ * {@link FeSurface#addMap(FeSurfaceTile[][])}.
+ * 
+ * @author Felix Moser - felix.ernesto.moser@googlemail.com
+ * 
+ */
 class FeSurfaceMap extends FeSurfaceElement {
 
 	private FeSurfaceTile[][] mBackgroundTiles;
