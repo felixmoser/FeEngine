@@ -15,21 +15,16 @@ import de.fieben.feengine.showroom.scenes.TiledForestScene;
 import de.fieben.feengine.showroom.scenes.UpdateTestScene;
 
 public class SceneProvider {
-	private static List<SceneItem> SCENE_ITEMS = new ArrayList<SceneItem>();
+	private static List<SceneItem> SCENE_ITEMS = new ArrayList<>();
 
-	// WIP make "build-packages" for scenes. maybe xml files. this packages
-	// include all informations to build a scene. also these scene descriptions
-	// can be used to handle loading of resources etc.
+	// WIP make "build-packages" for scenes. maybe xml files. this packages include all informations to build a scene.
+	// also these scene descriptions can be used to handle loading of resources etc.
 
 	static {
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_update,
-				UpdateTestScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_solar,
-				SolarSystemScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_tiled_forest,
-				TiledForestScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sound,
-				SoundExampleScene.class));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_update, UpdateTestScene.class));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_solar, SolarSystemScene.class));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_tiled_forest, TiledForestScene.class));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sound, SoundExampleScene.class));
 	}
 
 	public static SceneItem findSceneById(final int id) {
@@ -46,17 +41,14 @@ public class SceneProvider {
 	}
 
 	public static ListAdapter getSceneAdapter(final Context context) {
-		return new ArrayAdapter<SceneProvider.SceneItem>(context,
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, SCENE_ITEMS);
+		return new ArrayAdapter<>(context, android.R.layout.simple_list_item_activated_1, android.R.id.text1, SCENE_ITEMS);
 	}
 
 	public static class SceneItem {
 		public int mId;
 		public Class<? extends FeSurface> mClass;
 
-		public SceneItem(final int id,
-				final Class<? extends FeSurface> sceneClass) {
+		public SceneItem(final int id, final Class<? extends FeSurface> sceneClass) {
 			mId = id;
 			mClass = sceneClass;
 		}

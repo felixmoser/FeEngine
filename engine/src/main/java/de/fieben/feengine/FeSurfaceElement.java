@@ -1,7 +1,5 @@
 package de.fieben.feengine;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,14 +10,14 @@ import android.graphics.Rect;
 import android.media.SoundPool;
 import android.util.SparseArray;
 
+import java.util.ArrayList;
+
 /**
- * This class builds the basis for all elements in the {@link FeSurface}s scene
- * graph that gets drawn on its surface. Provides method for scaling,
- * translation and rotation. Native support of drawing bitmaps, update
- * mechanisms, animations, child layers and playback of sound.
+ * This class builds the basis for all elements in the {@link FeSurface}s scene graph that gets drawn on its surface.
+ * Provides method for scaling, translation and rotation.
+ * Native support of drawing bitmaps, update mechanisms, animations, child layers and playback of sound.
  * 
  * @author Felix Moser - felix.ernesto.moser@googlemail.com
- * 
  */
 public abstract class FeSurfaceElement {
 	// WIP what about display density?
@@ -28,7 +26,7 @@ public abstract class FeSurfaceElement {
 	/**
 	 * The mode used for sound playback.
 	 */
-	public static enum SoundMode {
+	public enum SoundMode {
 		MONO, STEREO, SURROUND
 	}
 
@@ -42,8 +40,7 @@ public abstract class FeSurfaceElement {
 
 	private FeSurfaceElement mParent;
 
-	// WIP add translate modifier to layers. e.g. 0f equals no translation, 1f
-	// full
+	// WIP add translate modifier to layers. e.g. 0f equals no translation, 1f full
 	private final SparseArray<ArrayList<FeSurfaceElement>> mChildLayers;
 	private int mMaxLayerLevel = 0;
 
@@ -64,32 +61,24 @@ public abstract class FeSurfaceElement {
 	private SoundMode mSoundMode = SoundMode.MONO;
 
 	/**
-	 * @param bitmapKey
-	 *            The key retrieved from {@link FeBitmapPool} after adding a
-	 *            bitmap. -1 if no bitmap should be used.
+	 * @param bitmapKey The key retrieved from {@link FeBitmapPool} after adding a bitmap. -1 if no bitmap should be used.
 	 */
 	public FeSurfaceElement(final int bitmapKey) {
 		mMatrix = new Matrix();
 		mMatrixValues = new float[9];
-		mChildLayers = new SparseArray<ArrayList<FeSurfaceElement>>();
+		mChildLayers = new SparseArray<>();
 		mBitmapKey = bitmapKey;
 	}
 
 	/**
-	 * @param bitmapKey
-	 *            The key retrieved from {@link FeBitmapPool} after adding an
-	 *            animation bitmap. -1 if no bitmap should be used.
-	 * @param stepCount
-	 *            The count of steps used for the animation.
-	 * @param animationInterval
-	 *            The time in milliseconds each animationstep should be
-	 *            displayed.
+	 * @param bitmapKey The key retrieved from {@link FeBitmapPool} after adding an animation bitmap. -1 if no bitmap should be used.
+	 * @param stepCount The count of steps used for the animation.
+	 * @param animationInterval The time in milliseconds each animationstep should be displayed.
 	 */
-	public FeSurfaceElement(final int bitmapKey, final int stepCount,
-			final int animationInterval) {
+	public FeSurfaceElement(final int bitmapKey, final int stepCount, final int animationInterval) {
 		mMatrix = new Matrix();
 		mMatrixValues = new float[9];
-		mChildLayers = new SparseArray<ArrayList<FeSurfaceElement>>();
+		mChildLayers = new SparseArray<>();
 		mBitmapKey = bitmapKey;
 
 		mAnimationCounter = mAnimationInterval = animationInterval;
@@ -98,14 +87,10 @@ public abstract class FeSurfaceElement {
 		mAnimationCurrentIndex = 0;
 
 		mAnimationBitmapGridDimension = (int) Math.ceil(Math.sqrt(stepCount));
-		mAnimationWidth = getBitmap().getWidth()
-				/ mAnimationBitmapGridDimension;
-		mAnimationHeight = getBitmap().getHeight()
-				/ mAnimationBitmapGridDimension;
+		mAnimationWidth = getBitmap().getWidth() / mAnimationBitmapGridDimension;
+		mAnimationHeight = getBitmap().getHeight() / mAnimationBitmapGridDimension;
 
-		mAnimationDstRect = new Rect(-mAnimationWidth / 2,
-				-mAnimationHeight / 2, mAnimationWidth / 2,
-				mAnimationHeight / 2);
+		mAnimationDstRect = new Rect(-mAnimationWidth / 2, -mAnimationHeight / 2, mAnimationWidth / 2, mAnimationHeight / 2);
 		mAnimationSrcRect = new Rect(0, 0, mAnimationWidth, mAnimationHeight);
 	}
 
@@ -116,8 +101,7 @@ public abstract class FeSurfaceElement {
 	public void setTranslate(final float translateX, final float translateY) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrix.postTranslate(translateX - mMatrixValues[Matrix.MTRANS_X],
-					translateY - mMatrixValues[Matrix.MTRANS_Y]);
+			mMatrix.postTranslate(translateX - mMatrixValues[Matrix.MTRANS_X], translateY - mMatrixValues[Matrix.MTRANS_Y]);
 		}
 	}
 
@@ -142,11 +126,9 @@ public abstract class FeSurfaceElement {
 	}
 
 	/**
-	 * Calculates all translation values of all parents together and returns the
-	 * absolute surface position of this element, including its own translation.
-	 * 
-	 * @return A {@link Point} contains the absolute position of this element on
-	 *         the surface.
+	 * Calculates all translation values of all parents together and returns the absolute surface position of this element, including its own translation.
+	 *
+	 * @return A {@link Point} contains the absolute position of this element on the surface.
 	 */
 	public final Point getAbsoluteSurfacePosition() {
 		if (mParent == null) {
@@ -165,8 +147,7 @@ public abstract class FeSurfaceElement {
 	public void setScale(final float scaleX, final float scaleY) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrix.postScale(scaleX / mMatrixValues[Matrix.MSCALE_X], scaleY
-					/ mMatrixValues[Matrix.MSCALE_Y]);
+			mMatrix.postScale(scaleX / mMatrixValues[Matrix.MSCALE_X], scaleY / mMatrixValues[Matrix.MSCALE_Y]);
 		}
 	}
 
@@ -176,17 +157,14 @@ public abstract class FeSurfaceElement {
 		}
 	}
 
-	public void setScale(final float scaleX, final float scaleY,
-			final float pointX, final float pointY) {
+	public void setScale(final float scaleX, final float scaleY, final float pointX, final float pointY) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrix.postScale(scaleX / mMatrixValues[Matrix.MSCALE_X], scaleY
-					/ mMatrixValues[Matrix.MSCALE_Y], pointX, pointY);
+			mMatrix.postScale(scaleX / mMatrixValues[Matrix.MSCALE_X], scaleY / mMatrixValues[Matrix.MSCALE_Y], pointX, pointY);
 		}
 	}
 
-	public void addScale(final float scaleX, final float scaleY,
-			final float pointX, final float pointY) {
+	public void addScale(final float scaleX, final float scaleY, final float pointX, final float pointY) {
 		synchronized (mMatrix) {
 			mMatrix.postScale(scaleX, scaleY, pointX, pointY);
 		}
@@ -209,18 +187,14 @@ public abstract class FeSurfaceElement {
 	public void setScaleFromCenter(final float scaleX, final float scaleY) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrix.postScale(scaleX / mMatrixValues[Matrix.MSCALE_X], scaleY
-					/ mMatrixValues[Matrix.MSCALE_Y],
-					mMatrixValues[Matrix.MTRANS_X],
-					mMatrixValues[Matrix.MTRANS_Y]);
+			mMatrix.postScale(scaleX / mMatrixValues[Matrix.MSCALE_X], scaleY / mMatrixValues[Matrix.MSCALE_Y], mMatrixValues[Matrix.MTRANS_X], mMatrixValues[Matrix.MTRANS_Y]);
 		}
 	}
 
 	public void addScaleFromCenter(final float scaleX, final float scaleY) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrix.postScale(scaleX, scaleY, mMatrixValues[Matrix.MTRANS_X],
-					mMatrixValues[Matrix.MTRANS_Y]);
+			mMatrix.postScale(scaleX, scaleY, mMatrixValues[Matrix.MTRANS_X], mMatrixValues[Matrix.MTRANS_Y]);
 		}
 	}
 
@@ -247,9 +221,7 @@ public abstract class FeSurfaceElement {
 	public void setRotateAroundCenter(final float degrees) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrix.postRotate(degrees - mRotationAroundCenterDegrees,
-					mMatrixValues[Matrix.MTRANS_X],
-					mMatrixValues[Matrix.MTRANS_Y]);
+			mMatrix.postRotate(degrees - mRotationAroundCenterDegrees, mMatrixValues[Matrix.MTRANS_X], mMatrixValues[Matrix.MTRANS_Y]);
 			mRotationAroundCenterDegrees = degrees;
 		}
 	}
@@ -257,8 +229,7 @@ public abstract class FeSurfaceElement {
 	public void addRotateAroundCenter(final float degrees) {
 		synchronized (mMatrix) {
 			mMatrix.getValues(mMatrixValues);
-			mMatrix.postRotate(degrees, mMatrixValues[Matrix.MTRANS_X],
-					mMatrixValues[Matrix.MTRANS_Y]);
+			mMatrix.postRotate(degrees, mMatrixValues[Matrix.MTRANS_X], mMatrixValues[Matrix.MTRANS_Y]);
 			mRotationAroundCenterDegrees += degrees;
 		}
 	}
@@ -271,23 +242,19 @@ public abstract class FeSurfaceElement {
 
 	// WIP provide removeChild method
 	/**
-	 * Equivalent to {@link #addChild(layerLevel, child)} with layer value 0.
-	 * 
-	 * @param child
-	 *            The {@link FeSurfaceElement} to add.
+	 * Equivalent to {@link #addChild(int, FeSurfaceElement)} with layer value 0.
+	 *
+	 * @param child The {@link FeSurfaceElement} to add.
 	 */
 	public void addChild(final FeSurfaceElement child) {
 		addChild(0, child);
 	}
 
 	/**
-	 * Adds a {@link FeSurfaceElement} as a child of this element on a given
-	 * layer.
-	 * 
-	 * @param layerLevel
-	 *            The level of which the child gets added. Needs to be >=0.
-	 * @param child
-	 *            The {@link FeSurfaceElement} to add.
+	 * Adds a {@link FeSurfaceElement} as a child of this element on a given layer.
+	 *
+	 * @param layerLevel The level of which the child gets added. Needs to be >=0.
+	 * @param child The {@link FeSurfaceElement} to add.
 	 */
 	public void addChild(final int layerLevel, final FeSurfaceElement child) {
 		synchronized (mMatrix) {
@@ -295,7 +262,7 @@ public abstract class FeSurfaceElement {
 
 			final int layerIndex = mChildLayers.indexOfKey(layerLevel);
 			if (layerIndex < 0) {
-				final ArrayList<FeSurfaceElement> layer = new ArrayList<FeSurfaceElement>();
+				final ArrayList<FeSurfaceElement> layer = new ArrayList<>();
 				layer.add(child);
 				mChildLayers.put(layerLevel, layer);
 			} else {
@@ -315,8 +282,7 @@ public abstract class FeSurfaceElement {
 
 			if (mBitmapKey != -1) {
 				if (mAnimationSteps > 0) {
-					canvas.drawBitmap(getBitmap(), mAnimationSrcRect,
-							mAnimationDstRect, paint);
+					canvas.drawBitmap(getBitmap(), mAnimationSrcRect, mAnimationDstRect, paint);
 				} else {
 					canvas.drawBitmap(getBitmap(), 0, 0, paint);
 				}
@@ -361,10 +327,8 @@ public abstract class FeSurfaceElement {
 					if (++mAnimationCurrentIndex >= mAnimationSteps) {
 						mAnimationCurrentIndex = 0;
 					}
-					final int left = (mAnimationCurrentIndex % mAnimationBitmapGridDimension)
-							* mAnimationWidth;
-					final int top = (mAnimationCurrentIndex / mAnimationBitmapGridDimension)
-							* mAnimationHeight;
+					final int left = (mAnimationCurrentIndex % mAnimationBitmapGridDimension) * mAnimationWidth;
+					final int top = (mAnimationCurrentIndex / mAnimationBitmapGridDimension) * mAnimationHeight;
 					final int right = left + mAnimationWidth;
 					final int bottom = top + mAnimationHeight;
 					mAnimationSrcRect = new Rect(left, top, right, bottom);
@@ -384,37 +348,28 @@ public abstract class FeSurfaceElement {
 
 	/**
 	 * This method is used to do custom drawing of this element.
-	 * 
-	 * @param canvas
-	 *            The {@link Canvas} to draw on.
-	 * @param paint
-	 *            The {@link Paint} used for drawing.
+	 *
+	 * @param canvas The {@link Canvas} to draw on.
+	 * @param paint The {@link Paint} used for drawing.
 	 */
 	public abstract void onDraw(final Canvas canvas, final Paint paint);
 
 	/**
 	 * This method is used to do continuous update of this element.
-	 * 
-	 * @param elapsedMillis
-	 *            The elapsed milliseconds since last call of this method.
+	 *
+	 * @param elapsedMillis The elapsed milliseconds since last call of this method.
 	 */
 	public abstract void onUpdate(final long elapsedMillis);
 
 	/**
-	 * This method is used to do interval based updates of this element. The
-	 * interval needs to be set with {@link #setUpdateInterval(updateInterval)}.
-	 * 
-	 * @param elapsedMillis
-	 *            The elapsed milliseconds since last call of this method.
+	 * This method is used to do interval based updates of this element. The interval needs to be set with {@link #setUpdateInterval(int)}.
 	 */
 	public abstract void doUpdate();
 
 	/**
-	 * Sets the update in which {@link #doUpdate()} gets called. First
-	 * {@link #doUpdate()} call after the interval elapsed.
-	 * 
-	 * @param updateInterval
-	 *            Interval in milliseconds.
+	 * Sets the update in which {@link #doUpdate()} gets called. First {@link #doUpdate()} call after the interval elapsed.
+	 *
+	 * @param updateInterval Interval in milliseconds.
 	 */
 	public void setUpdateInterval(final int updateInterval) {
 		mDoUpdateCounter = mDoUpdateInterval = updateInterval;
@@ -422,30 +377,20 @@ public abstract class FeSurfaceElement {
 
 	/**
 	 * Creates a {@link FeSoundElement} with a given sound resource.
-	 * 
-	 * @param context
-	 *            The context used to get the resource.
-	 * @param resourceId
-	 *            The android id of the sound resource to load. All types
-	 *            support by {@link SoundPool} are supported as well.
-	 * @param callback
-	 *            The {@link SoundLoadCallback#soundLoaded(success)} of this
-	 *            callback gets triggered after the sound is loaded, can be
-	 *            null.
+	 *
+	 * @param context The context used to get the resource.
+	 * @param resourceId The android id of the sound resource to load. All types support by {@link SoundPool} are supported as well.
+	 * @param callback The {@link SoundLoadCallback#soundLoaded(boolean)} of this callback gets triggered after the sound is loaded, can be null.
 	 */
-	public void setSound(final Context context, final int resourceId,
-			final SoundLoadCallback callback) {
+	public void setSound(final Context context, final int resourceId, final SoundLoadCallback callback) {
 		mSoundElement = new FeSoundElement(context, resourceId, callback);
 	}
 
 	/**
-	 * Starts the playback of a previous set sound resource if sound has
-	 * finished loading.
-	 * 
-	 * @param mode
-	 *            The {@link SoundMode} used for playback.
-	 * @param loop
-	 *            true if sound playback should be looping.
+	 * Starts the playback of a previous set sound resource if sound has finished loading.
+	 *
+	 * @param mode The {@link SoundMode} used for playback.
+	 * @param loop true if sound playback should be looping.
 	 */
 	public void playSound(final SoundMode mode, final boolean loop) {
 		mSoundElement.playSound(1f, 1f, loop);
@@ -464,9 +409,8 @@ public abstract class FeSurfaceElement {
 
 	/**
 	 * Sets the maximum volume of a previous loaded sound.
-	 * 
-	 * @param volume
-	 *            The volume range from 0f to 1f.
+	 *
+	 * @param volume The volume range from 0f to 1f.
 	 */
 	public void setVolume(final float volume) {
 		mSoundElement.setMasterVolume(volume);
@@ -477,18 +421,11 @@ public abstract class FeSurfaceElement {
 		final Point cords = getAbsoluteSurfacePosition();
 
 		final float surfaceScaleX = FeSurface.SURFACE.getSurfaceScaleX();
-		final float surfaceTranslateX = FeSurface.SURFACE
-				.getSurfaceTranslationX();
+		final float surfaceTranslateX = FeSurface.SURFACE.getSurfaceTranslationX();
 
-		final float leftVolume = (FeSurface.SURFACE.getSurfaceWidth()
-				- surfaceTranslateX - cords.x * surfaceScaleX)
-				/ FeSurface.SURFACE.getSurfaceWidth();
-		final float rightVolume = (surfaceTranslateX + cords.x * surfaceScaleX)
-				/ FeSurface.SURFACE.getSurfaceWidth();
-		final float yMod = mSoundMode == SoundMode.SURROUND ? (FeSurface.SURFACE
-				.getSurfaceTranslationY() + cords.y
-				* FeSurface.SURFACE.getSurfaceScaleY())
-				/ FeSurface.SURFACE.getSurfaceHeight() : 1f;
+		final float leftVolume = (FeSurface.SURFACE.getSurfaceWidth() - surfaceTranslateX - cords.x * surfaceScaleX) / FeSurface.SURFACE.getSurfaceWidth();
+		final float rightVolume = (surfaceTranslateX + cords.x * surfaceScaleX) / FeSurface.SURFACE.getSurfaceWidth();
+		final float yMod = mSoundMode == SoundMode.SURROUND ? (FeSurface.SURFACE.getSurfaceTranslationY() + cords.y * FeSurface.SURFACE.getSurfaceScaleY()) / FeSurface.SURFACE.getSurfaceHeight() : 1f;
 
 		mSoundElement.setChannelVolumes(leftVolume * yMod, rightVolume * yMod);
 	}

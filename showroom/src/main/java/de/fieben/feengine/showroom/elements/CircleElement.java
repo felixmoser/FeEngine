@@ -3,6 +3,7 @@ package de.fieben.feengine.showroom.elements;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
 import de.fieben.feengine.FeSurfaceElement;
 
 public class CircleElement extends FeSurfaceElement {
@@ -10,7 +11,7 @@ public class CircleElement extends FeSurfaceElement {
 	protected final int mRadius;
 	private int mColor;
 	private boolean mUpdateTestRotation, mNormalRotation = false;
-	private float mRotateAroundParentSpeed, mRotateArountCenterSpeed;
+	private float mRotateAroundParentSpeed, mRotateAroundCenterSpeed;
 
 	public CircleElement(final int radius) {
 		super(-1);
@@ -31,7 +32,7 @@ public class CircleElement extends FeSurfaceElement {
 	public void enableUpdateTestRotation() {
 		mColor = Color.RED;
 		mRotateAroundParentSpeed = 360f / 4000;
-		mRotateArountCenterSpeed = -360f / 2000;
+		mRotateAroundCenterSpeed = -360f / 2000;
 		mUpdateTestRotation = true;
 		setUpdateInterval(1000);
 	}
@@ -45,7 +46,7 @@ public class CircleElement extends FeSurfaceElement {
 	public void onUpdate(final long elapsedMillis) {
 		if (mUpdateTestRotation) {
 			addRotate(mRotateAroundParentSpeed * elapsedMillis);
-			addRotateAroundCenter(mRotateArountCenterSpeed * elapsedMillis);
+			addRotateAroundCenter(mRotateAroundCenterSpeed * elapsedMillis);
 		} else if (mNormalRotation) {
 			addRotate(-mRotateAroundParentSpeed * elapsedMillis);
 		}

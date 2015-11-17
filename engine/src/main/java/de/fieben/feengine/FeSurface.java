@@ -11,14 +11,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /**
- * This view provides methods to draw {@link FeSurfaceElement}s on a dedicated
- * drawing surface. It holds a scene graph with all elements to draw.
+ * This view provides methods to draw {@link FeSurfaceElement}s on a dedicated drawing surface.
+ * It holds a scene graph with all elements to draw.
  * 
  * @author Felix Moser - felix.ernesto.moser@googlemail.com
- * 
  */
-public abstract class FeSurface extends SurfaceView implements
-		SurfaceHolder.Callback {
+public abstract class FeSurface extends SurfaceView implements SurfaceHolder.Callback {
 	// WIP impl preparation thread and "loading" support
 	// WIP to enable hw-acceleration use textureview instead
 
@@ -43,12 +41,9 @@ public abstract class FeSurface extends SurfaceView implements
 		super(context, attrs);
 		getHolder().addCallback(this);
 
-		final TypedArray styleAttrs = context.getTheme()
-				.obtainStyledAttributes(attrs, R.styleable.FeSurface, 0, 0);
-		final int voidColor = styleAttrs.getInteger(
-				R.styleable.FeSurface_voidColor, Color.BLACK);
-		final int touchMode = styleAttrs.getInt(
-				R.styleable.FeSurface_touchMode, 0);
+		final TypedArray styleAttrs = context.getTheme().obtainStyledAttributes(attrs, R.styleable.FeSurface, 0, 0);
+		final int voidColor = styleAttrs.getInteger(R.styleable.FeSurface_voidColor, Color.BLACK);
+		final int touchMode = styleAttrs.getInt(R.styleable.FeSurface_touchMode, 0);
 		styleAttrs.recycle();
 
 		SURFACE = this;
@@ -83,9 +78,8 @@ public abstract class FeSurface extends SurfaceView implements
 
 	/**
 	 * Draws the scene graph on the canvas. Implement to do custom drawing.
-	 * 
-	 * @param canvas
-	 *            The canvas the scene graph gets drawn onto.
+	 *
+	 * @param canvas The canvas the scene graph gets drawn onto.
 	 */
 	@Override
 	protected void onDraw(final Canvas canvas) {
@@ -94,9 +88,8 @@ public abstract class FeSurface extends SurfaceView implements
 
 	/**
 	 * Updates the scene graph.
-	 * 
-	 * @param elapsedMillis
-	 *            The elapsed milliseconds since last call of this method.
+	 *
+	 * @param elapsedMillis The elapsed milliseconds since last call of this method.
 	 */
 	protected void onUpdate(final long elapsedMillis) {
 		mRootElement.update(elapsedMillis);
@@ -109,82 +102,65 @@ public abstract class FeSurface extends SurfaceView implements
 
 	// WIP schöner machen? evtl mit flag @ addElement?
 	/**
-	 * Adds an {@link FeSurfaceTouchable} to the list of elements that get
-	 * notified about touch inputs.
-	 * 
-	 * @param touchableElement
-	 *            The {@link FeSurfaceTouchable} to add.
+	 * Adds an {@link FeSurfaceTouchable} to the list of elements that get notified about touch inputs.
+	 *
+	 * @param touchableElement The {@link FeSurfaceTouchable} to add.
 	 */
 	public void registerTouchable(final FeSurfaceTouchable touchableElement) {
 		mRootElement.registerTouchable(touchableElement);
 	}
 
 	/**
-	 * Adds an {@link FeSurfaceElement} as a child to the scene graphs root
-	 * element on the element layer. Equivalent to
-	 * {@link #addElement(layerLevel, element)} with layer 0.
-	 * 
-	 * @param element
-	 *            The {@link FeSurfaceElement} to add.
+	 * Adds an {@link FeSurfaceElement} as a child to the scene graphs root element on the element layer. Equivalent to {@link #addElement(int, FeSurfaceElement)} with layer 0.
+	 *
+	 * @param element The {@link FeSurfaceElement} to add.
 	 */
 	public void addElement(final FeSurfaceElement element) {
 		mRootElement.addChild(LAYER_ELEMENTS, element);
 	}
 
 	/**
-	 * Adds an {@link FeSurfaceElement} as a child to the scene graphs root
-	 * element on the element layer plus layerLevel.
-	 * 
-	 * @param layerLevel
-	 *            The layer level offset to the element layer. Needs to be >=0.
-	 * @param element
-	 *            The {@link FeSurfaceElement} to add.
+	 * Adds an {@link FeSurfaceElement} as a child to the scene graphs root element on the element layer plus layerLevel.
+	 *
+	 * @param layerLevel The layer level offset to the element layer. Needs to be >=0.
+	 * @param element The {@link FeSurfaceElement} to add.
 	 */
 	public void addElement(final int layerLevel, final FeSurfaceElement element) {
 		mRootElement.addChild(layerLevel + LAYER_ELEMENTS, element);
 	}
 
 	/**
-	 * Adds an {@link FeSurfaceElement} as a child to the scene graphs root
-	 * element on the background layer. This element gets drawn even behind the
-	 * map.
-	 * 
-	 * @param element
-	 *            The {@link FeSurfaceElement} to add.
+	 * Adds an {@link FeSurfaceElement} as a child to the scene graphs root element on the background layer.
+	 * This element gets drawn even behind the map.
+	 *
+	 * @param element The {@link FeSurfaceElement} to add.
 	 */
 	public void addBackgroundElement(final FeSurfaceElement element) {
 		mRootElement.addChild(LAYER_BACKGROUND, element);
 	}
 
 	/**
-	 * Creates and adds a {@link FeSurfaceMap} to the scene graphs root element
-	 * on the map layer.
-	 * 
-	 * @param tiles
-	 *            The {@link FeSurfaceTile}s that gets drawn on the map. First
-	 *            dimension indicates the row, second the column.
+	 * Creates and adds a {@link FeSurfaceMap} to the scene graphs root element on the map layer.
+	 *
+	 * @param tiles The {@link FeSurfaceTile}s that gets drawn on the map. First dimension indicates the row, second the column.
 	 */
 	public void addMap(final FeSurfaceTile[][] tiles) {
 		mRootElement.addChild(LAYER_MAP, new FeSurfaceMap(tiles));
 	}
 
-	public void setSurfaceTranslation(final float translateX,
-			final float translateY) {
+	public void setSurfaceTranslation(final float translateX, final float translateY) {
 		mRootElement.setTranslate(translateX, translateY);
 	}
 
-	public void addSurfaceTranslation(final float translateX,
-			final float translateY) {
+	public void addSurfaceTranslation(final float translateX, final float translateY) {
 		mRootElement.addTranslate(translateX, translateY);
 	}
 
-	public void setSurfaceScale(final float scaleX, final float scaleY,
-			final float pointX, final float pointY) {
+	public void setSurfaceScale(final float scaleX, final float scaleY, final float pointX, final float pointY) {
 		mRootElement.setScale(scaleX, scaleY, pointX, pointY);
 	}
 
-	public void addSurfaceScale(final float scaleX, final float scaleY,
-			final float pointX, final float pointY) {
+	public void addSurfaceScale(final float scaleX, final float scaleY, final float pointX, final float pointY) {
 		mRootElement.addScale(scaleX, scaleY, pointX, pointY);
 	}
 

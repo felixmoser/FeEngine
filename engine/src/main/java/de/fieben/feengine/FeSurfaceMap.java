@@ -4,11 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 /**
- * Holds and draws a tiled map on the {@link FeSurface} set with
- * {@link FeSurface#addMap(FeSurfaceTile[][])}.
+ * Holds and draws a tiled map on the {@link FeSurface} set with {@link FeSurface#addMap(FeSurfaceTile[][])}.
  * 
  * @author Felix Moser - felix.ernesto.moser@googlemail.com
- * 
  */
 class FeSurfaceMap extends FeSurfaceElement {
 
@@ -37,26 +35,16 @@ class FeSurfaceMap extends FeSurfaceElement {
 	// WIP fix little (1px) offset between tiles @ scaling != 1f
 	@Override
 	public void onDraw(final Canvas canvas, final Paint paint) {
-		final int scaledTileHeight = (int) (mTileHeight * FeSurface.SURFACE
-				.getSurfaceScaleY());
-		final int scaledTileWidth = (int) (mTileWidth * FeSurface.SURFACE
-				.getSurfaceScaleX());
-		final float surfaceTranslationX = FeSurface.SURFACE
-				.getSurfaceTranslationX();
-		final float surfaceTranslationY = FeSurface.SURFACE
-				.getSurfaceTranslationY();
+		final int scaledTileHeight = (int) (mTileHeight * FeSurface.SURFACE.getSurfaceScaleY());
+		final int scaledTileWidth = (int) (mTileWidth * FeSurface.SURFACE.getSurfaceScaleX());
+		final float surfaceTranslationX = FeSurface.SURFACE.getSurfaceTranslationX();
+		final float surfaceTranslationY = FeSurface.SURFACE.getSurfaceTranslationY();
 
 		// WIP -1 & +1 is a workaround. rounding does not work with low skaling
-		final int firstVisibleRow = limitTo(
-				(-surfaceTranslationY / scaledTileHeight) - 1, mRowCount);
-		final int lastVisibleRow = limitTo(
-				((FeSurface.SURFACE.getSurfaceHeight() - surfaceTranslationY + scaledTileHeight) / scaledTileHeight) + 1,
-				mRowCount);
-		final int firstVisibleColumn = limitTo(
-				(-surfaceTranslationX / scaledTileWidth) - 1, mColumnCount);
-		final int lastVisibleColumn = limitTo(
-				((FeSurface.SURFACE.getSurfaceWidth() - surfaceTranslationX + scaledTileWidth) / scaledTileWidth) + 1,
-				mColumnCount);
+		final int firstVisibleRow = limitTo((-surfaceTranslationY / scaledTileHeight) - 1, mRowCount);
+		final int lastVisibleRow = limitTo(((FeSurface.SURFACE.getSurfaceHeight() - surfaceTranslationY + scaledTileHeight) / scaledTileHeight) + 1, mRowCount);
+		final int firstVisibleColumn = limitTo((-surfaceTranslationX / scaledTileWidth) - 1, mColumnCount);
+		final int lastVisibleColumn = limitTo(((FeSurface.SURFACE.getSurfaceWidth() - surfaceTranslationX + scaledTileWidth) / scaledTileWidth) + 1, mColumnCount);
 
 		int drawOffsetY = firstVisibleRow * mTileHeight;
 		for (int i = firstVisibleRow; i < lastVisibleRow; i++) {

@@ -10,7 +10,6 @@ import java.util.ArrayList;
  * This is the root element of the {@link FeSurface}s scene graph.
  * 
  * @author Felix Moser - felix.ernesto.moser@googlemail.com
- * 
  */
 class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
@@ -27,7 +26,7 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 	private float mLastTouchY;
 	private float mLastTouchDistance = 0f;
 
-	private ArrayList<FeSurfaceTouchable> mTouchableElements = new ArrayList<FeSurfaceTouchable>();
+	private ArrayList<FeSurfaceTouchable> mTouchableElements = new ArrayList<>();
 
 	public FeRootElement(final int voidColor, final int touchMode) {
 		super(-1);
@@ -78,28 +77,23 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 		case MotionEvent.ACTION_POINTER_DOWN:
 			if (mTouchMode >= TOUCH_ZOOM) {
 				mCurrentTouch = TOUCH_ZOOM;
-				mLastTouchDistance = (float) Math.hypot(
-						event.getX(0) - event.getX(1),
-						event.getY(0) - event.getY(1));
+				mLastTouchDistance = (float) Math.hypot(event.getX(0) - event.getX(1), event.getY(0) - event.getY(1));
 				return true;
 			}
 			break;
 		case MotionEvent.ACTION_MOVE:
 			switch (mCurrentTouch) {
 			case TOUCH_DRAG:
-				FeSurface.SURFACE.addSurfaceTranslation(event.getX()
-						- mLastTouchX, event.getY() - mLastTouchY);
+				FeSurface.SURFACE.addSurfaceTranslation(event.getX() - mLastTouchX, event.getY() - mLastTouchY);
 				mLastTouchX = event.getX(0);
 				mLastTouchY = event.getY(0);
 				return true;
 			case TOUCH_ZOOM:
-				final float newDistance = (float) Math.hypot(event.getX(0)
-						- event.getX(1), event.getY(0) - event.getY(1));
+				final float newDistance = (float) Math.hypot(event.getX(0) - event.getX(1), event.getY(0) - event.getY(1));
 				final float centerPointX = (event.getX(0) + event.getX(1)) / 2;
 				final float centerPointY = (event.getY(0) + event.getY(1)) / 2;
 				final float scale = newDistance / mLastTouchDistance;
-				FeSurface.SURFACE.addSurfaceScale(scale, scale, centerPointX,
-						centerPointY);
+				FeSurface.SURFACE.addSurfaceScale(scale, scale, centerPointX, centerPointY);
 				mLastTouchDistance = newDistance;
 				return true;
 			}

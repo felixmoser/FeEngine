@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+
 import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.FeSurfaceElement;
 import de.fieben.feengine.FeSurfaceTouchable;
@@ -24,8 +25,7 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 	public SoundExampleScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		mSoundElement = new SoundTestElement(context, 150,
-				R.raw.sound_view_clicked);
+		mSoundElement = new SoundTestElement(context, 150, R.raw.sound_view_clicked);
 		mSoundElement.setTranslate(300, 300);
 		addElement(mSoundElement);
 		registerTouchable(mSoundElement);
@@ -39,37 +39,28 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 	}
 
 	@Override
-	public void surfaceChanged(final SurfaceHolder holder, final int format,
-			final int width, final int height) {
+	public void surfaceChanged(final SurfaceHolder holder, final int format, final int width, final int height) {
 		final GridElement grid = new GridElement(100);
-		grid.calculateGrid((int) (width / getSurfaceScaleX()),
-				(int) (height / getSurfaceScaleY()));
+		grid.calculateGrid((int) (width / getSurfaceScaleX()), (int) (height / getSurfaceScaleY()));
 		addBackgroundElement(grid);
 
-		final ButtonElement monoButton = new ButtonElement(
-				FeSurfaceElement.SoundMode.MONO, 300, 200);
-		monoButton.setTranslate((width - 200) / getSurfaceScaleX(),
-				50 / getSurfaceScaleX());
+		final ButtonElement monoButton = new ButtonElement(FeSurfaceElement.SoundMode.MONO, 300, 200);
+		monoButton.setTranslate((width - 200) / getSurfaceScaleX(), 50 / getSurfaceScaleX());
 		addElement(monoButton);
 		registerTouchable(monoButton);
 
-		final ButtonElement stereoButton = new ButtonElement(
-				FeSurfaceElement.SoundMode.STEREO, 300, 200);
-		stereoButton.setTranslate((width - 200) / getSurfaceScaleX(),
-				200 / getSurfaceScaleX());
+		final ButtonElement stereoButton = new ButtonElement(FeSurfaceElement.SoundMode.STEREO, 300, 200);
+		stereoButton.setTranslate((width - 200) / getSurfaceScaleX(), 200 / getSurfaceScaleX());
 		addElement(stereoButton);
 		registerTouchable(stereoButton);
 
-		final ButtonElement surroundButton = new ButtonElement(
-				FeSurfaceElement.SoundMode.SURROUND, 300, 200);
-		surroundButton.setTranslate((width - 200) / getSurfaceScaleX(),
-				350 / getSurfaceScaleX());
+		final ButtonElement surroundButton = new ButtonElement(FeSurfaceElement.SoundMode.SURROUND, 300, 200);
+		surroundButton.setTranslate((width - 200) / getSurfaceScaleX(), 350 / getSurfaceScaleX());
 		addElement(surroundButton);
 		registerTouchable(surroundButton);
 
 		final ButtonElement stopButton = new ButtonElement(null, 300, 200);
-		stopButton.setTranslate((width - 200) / getSurfaceScaleX(),
-				500 / getSurfaceScaleX());
+		stopButton.setTranslate((width - 200) / getSurfaceScaleX(), 500 / getSurfaceScaleX());
 		addElement(stopButton);
 		registerTouchable(stopButton);
 
@@ -82,14 +73,12 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 		super.surfaceDestroyed(holder);
 	}
 
-	private class SoundTestElement extends CircleElement implements
-			FeSurfaceTouchable {
+	private class SoundTestElement extends CircleElement implements FeSurfaceTouchable {
 		private boolean mDragMode = false;
 		private float mLastTouchX;
 		private float mLastTouchY;
 
-		public SoundTestElement(final Context context, final int radius,
-				final int resourceId) {
+		public SoundTestElement(final Context context, final int radius, final int resourceId) {
 			super(radius);
 			setSound(context, resourceId, SoundExampleScene.this);
 		}
@@ -99,10 +88,8 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 			Point cords = getAbsoluteSurfacePosition();
 			final float surfaceScaleFactor = (getSurfaceScaleX() + getSurfaceScaleY()) / 2;
 
-			if (!mDragMode
-					&& Math.hypot(event.getX() - cords.x * surfaceScaleFactor,
-							event.getY() - cords.y * surfaceScaleFactor) > mRadius
-							* surfaceScaleFactor) {
+			if (!mDragMode &&
+					Math.hypot(event.getX() - cords.x * surfaceScaleFactor, event.getY() - cords.y * surfaceScaleFactor) > mRadius * surfaceScaleFactor) {
 				return false;
 			}
 
@@ -115,8 +102,7 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 				setColor(Color.BLUE);
 				break;
 			case MotionEvent.ACTION_MOVE:
-				addTranslate((event.getX() - mLastTouchX) / surfaceScaleFactor,
-						(event.getY() - mLastTouchY) / surfaceScaleFactor);
+				addTranslate((event.getX() - mLastTouchX) / surfaceScaleFactor, (event.getY() - mLastTouchY) / surfaceScaleFactor);
 				mLastTouchX = event.getX();
 				mLastTouchY = event.getY();
 				break;
@@ -128,28 +114,22 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 
 			cords = getAbsoluteSurfacePosition();
 			final float minX = -getSurfaceTranslationX() / surfaceScaleFactor;
-			final float maxX = (getSurfaceWidth() - getSurfaceTranslationX())
-					/ surfaceScaleFactor;
+			final float maxX = (getSurfaceWidth() - getSurfaceTranslationX()) / surfaceScaleFactor;
 			final float minY = -getSurfaceTranslationY() / surfaceScaleFactor;
-			final float maxY = (getSurfaceHeight() - getSurfaceTranslationY())
-					/ surfaceScaleFactor;
-			if (cords.x < minX || cords.x > maxX || cords.y < minY
-					|| cords.y > maxY) {
-				setTranslate(Math.max(minX, Math.min(getTranslateX(), maxX)),
-						Math.max(minY, Math.min(getTranslateY(), maxY)));
+			final float maxY = (getSurfaceHeight() - getSurfaceTranslationY()) / surfaceScaleFactor;
+			if (cords.x < minX || cords.x > maxX || cords.y < minY || cords.y > maxY) {
+				setTranslate(Math.max(minX, Math.min(getTranslateX(), maxX)), Math.max(minY, Math.min(getTranslateY(), maxY)));
 			}
 			return true;
 		}
 	}
 
-	private class ButtonElement extends FeSurfaceElement implements
-			FeSurfaceTouchable {
+	private class ButtonElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
 		private FeSurfaceElement.SoundMode mMode;
 		private final Rect mDimensions;
 
-		public ButtonElement(final FeSurfaceElement.SoundMode mode,
-				final int width, final int height) {
+		public ButtonElement(final FeSurfaceElement.SoundMode mode, final int width, final int height) {
 			super(-1);
 			mMode = mode;
 			mDimensions = new Rect(0, 0, width, height);
@@ -160,12 +140,10 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 			final Point cords = getAbsoluteSurfacePosition();
 			final float surfaceScaleFactor = (getSurfaceScaleX() + getSurfaceScaleY()) / 2;
 
-			if (event.getX() < cords.x * surfaceScaleFactor
-					|| event.getX() > (cords.x + mDimensions.right)
-							* surfaceScaleFactor
-					|| event.getY() < cords.y * surfaceScaleFactor
-					|| event.getY() > (cords.y + mDimensions.bottom)
-							* surfaceScaleFactor) {
+			if (event.getX() < cords.x * surfaceScaleFactor ||
+					event.getX() > (cords.x + mDimensions.right) * surfaceScaleFactor ||
+					event.getY() < cords.y * surfaceScaleFactor ||
+					event.getY() > (cords.y + mDimensions.bottom) * surfaceScaleFactor) {
 				return false;
 			}
 

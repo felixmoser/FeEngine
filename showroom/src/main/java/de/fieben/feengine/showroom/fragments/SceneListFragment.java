@@ -1,10 +1,11 @@
 package de.fieben.feengine.showroom.fragments;
 
 import android.app.Activity;
+import android.app.ListFragment;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
+
 import de.fieben.feengine.showroom.utils.SceneProvider;
 
 public class SceneListFragment extends ListFragment {
@@ -23,10 +24,8 @@ public class SceneListFragment extends ListFragment {
 	@Override
 	public void onViewCreated(final View view, final Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		if (savedInstanceState != null
-				&& savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-			setActivatedPosition(savedInstanceState
-					.getInt(STATE_ACTIVATED_POSITION));
+		if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+			setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
 		}
 	}
 
@@ -34,8 +33,7 @@ public class SceneListFragment extends ListFragment {
 	public void onAttach(final Activity activity) {
 		super.onAttach(activity);
 		if (!(activity instanceof Callbacks)) {
-			throw new IllegalStateException(
-					"Activity must implement fragment's callbacks.");
+			throw new IllegalStateException("Activity must implement fragment's callbacks.");
 		}
 
 		mCallbacks = (Callbacks) activity;
@@ -48,8 +46,7 @@ public class SceneListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onListItemClick(final ListView listView, final View view,
-			final int position, final long id) {
+	public void onListItemClick(final ListView listView, final View view, final int position, final long id) {
 		super.onListItemClick(listView, view, position, id);
 		mCallbacks.onItemSelected(SceneProvider.getIdByPosition(position));
 	}
@@ -63,9 +60,7 @@ public class SceneListFragment extends ListFragment {
 	}
 
 	public void setActivateOnItemClick(final boolean activateOnItemClick) {
-		getListView().setChoiceMode(
-				activateOnItemClick ? ListView.CHOICE_MODE_SINGLE
-						: ListView.CHOICE_MODE_NONE);
+		getListView().setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
 
 	public void setActivatedPosition(final int position) {
@@ -78,6 +73,6 @@ public class SceneListFragment extends ListFragment {
 	}
 
 	public interface Callbacks {
-		public void onItemSelected(int id);
+		void onItemSelected(int id);
 	}
 }

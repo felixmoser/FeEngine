@@ -1,16 +1,16 @@
 package de.fieben.feengine.showroom.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+
 import de.fieben.feengine.showroom.R;
 import de.fieben.feengine.showroom.fragments.SceneDetailFragment;
 import de.fieben.feengine.showroom.fragments.SceneListFragment;
 
-public class SceneListActivity extends FragmentActivity implements
-		SceneListFragment.Callbacks {
+public class SceneListActivity extends Activity implements SceneListFragment.Callbacks {
 
 	private boolean mTwoPane;
 
@@ -21,8 +21,7 @@ public class SceneListActivity extends FragmentActivity implements
 
 		if (findViewById(R.id.scene_detail_container) != null) {
 			mTwoPane = true;
-			((SceneListFragment) getSupportFragmentManager().findFragmentById(
-					R.id.scene_list)).setActivateOnItemClick(true);
+			((SceneListFragment) getFragmentManager().findFragmentById(R.id.scene_list)).setActivateOnItemClick(true);
 
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		} else {
@@ -39,11 +38,9 @@ public class SceneListActivity extends FragmentActivity implements
 			arguments.putInt(SceneDetailFragment.ARG_ITEM_ID, id);
 			final SceneDetailFragment fragment = new SceneDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.scene_detail_container, fragment).commit();
+			getFragmentManager().beginTransaction().replace(R.id.scene_detail_container, fragment).commit();
 		} else {
-			final Intent detailIntent = new Intent(this,
-					SceneDetailActivity.class);
+			final Intent detailIntent = new Intent(this, SceneDetailActivity.class);
 			detailIntent.putExtra(SceneDetailFragment.ARG_ITEM_ID, id);
 			startActivity(detailIntent);
 		}
