@@ -28,8 +28,8 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 
 	private ArrayList<FeSurfaceTouchable> mTouchableElements = new ArrayList<>();
 
-	public FeRootElement(final int voidColor, final int touchMode) {
-		super(-1);
+	public FeRootElement(final FeSurface feSurface, final int voidColor, final int touchMode) {
+		super(feSurface, -1);
 		mVoidColor = voidColor;
 		mTouchMode = touchMode;
 	}
@@ -84,7 +84,7 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 		case MotionEvent.ACTION_MOVE:
 			switch (mCurrentTouch) {
 			case TOUCH_DRAG:
-				FeSurface.SURFACE.addSurfaceTranslation(event.getX() - mLastTouchX, event.getY() - mLastTouchY);
+				getSurface().addSurfaceTranslation(event.getX() - mLastTouchX, event.getY() - mLastTouchY);
 				mLastTouchX = event.getX(0);
 				mLastTouchY = event.getY(0);
 				return true;
@@ -93,7 +93,7 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 				final float centerPointX = (event.getX(0) + event.getX(1)) / 2;
 				final float centerPointY = (event.getY(0) + event.getY(1)) / 2;
 				final float scale = newDistance / mLastTouchDistance;
-				FeSurface.SURFACE.addSurfaceScale(scale, scale, centerPointX, centerPointY);
+				getSurface().addSurfaceScale(scale, scale, centerPointX, centerPointY);
 				mLastTouchDistance = newDistance;
 				return true;
 			}

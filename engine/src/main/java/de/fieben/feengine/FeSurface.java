@@ -29,7 +29,6 @@ public abstract class FeSurface extends SurfaceView implements SurfaceHolder.Cal
 	private final static int LAYER_MAP = 1;
 	private final static int LAYER_ELEMENTS = 2;
 
-	static FeSurface SURFACE;
 	private FeRootElement mRootElement;
 	private FeSurfaceThread mSurfaceThread;
 
@@ -46,8 +45,7 @@ public abstract class FeSurface extends SurfaceView implements SurfaceHolder.Cal
 		final int touchMode = styleAttrs.getInt(R.styleable.FeSurface_touchMode, 0);
 		styleAttrs.recycle();
 
-		SURFACE = this;
-		mRootElement = new FeRootElement(voidColor, touchMode);
+		mRootElement = new FeRootElement(this, voidColor, touchMode);
 
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	}
@@ -59,7 +57,7 @@ public abstract class FeSurface extends SurfaceView implements SurfaceHolder.Cal
 
 	private void startSurfaceThread() {
 		if (mSurfaceThread == null || !mSurfaceThread.isAlive()) {
-			mSurfaceThread = new FeSurfaceThread();
+			mSurfaceThread = new FeSurfaceThread(this);
 		}
 		mSurfaceThread.start();
 	}
@@ -145,7 +143,7 @@ public abstract class FeSurface extends SurfaceView implements SurfaceHolder.Cal
 	 * @param tiles The {@link FeSurfaceTile}s that gets drawn on the map. First dimension indicates the row, second the column.
 	 */
 	public void addMap(final FeSurfaceTile[][] tiles) {
-		mRootElement.addChild(LAYER_MAP, new FeSurfaceMap(tiles));
+		mRootElement.addChild(LAYER_MAP, new FeSurfaceMap(this, tiles));
 	}
 
 	public void setSurfaceTranslation(final float translateX, final float translateY) {

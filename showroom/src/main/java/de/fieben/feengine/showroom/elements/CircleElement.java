@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.FeSurfaceElement;
 
 public class CircleElement extends FeSurfaceElement {
@@ -13,8 +14,8 @@ public class CircleElement extends FeSurfaceElement {
 	private boolean mUpdateTestRotation, mNormalRotation = false;
 	private float mRotateAroundParentSpeed, mRotateAroundCenterSpeed;
 
-	public CircleElement(final int radius) {
-		super(-1);
+	public CircleElement(final FeSurface feSurface, final int radius) {
+		super(feSurface, -1);
 		mRadius = radius;
 		mColor = Color.WHITE;
 	}

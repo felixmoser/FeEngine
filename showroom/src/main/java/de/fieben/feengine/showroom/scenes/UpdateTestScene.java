@@ -18,10 +18,10 @@ public class UpdateTestScene extends FeSurface {
 	public UpdateTestScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		mInnerCircle = new CircleElement(50);
+		mInnerCircle = new CircleElement(this, 50);
 		mInnerCircle.setColor(Color.BLUE);
 
-		final CircleElement orbitEllipse = new CircleElement(15);
+		final CircleElement orbitEllipse = new CircleElement(this, 15);
 		orbitEllipse.setTranslate(0, -125);
 		orbitEllipse.setScaleFromCenter(0.5f, 3f);
 		orbitEllipse.enableUpdateTestRotation();
@@ -49,7 +49,7 @@ public class UpdateTestScene extends FeSurface {
 		private final Point mHorizontalRight;
 
 		public CrossElement(final Point center, final int height, final int width) {
-			super(-1);
+			super(UpdateTestScene.this, -1);
 			mVerticalTop = new Point(center.x, 0);
 			mVerticalBottom = new Point(center.x, height);
 			mHorizontalLeft = new Point(0, center.y);

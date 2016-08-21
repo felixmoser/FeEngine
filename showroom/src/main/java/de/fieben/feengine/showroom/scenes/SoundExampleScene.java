@@ -79,7 +79,7 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 		private float mLastTouchY;
 
 		public SoundTestElement(final Context context, final int radius, final int resourceId) {
-			super(radius);
+			super(SoundExampleScene.this, radius);
 			setSound(context, resourceId, SoundExampleScene.this);
 		}
 
@@ -130,7 +130,7 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 		private final Rect mDimensions;
 
 		public ButtonElement(final FeSurfaceElement.SoundMode mode, final int width, final int height) {
-			super(-1);
+			super(SoundExampleScene.this, -1);
 			mMode = mode;
 			mDimensions = new Rect(0, 0, width, height);
 		}
@@ -186,7 +186,7 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 		private float[] mGrid;
 
 		public GridElement(final int spacing) {
-			super(-1);
+			super(SoundExampleScene.this, -1);
 			mSpacing = spacing;
 		}
 

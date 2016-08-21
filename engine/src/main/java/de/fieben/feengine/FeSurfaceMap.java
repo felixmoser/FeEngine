@@ -18,8 +18,8 @@ class FeSurfaceMap extends FeSurfaceElement {
 	private final int mTileWidth;
 	private final int mTileHeight;
 
-	public FeSurfaceMap(final FeSurfaceTile[][] tiles) {
-		super(-1);
+	public FeSurfaceMap(final FeSurface feSurface, final FeSurfaceTile[][] tiles) {
+		super(feSurface, -1);
 
 		mBackgroundTiles = tiles;
 
@@ -35,16 +35,16 @@ class FeSurfaceMap extends FeSurfaceElement {
 	// WIP fix little (1px) offset between tiles @ scaling != 1f
 	@Override
 	public void onDraw(final Canvas canvas, final Paint paint) {
-		final int scaledTileHeight = (int) (mTileHeight * FeSurface.SURFACE.getSurfaceScaleY());
-		final int scaledTileWidth = (int) (mTileWidth * FeSurface.SURFACE.getSurfaceScaleX());
-		final float surfaceTranslationX = FeSurface.SURFACE.getSurfaceTranslationX();
-		final float surfaceTranslationY = FeSurface.SURFACE.getSurfaceTranslationY();
+		final int scaledTileHeight = (int) (mTileHeight * getSurface().getSurfaceScaleY());
+		final int scaledTileWidth = (int) (mTileWidth * getSurface().getSurfaceScaleX());
+		final float surfaceTranslationX = getSurface().getSurfaceTranslationX();
+		final float surfaceTranslationY = getSurface().getSurfaceTranslationY();
 
 		// WIP -1 & +1 is a workaround. rounding does not work with low skaling
 		final int firstVisibleRow = limitTo((-surfaceTranslationY / scaledTileHeight) - 1, mRowCount);
-		final int lastVisibleRow = limitTo(((FeSurface.SURFACE.getSurfaceHeight() - surfaceTranslationY + scaledTileHeight) / scaledTileHeight) + 1, mRowCount);
+		final int lastVisibleRow = limitTo(((getSurface().getSurfaceHeight() - surfaceTranslationY + scaledTileHeight) / scaledTileHeight) + 1, mRowCount);
 		final int firstVisibleColumn = limitTo((-surfaceTranslationX / scaledTileWidth) - 1, mColumnCount);
-		final int lastVisibleColumn = limitTo(((FeSurface.SURFACE.getSurfaceWidth() - surfaceTranslationX + scaledTileWidth) / scaledTileWidth) + 1, mColumnCount);
+		final int lastVisibleColumn = limitTo(((getSurface().getSurfaceWidth() - surfaceTranslationX + scaledTileWidth) / scaledTileWidth) + 1, mColumnCount);
 
 		int drawOffsetY = firstVisibleRow * mTileHeight;
 		for (int i = firstVisibleRow; i < lastVisibleRow; i++) {

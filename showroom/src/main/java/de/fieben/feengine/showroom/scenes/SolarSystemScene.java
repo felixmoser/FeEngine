@@ -47,10 +47,10 @@ public class SolarSystemScene extends FeSurface {
 
 		// Saturn
 		final CircleElement saturnOuterRing = addSatellite(mAnimationSun, 38, 3.5f, 50, Color.GRAY);
-		final CircleElement saturnInnerGap = new CircleElement(29);
+		final CircleElement saturnInnerGap = new CircleElement(this, 29);
 		saturnInnerGap.setColor(Color.BLACK);
 		saturnOuterRing.addChild(saturnInnerGap);
-		final CircleElement saturnPlanet = new CircleElement(21);
+		final CircleElement saturnPlanet = new CircleElement(this, 21);
 		saturnPlanet.setColor(Color.YELLOW);
 		saturnOuterRing.addChild(saturnPlanet);
 
@@ -62,7 +62,7 @@ public class SolarSystemScene extends FeSurface {
 	}
 
 	private CircleElement addSatellite(final FeSurfaceElement parent, final int satelliteRadius, final float orbitRadiusInAU, final int orbitDuration, final int color) {
-		final CircleElement child = new CircleElement(satelliteRadius);
+		final CircleElement child = new CircleElement(this, satelliteRadius);
 		child.setTranslate(orbitRadiusInAU * 500, 0);
 		child.setContinuousRotationAroundParent(orbitDuration);
 		child.setColor(color);
@@ -72,7 +72,7 @@ public class SolarSystemScene extends FeSurface {
 
 	private class AnimationTestElement extends FeSurfaceElement {
 		public AnimationTestElement(final int animationBitmapKey, final int stepCount, final int animationInterval) {
-			super(animationBitmapKey, stepCount, animationInterval);
+			super(SolarSystemScene.this, animationBitmapKey, stepCount, animationInterval);
 		}
 
 		@Override

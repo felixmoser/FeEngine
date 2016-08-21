@@ -20,6 +20,7 @@ import java.util.ArrayList;
  * @author Felix Moser - felix.ernesto.moser@googlemail.com
  */
 public abstract class FeSurfaceElement {
+
 	// WIP what about display density?
 	// WIP impl ancor point/coorinats
 
@@ -30,6 +31,7 @@ public abstract class FeSurfaceElement {
 		MONO, STEREO, SURROUND
 	}
 
+	private FeSurface mSurface;
 	private final int mBitmapKey;
 
 	private final Matrix mMatrix;
@@ -63,7 +65,8 @@ public abstract class FeSurfaceElement {
 	/**
 	 * @param bitmapKey The key retrieved from {@link FeBitmapPool} after adding a bitmap. -1 if no bitmap should be used.
 	 */
-	public FeSurfaceElement(final int bitmapKey) {
+	public FeSurfaceElement(final FeSurface feSurface, final int bitmapKey) {
+		mSurface = feSurface;
 		mMatrix = new Matrix();
 		mMatrixValues = new float[9];
 		mChildLayers = new SparseArray<>();
@@ -75,11 +78,8 @@ public abstract class FeSurfaceElement {
 	 * @param stepCount The count of steps used for the animation.
 	 * @param animationInterval The time in milliseconds each animationstep should be displayed.
 	 */
-	public FeSurfaceElement(final int bitmapKey, final int stepCount, final int animationInterval) {
-		mMatrix = new Matrix();
-		mMatrixValues = new float[9];
-		mChildLayers = new SparseArray<>();
-		mBitmapKey = bitmapKey;
+	public FeSurfaceElement(final FeSurface feSurface, final int bitmapKey, final int stepCount, final int animationInterval) {
+		this(feSurface, bitmapKey);
 
 		mAnimationCounter = mAnimationInterval = animationInterval;
 
@@ -92,6 +92,11 @@ public abstract class FeSurfaceElement {
 
 		mAnimationDstRect = new Rect(-mAnimationWidth / 2, -mAnimationHeight / 2, mAnimationWidth / 2, mAnimationHeight / 2);
 		mAnimationSrcRect = new Rect(0, 0, mAnimationWidth, mAnimationHeight);
+	}
+
+
+	FeSurface getSurface() {
+		return mSurface;
 	}
 
 	private Bitmap getBitmap() {
@@ -420,12 +425,12 @@ public abstract class FeSurfaceElement {
 	private void updateVolumes() {
 		final Point cords = getAbsoluteSurfacePosition();
 
-		final float surfaceScaleX = FeSurface.SURFACE.getSurfaceScaleX();
-		final float surfaceTranslateX = FeSurface.SURFACE.getSurfaceTranslationX();
+		final float surfaceScaleX = mSurface.getSurfaceScaleX();
+		final float surfaceTranslateX = mSurface.getSurfaceTranslationX();
 
-		final float leftVolume = (FeSurface.SURFACE.getSurfaceWidth() - surfaceTranslateX - cords.x * surfaceScaleX) / FeSurface.SURFACE.getSurfaceWidth();
-		final float rightVolume = (surfaceTranslateX + cords.x * surfaceScaleX) / FeSurface.SURFACE.getSurfaceWidth();
-		final float yMod = mSoundMode == SoundMode.SURROUND ? (FeSurface.SURFACE.getSurfaceTranslationY() + cords.y * FeSurface.SURFACE.getSurfaceScaleY()) / FeSurface.SURFACE.getSurfaceHeight() : 1f;
+		final float leftVolume = (mSurface.getSurfaceWidth() - surfaceTranslateX - cords.x * surfaceScaleX) / mSurface.getSurfaceWidth();
+		final float rightVolume = (surfaceTranslateX + cords.x * surfaceScaleX) / mSurface.getSurfaceWidth();
+		final float yMod = mSoundMode == SoundMode.SURROUND ? (mSurface.getSurfaceTranslationY() + cords.y * mSurface.getSurfaceScaleY()) / mSurface.getSurfaceHeight() : 1f;
 
 		mSoundElement.setChannelVolumes(leftVolume * yMod, rightVolume * yMod);
 	}

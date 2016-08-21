@@ -1,5 +1,6 @@
 package de.fieben.feengine;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -12,19 +13,25 @@ import android.view.SurfaceHolder;
 class FeSurfaceThread extends Thread {
 	private static final String LOG_TAG = FeSurfaceThread.class.getSimpleName();
 
+	private final FeSurface mSurface;
 	private boolean mRun = true;
 
+	public FeSurfaceThread(FeSurface feSurface) {
+		mSurface = feSurface;
+	}
+
 	// WIP thread pausieren wenn surface weg?
+	@SuppressLint("WrongCall")
 	@Override
 	public void run() {
-		final SurfaceHolder holder = FeSurface.SURFACE.getHolder();
+		final SurfaceHolder holder = mSurface.getHolder();
 		long lastUpdate = System.currentTimeMillis();
 		while (mRun) {
 			final Canvas canvas = holder.lockCanvas();
 			if (canvas != null) {
 				final long currentSystemTime = System.currentTimeMillis();
-				FeSurface.SURFACE.onUpdate(currentSystemTime - lastUpdate);
-				FeSurface.SURFACE.onDraw(canvas);
+				mSurface.onUpdate(currentSystemTime - lastUpdate);
+				mSurface.onDraw(canvas);
 				lastUpdate = currentSystemTime;
 				holder.unlockCanvasAndPost(canvas);
 			}
