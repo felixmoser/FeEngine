@@ -12,10 +12,10 @@ import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.FeSurfaceElement;
 import de.fieben.feengine.showroom.elements.CircleElement;
 
-public class UpdateTestScene extends FeSurface {
+public class UpdateScene extends FeSurface {
 	private final CircleElement mInnerCircle;
 
-	public UpdateTestScene(final Context context, final AttributeSet attrs) {
+	public UpdateScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
 		mInnerCircle = new CircleElement(this, 50);
@@ -24,7 +24,7 @@ public class UpdateTestScene extends FeSurface {
 		final CircleElement orbitEllipse = new CircleElement(this, 15);
 		orbitEllipse.setTranslate(0, -125);
 		orbitEllipse.setScaleFromCenter(0.5f, 3f);
-		orbitEllipse.enableUpdateTestRotation();
+		orbitEllipse.enableRotationAroundCenter();
 
 		mInnerCircle.addChild(orbitEllipse);
 		addElement(mInnerCircle);
@@ -49,7 +49,7 @@ public class UpdateTestScene extends FeSurface {
 		private final Point mHorizontalRight;
 
 		public CrossElement(final Point center, final int height, final int width) {
-			super(UpdateTestScene.this, -1);
+			super(UpdateScene.this, -1);
 			mVerticalTop = new Point(center.x, 0);
 			mVerticalBottom = new Point(center.x, height);
 			mHorizontalLeft = new Point(0, center.y);

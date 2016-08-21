@@ -16,7 +16,7 @@ public class SceneProvider {
 	// also these scene descriptions can be used to handle loading of resources etc.
 
 	static {
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_update, "UpdateTestScene"));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_update, "UpdateScene"));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_solar, "SolarSystemScene"));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_tiled_forest, "TiledForestScene"));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sound, "SoundExampleScene"));

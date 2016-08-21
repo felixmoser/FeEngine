@@ -11,8 +11,10 @@ public class CircleElement extends FeSurfaceElement {
 
 	protected final int mRadius;
 	private int mColor;
-	private boolean mUpdateTestRotation, mNormalRotation = false;
-	private float mRotateAroundParentSpeed, mRotateAroundCenterSpeed;
+	private boolean mCenterRotation;
+	private boolean mNormalRotation;
+	private float mRotateAroundParentSpeed;
+	private float mRotateAroundCenterSpeed;
 
 	public CircleElement(final FeSurface feSurface, final int radius) {
 		super(feSurface, -1);
@@ -30,11 +32,11 @@ public class CircleElement extends FeSurfaceElement {
 		canvas.drawCircle(0, 0, mRadius, paint);
 	}
 
-	public void enableUpdateTestRotation() {
+	public void enableRotationAroundCenter() {
 		mColor = Color.RED;
 		mRotateAroundParentSpeed = 360f / 4000;
 		mRotateAroundCenterSpeed = -360f / 2000;
-		mUpdateTestRotation = true;
+		mCenterRotation = true;
 		setUpdateInterval(1000);
 	}
 
@@ -45,7 +47,7 @@ public class CircleElement extends FeSurfaceElement {
 
 	@Override
 	public void onUpdate(final long elapsedMillis) {
-		if (mUpdateTestRotation) {
+		if (mCenterRotation) {
 			addRotate(mRotateAroundParentSpeed * elapsedMillis);
 			addRotateAroundCenter(mRotateAroundCenterSpeed * elapsedMillis);
 		} else if (mNormalRotation) {
@@ -55,7 +57,7 @@ public class CircleElement extends FeSurfaceElement {
 
 	@Override
 	public void doUpdate() {
-		if (mUpdateTestRotation) {
+		if (mCenterRotation) {
 			mColor = mColor == Color.RED ? Color.GREEN : Color.RED;
 		}
 	}

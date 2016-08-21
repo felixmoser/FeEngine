@@ -19,13 +19,13 @@ import de.fieben.feengine.showroom.elements.CircleElement;
 
 public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 
-	private SoundTestElement mSoundElement;
+	private SoundElement mSoundElement;
 	private boolean mSoundLoaded = false;
 
 	public SoundExampleScene(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 
-		mSoundElement = new SoundTestElement(context, 150, R.raw.sound_view_clicked);
+		mSoundElement = new SoundElement(context, 150, R.raw.sound_view_clicked);
 		mSoundElement.setTranslate(300, 300);
 		addElement(mSoundElement);
 		registerTouchable(mSoundElement);
@@ -73,12 +73,12 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 		super.surfaceDestroyed(holder);
 	}
 
-	private class SoundTestElement extends CircleElement implements FeSurfaceTouchable {
+	private class SoundElement extends CircleElement implements FeSurfaceTouchable {
 		private boolean mDragMode = false;
 		private float mLastTouchX;
 		private float mLastTouchY;
 
-		public SoundTestElement(final Context context, final int radius, final int resourceId) {
+		public SoundElement(final Context context, final int radius, final int resourceId) {
 			super(SoundExampleScene.this, radius);
 			setSound(context, resourceId, SoundExampleScene.this);
 		}
