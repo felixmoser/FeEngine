@@ -29,8 +29,8 @@ public class SceneDetailFragment extends Fragment {
 		final View rootView = inflater.inflate(R.layout.fragment_scene_detail, container, false);
 		if (mSceneItem != null) {
 			final ViewStub stub = (ViewStub) rootView.findViewById(R.id.stub);
-			stub.setLayoutResource(mSceneItem.mId);
-			mSceneItem.mClass.cast(stub.inflate().findViewById(R.id.scene));
+			stub.setLayoutResource(mSceneItem.getId());
+			stub.inflate();
 		}
 		return rootView;
 	}

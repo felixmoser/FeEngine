@@ -7,12 +7,7 @@ import android.widget.ListAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fieben.feengine.FeSurface;
 import de.fieben.feengine.showroom.R;
-import de.fieben.feengine.showroom.scenes.SolarSystemScene;
-import de.fieben.feengine.showroom.scenes.SoundExampleScene;
-import de.fieben.feengine.showroom.scenes.TiledForestScene;
-import de.fieben.feengine.showroom.scenes.UpdateTestScene;
 
 public class SceneProvider {
 	private static List<SceneItem> SCENE_ITEMS = new ArrayList<>();
@@ -21,10 +16,10 @@ public class SceneProvider {
 	// also these scene descriptions can be used to handle loading of resources etc.
 
 	static {
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_update, UpdateTestScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_solar, SolarSystemScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_tiled_forest, TiledForestScene.class));
-		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sound, SoundExampleScene.class));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_update, "UpdateTestScene"));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_solar, "SolarSystemScene"));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_tiled_forest, "TiledForestScene"));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sound, "SoundExampleScene"));
 	}
 
 	public static SceneItem findSceneById(final int id) {
@@ -45,17 +40,25 @@ public class SceneProvider {
 	}
 
 	public static class SceneItem {
-		public int mId;
-		public Class<? extends FeSurface> mClass;
+		private int mId;
+		private String mName;
 
-		public SceneItem(final int id, final Class<? extends FeSurface> sceneClass) {
+		public SceneItem(final int id, final String name) {
 			mId = id;
-			mClass = sceneClass;
+			mName = name;
+		}
+
+		public int getId() {
+			return mId;
+		}
+
+		public String getName() {
+			return mName;
 		}
 
 		@Override
 		public String toString() {
-			return mClass.getSimpleName();
+			return getName();
 		}
 	}
 }
