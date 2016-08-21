@@ -171,14 +171,6 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 				canvas.drawText("stop", 10, 50, paint);
 			}
 		}
-
-		@Override
-		public void onUpdate(final long elapsedMillis) {
-		}
-
-		@Override
-		public void doUpdate() {
-		}
 	}
 
 	private class GridElement extends FeSurfaceElement {
@@ -211,14 +203,6 @@ public class SoundExampleScene extends FeSurface implements SoundLoadCallback {
 				mGrid[nextGridIndex++] = width;
 				mGrid[nextGridIndex++] = nextYValue;
 			}
-		}
-
-		@Override
-		public void onUpdate(final long elapsedMillis) {
-		}
-
-		@Override
-		public void doUpdate() {
 		}
 	}
 }

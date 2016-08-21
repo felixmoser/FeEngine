@@ -39,14 +39,6 @@ class FeRootElement extends FeSurfaceElement implements FeSurfaceTouchable {
 		canvas.drawColor(mVoidColor);
 	}
 
-	@Override
-	public void onUpdate(final long elapsedMillis) {
-	}
-
-	@Override
-	public void doUpdate() {
-	}
-
 	public void registerTouchable(final FeSurfaceTouchable touchableElement) {
 		mTouchableElements.add(touchableElement);
 	}

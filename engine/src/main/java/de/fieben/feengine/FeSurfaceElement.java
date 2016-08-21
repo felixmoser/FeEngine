@@ -16,10 +16,10 @@ import java.util.ArrayList;
  * This class builds the basis for all elements in the {@link FeSurface}s scene graph that gets drawn on its surface.
  * Provides method for scaling, translation and rotation.
  * Native support of drawing bitmaps, update mechanisms, animations, child layers and playback of sound.
- * 
+ *
  * @author Felix Moser - felix.ernesto.moser@googlemail.com
  */
-public abstract class FeSurfaceElement {
+public class FeSurfaceElement {
 
 	// WIP what about display density?
 	// WIP impl ancor point/coorinats
@@ -93,7 +93,6 @@ public abstract class FeSurfaceElement {
 		mAnimationDstRect = new Rect(-mAnimationWidth / 2, -mAnimationHeight / 2, mAnimationWidth / 2, mAnimationHeight / 2);
 		mAnimationSrcRect = new Rect(0, 0, mAnimationWidth, mAnimationHeight);
 	}
-
 
 	FeSurface getSurface() {
 		return mSurface;
@@ -357,19 +356,25 @@ public abstract class FeSurfaceElement {
 	 * @param canvas The {@link Canvas} to draw on.
 	 * @param paint The {@link Paint} used for drawing.
 	 */
-	public abstract void onDraw(final Canvas canvas, final Paint paint);
+	public void onDraw(final Canvas canvas, final Paint paint) {
+		// Do nothing in default implementation.
+	}
 
 	/**
 	 * This method is used to do continuous update of this element.
 	 *
 	 * @param elapsedMillis The elapsed milliseconds since last call of this method.
 	 */
-	public abstract void onUpdate(final long elapsedMillis);
+	public void onUpdate(final long elapsedMillis){
+		// Do nothing in default implementation.
+	}
 
 	/**
 	 * This method is used to do interval based updates of this element. The interval needs to be set with {@link #setUpdateInterval(int)}.
 	 */
-	public abstract void doUpdate();
+	public void doUpdate(){
+		// Do nothing in default implementation.
+	}
 
 	/**
 	 * Sets the update in which {@link #doUpdate()} gets called. First {@link #doUpdate()} call after the interval elapsed.

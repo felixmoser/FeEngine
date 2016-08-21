@@ -61,12 +61,4 @@ class FeSurfaceMap extends FeSurfaceElement {
 	private int limitTo(final float f, final int maxValue) {
 		return Math.max(0, Math.min((int) f, maxValue));
 	}
-
-	@Override
-	public void onUpdate(final long elapsedMillis) {
-	}
-
-	@Override
-	public void doUpdate() {
-	}
 }

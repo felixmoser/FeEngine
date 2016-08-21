@@ -62,13 +62,5 @@ public class UpdateScene extends FeSurface {
 			canvas.drawLine(mVerticalTop.x, mVerticalTop.y, mVerticalBottom.x, mVerticalBottom.y, paint);
 			canvas.drawLine(mHorizontalLeft.x, mHorizontalLeft.y, mHorizontalRight.x, mHorizontalRight.y, paint);
 		}
-
-		@Override
-		public void onUpdate(final long elapsedMillis) {
-		}
-
-		@Override
-		public void doUpdate() {
-		}
 	}
 }
