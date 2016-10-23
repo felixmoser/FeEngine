@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="cube">
+        <item>@drawable/cube_bottom</item>
+        <item>@drawable/cube_blank_bottom_0</item>
+        <item>@drawable/cube_blank_bottom_1</item>
+        <item>@drawable/cube_blank_bottom_2</item>
+        <item>@drawable/cube_face_bottom</item>
+        <item>@drawable/cube_blank_mid_bottom_0</item>
+        <item>@drawable/cube_blank_mid_bottom_1</item>
+        <item>@drawable/cube_face_mid</item>
+        <item>@drawable/cube_blank_mid_top_0</item>
+        <item>@drawable/cube_blank_mid_top_1</item>
+        <item>@drawable/cube_face_top</item>
+        <item>@drawable/cube_blank_top_0</item>
+        <item>@drawable/cube_blank_top_1</item>
+        <item>@drawable/cube_blank_top_2</item>
+        <item>@drawable/cube_top</item>
+    </integer-array>
+</resources>

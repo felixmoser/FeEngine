@@ -17,6 +17,7 @@ public class SceneProvider {
 
 	static {
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_update, "UpdateScene"));
+		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_iso_cube, "IsoCubeScene"));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_solar, "SolarSystemScene"));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_tiled_forest, "TiledForestScene"));
 		SCENE_ITEMS.add(new SceneItem(R.layout.view_scene_sound, "SoundExampleScene"));
